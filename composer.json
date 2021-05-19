@@ -1,0 +1,22 @@
+{
+    "name": "mollokhan/design-patterns",
+    "authors": [
+        {
+            "name": "Diego Aguiar",
+            "email": "barret91@hotmail.com"
+        }
+    ],
+    "require": {
+        "phpunit/phpunit": "^9.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "App\\Tests\\": "tests/"
+        }
+    }
+}
