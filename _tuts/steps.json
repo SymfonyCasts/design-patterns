@@ -1,0 +1,20 @@
+{
+    "steps": [
+        {
+            "id": "start",
+            "name": "start",
+            "description": null
+        },
+        {
+            "id": "strategy-add-more-characters",
+            "name": "strategy-add-more-characters",
+            "description": null
+        },
+        {
+            "id": "strategy-apply-on-weapon",
+            "name": "strategy-apply-on-weapon",
+            "description": null
+        }
+    ],
+    "sha": "ff5a96c307edfe5a4d5f1353fb5b89e7d06a9066"
+}
