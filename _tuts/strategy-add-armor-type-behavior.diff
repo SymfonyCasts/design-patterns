@@ -1,0 +1,275 @@
+diff --git a/src/ArmorType/ArmorStrategy.php b/src/ArmorType/ArmorStrategy.php
+new file mode 100644
+index 0000000..a87b5f4
+--- /dev/null
++++ b/src/ArmorType/ArmorStrategy.php
+@@ -0,0 +1,8 @@
++<?php
++
++namespace App\ArmorType;
++
++interface ArmorStrategy
++{
++    public function getArmorReduction(int $damage): int;
++}
+diff --git a/src/ArmorType/IceBlockType.php b/src/ArmorType/IceBlockType.php
+new file mode 100644
+index 0000000..7708692
+--- /dev/null
++++ b/src/ArmorType/IceBlockType.php
+@@ -0,0 +1,16 @@
++<?php
++
++namespace App\ArmorType;
++
++use App\Dice;
++
++class IceBlockType implements ArmorStrategy
++{
++    /**
++     * Absorbs 2d8
++     */
++    public function getArmorReduction(int $damage): int
++    {
++        return Dice::roll(8) + Dice::roll(8);
++    }
++}
+diff --git a/src/ArmorType/LeatherArmorType.php b/src/ArmorType/LeatherArmorType.php
+new file mode 100644
+index 0000000..a0fd8f5
+--- /dev/null
++++ b/src/ArmorType/LeatherArmorType.php
+@@ -0,0 +1,14 @@
++<?php
++
++namespace App\ArmorType;
++
++class LeatherArmorType implements ArmorStrategy
++{
++    /**
++     * Absorbs 25% of the damage
++     */
++    public function getArmorReduction(int $damage): int
++    {
++        return $damage * 0.25;
++    }
++}
+diff --git a/src/ArmorType/ShieldType.php b/src/ArmorType/ShieldType.php
+new file mode 100644
+index 0000000..2155aa6
+--- /dev/null
++++ b/src/ArmorType/ShieldType.php
+@@ -0,0 +1,18 @@
++<?php
++
++namespace App\ArmorType;
++
++use App\Dice;
++
++class ShieldType implements ArmorStrategy
++{
++    /**
++     * Has 20% to fully block the attack
++     */
++    public function getArmorReduction(int $damage): int
++    {
++        $chanceToBlock = Dice::roll(100);
++
++        return $chanceToBlock > 80 ? $damage : 0;
++    }
++}
+diff --git a/src/AttackType/CastSpellType.php b/src/AttackType/CastSpellType.php
+index b03cfd8..fc11fd5 100644
+--- a/src/AttackType/CastSpellType.php
++++ b/src/AttackType/CastSpellType.php
+@@ -8,7 +8,7 @@ class CastSpellType implements AttackStrategy
+ {
+     public function attack(int $baseDamage): int
+     {
+-        return $this->castFireBolt();
++        return $baseDamage + $this->castFireBolt();
+     }
+ 
+     /**
+diff --git a/src/AttackType/ShootType.php b/src/AttackType/ShootType.php
+index a366b09..8520c1c 100644
+--- a/src/AttackType/ShootType.php
++++ b/src/AttackType/ShootType.php
+@@ -9,7 +9,13 @@ class ShootType implements AttackStrategy
+     public function attack(int $baseDamage): int
+     {
+         $criticalChance = Dice::roll(100);
++        $damage = $baseDamage + $this->bowDamage();
+ 
+-        return $criticalChance > 70 ? $baseDamage * 3 : $baseDamage;
++        return $criticalChance > 75 ? $damage * 3 : $damage;
++    }
++
++    private function bowDamage(): int
++    {
++        return Dice::roll(18);
+     }
+ }
+diff --git a/src/Character/Archer.php b/src/Character/Archer.php
+index ee75668..e97bffa 100755
+--- a/src/Character/Archer.php
++++ b/src/Character/Archer.php
+@@ -2,17 +2,18 @@
+ 
+ namespace App\Character;
+ 
++use App\ArmorType\LeatherArmorType;
+ use App\AttackType\ShootType;
+ 
+ class Archer extends Character
+ {
+     public function __construct()
+     {
+-        $this->health = 85;
++        $this->health = 80;
+         $this->currentHealth = $this->health;
+         $this->baseDamage = 10;
+-        $this->armor = 0.15;
+ 
+         $this->attackType = new ShootType();
++        $this->addArmorType(new LeatherArmorType());
+     }
+ }
+diff --git a/src/Character/Character.php b/src/Character/Character.php
+index a080ebc..ee6fd69 100755
+--- a/src/Character/Character.php
++++ b/src/Character/Character.php
+@@ -2,14 +2,20 @@
+ 
+ namespace App\Character;
+ 
++use App\ArmorType\ArmorStrategy;
+ use App\AttackType\AttackStrategy;
+ 
+ abstract class Character
+ {
+     protected int $baseDamage;
+-    protected float $armor;
+     protected int $health;
+     protected int $currentHealth;
++
++    /**
++     * @var ArmorStrategy[]
++     */
++    protected array $armorTypes;
++
+     protected AttackStrategy $attackType;
+ 
+     public function attack(): int
+@@ -19,13 +25,22 @@ abstract class Character
+ 
+     public function receiveAttack(int $damage): int
+     {
+-        $armorReduction = (int) ($damage * $this->armor);
+-        $damageTaken = $damage - $armorReduction;
++        $armorReduction = 0;
++        foreach ($this->armorTypes as $armorType) {
++            $armorReduction += $armorType->getArmorReduction($damage);
++        }
++
++        $damageTaken = $damage > $armorReduction ? $damage - $armorReduction : 0;
+         $this->currentHealth -= $damageTaken;
+ 
+         return $damageTaken;
+     }
+ 
++    public function addArmorType(ArmorStrategy $armorType)
++    {
++        $this->armorTypes[] = $armorType;
++    }
++
+     public function getCurrentHealth(): int
+     {
+         return $this->currentHealth;
+diff --git a/src/Character/Fighter.php b/src/Character/Fighter.php
+index a99dcd9..c1ba5f8 100644
+--- a/src/Character/Fighter.php
++++ b/src/Character/Fighter.php
+@@ -2,17 +2,18 @@
+ 
+ namespace App\Character;
+ 
++use App\ArmorType\ShieldType;
+ use App\AttackType\TwoHandedSwordType;
+ 
+ class Fighter extends Character
+ {
+     public function __construct()
+     {
+-        $this->health = 100;
++        $this->health = 90;
+         $this->currentHealth = $this->health;
+         $this->baseDamage = 12;
+-        $this->armor = 0.25;
+ 
+         $this->attackType = new TwoHandedSwordType();
++        $this->addArmorType(new ShieldType());
+     }
+ }
+diff --git a/src/Character/Mage.php b/src/Character/Mage.php
+index 65431be..be5bc9f 100755
+--- a/src/Character/Mage.php
++++ b/src/Character/Mage.php
+@@ -2,17 +2,18 @@
+ 
+ namespace App\Character;
+ 
++use App\ArmorType\IceBlockType;
+ use App\AttackType\CastSpellType;
+ 
+ class Mage extends Character
+ {
+     public function __construct()
+     {
+-        $this->health = 60;
++        $this->health = 70;
+         $this->currentHealth = $this->health;
+         $this->baseDamage = 8;
+-        $this->armor = 0.10;
+ 
+         $this->attackType = new CastSpellType();
++        $this->addArmorType(new IceBlockType());
+     }
+ }
+diff --git a/src/Game.php b/src/Game.php
+index a7a7178..7ffeb78 100755
+--- a/src/Game.php
++++ b/src/Game.php
+@@ -27,7 +27,7 @@ class Game
+ 
+     private function doPlay()
+     {
+-        while (!$this->didPlayerDie($this->player1) && !$this->didPlayerDie($this->player1)) {
++        while (!$this->didPlayerDie($this->player1) && !$this->didPlayerDie($this->player2)) {
+             $this->attack($this->player1, $this->player2, 'p_1');
+             $this->attack($this->player2, $this->player1, 'p_2');
+             $this->turnsPlayed++;
+diff --git a/tests/Character/CharacterTest.php b/tests/Character/CharacterTest.php
+index 9994134..1c1eb04 100644
+--- a/tests/Character/CharacterTest.php
++++ b/tests/Character/CharacterTest.php
+@@ -5,6 +5,7 @@ namespace App\Tests\Character;
+ use App\Character\Archer;
+ use App\Character\Fighter;
+ use App\Character\Mage;
++use App\Game;
+ use PHPUnit\Framework\TestCase;
+ 
+ class CharacterTest extends TestCase
+@@ -18,5 +19,11 @@ class CharacterTest extends TestCase
+         self::assertGreaterThanOrEqual(14, $fighter->attack());
+         self::assertGreaterThanOrEqual(10, $archer->attack());
+         self::assertGreaterThanOrEqual(3, $mage->attack());
++
++        $game = new Game();
++        $game->play($mage, $archer);
++        $score = $game->getScore();
++
++        var_dump($score);
+     }
+ }
