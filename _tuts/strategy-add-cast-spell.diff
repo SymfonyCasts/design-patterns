@@ -1,0 +1,101 @@
+diff --git a/src/Character/Archer.php b/src/Character/Archer.php
+index 4b5fa70..c9dbe8b 100755
+--- a/src/Character/Archer.php
++++ b/src/Character/Archer.php
+@@ -13,4 +13,10 @@ class Archer extends Character
+         $this->baseDamage = 10;
+         $this->armor = 0.15;
+     }
++
++    public function castSpell(): int
++    {
++        // I can't cast a spell
++        return 0;
++    }
+ }
+diff --git a/src/Character/Character.php b/src/Character/Character.php
+index 720442f..4533663 100755
+--- a/src/Character/Character.php
++++ b/src/Character/Character.php
+@@ -11,6 +11,8 @@ abstract class Character
+     protected int $health;
+     protected int $currentHealth;
+ 
++    abstract public function castSpell(): int;
++
+     public function attack(): int
+     {
+         // 1d6 (1 dice of 6)
+diff --git a/src/Character/Fighter.php b/src/Character/Fighter.php
+index 8b75179..c2f49f9 100644
+--- a/src/Character/Fighter.php
++++ b/src/Character/Fighter.php
+@@ -11,4 +11,10 @@ class Fighter extends Character
+         $this->baseDamage = 12;
+         $this->armor = 0.25;
+     }
++
++    public function castSpell(): int
++    {
++        // I can't cast a spell
++        return 0;
++    }
+ }
+diff --git a/src/Character/Mage.php b/src/Character/Mage.php
+index b8bf977..af5e168 100755
+--- a/src/Character/Mage.php
++++ b/src/Character/Mage.php
+@@ -2,6 +2,8 @@
+ 
+ namespace App\Character;
+ 
++use App\Dice;
++
+ class Mage extends Character
+ {
+     public function __construct()
+@@ -11,4 +13,17 @@ class Mage extends Character
+         $this->baseDamage = 8;
+         $this->armor = 0.10;
+     }
++
++    public function castSpell(): int
++    {
++        return $this->castFireBolt();
++    }
++
++    /**
++     * Damage: 3d10
++     */
++    private function castFireBolt(): int
++    {
++        return Dice::roll(10) + Dice::roll(10) + Dice::roll(10);
++    }
+ }
+diff --git a/tests/Character/CharacterTest.php b/tests/Character/CharacterTest.php
+index d229e43..5a46a1c 100644
+--- a/tests/Character/CharacterTest.php
++++ b/tests/Character/CharacterTest.php
+@@ -2,10 +2,21 @@
+ 
+ namespace App\Tests\Character;
+ 
+-use App\Character\Character;
++use App\Character\Archer;
++use App\Character\Fighter;
++use App\Character\Mage;
+ use PHPUnit\Framework\TestCase;
+ 
+ class CharacterTest extends TestCase
+ {
++    public function testCastSpellAbility()
++    {
++        $fighter = new Fighter();
++        $archer = new Archer();
++        $mage = new Mage();
+ 
++        self::assertSame(0, $fighter->castSpell());
++        self::assertSame(0, $archer->castSpell());
++        self::assertGreaterThanOrEqual(3, $mage->castSpell());
++    }
+ }

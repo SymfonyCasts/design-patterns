@@ -1,0 +1,216 @@
+diff --git a/src/AttackType/AttackStrategy.php b/src/AttackType/AttackStrategy.php
+new file mode 100644
+index 0000000..c7a958a
+--- /dev/null
++++ b/src/AttackType/AttackStrategy.php
+@@ -0,0 +1,8 @@
++<?php
++
++namespace App\AttackType;
++
++interface AttackStrategy
++{
++    public function attack(int $baseDamage): int;
++}
+diff --git a/src/AttackType/CastSpellType.php b/src/AttackType/CastSpellType.php
+new file mode 100644
+index 0000000..b03cfd8
+--- /dev/null
++++ b/src/AttackType/CastSpellType.php
+@@ -0,0 +1,21 @@
++<?php
++
++namespace App\AttackType;
++
++use App\Dice;
++
++class CastSpellType implements AttackStrategy
++{
++    public function attack(int $baseDamage): int
++    {
++        return $this->castFireBolt();
++    }
++
++    /**
++     * Damage: 3d10
++     */
++    private function castFireBolt(): int
++    {
++        return Dice::roll(10) + Dice::roll(10) + Dice::roll(10);
++    }
++}
+diff --git a/src/AttackType/ShootType.php b/src/AttackType/ShootType.php
+new file mode 100644
+index 0000000..a366b09
+--- /dev/null
++++ b/src/AttackType/ShootType.php
+@@ -0,0 +1,15 @@
++<?php
++
++namespace App\AttackType;
++
++use App\Dice;
++
++class ShootType implements AttackStrategy
++{
++    public function attack(int $baseDamage): int
++    {
++        $criticalChance = Dice::roll(100);
++
++        return $criticalChance > 70 ? $baseDamage * 3 : $baseDamage;
++    }
++}
+diff --git a/src/AttackType/TwoHandedSwordType.php b/src/AttackType/TwoHandedSwordType.php
+new file mode 100644
+index 0000000..e85e048
+--- /dev/null
++++ b/src/AttackType/TwoHandedSwordType.php
+@@ -0,0 +1,18 @@
++<?php
++
++namespace App\AttackType;
++
++use App\Dice;
++
++class TwoHandedSwordType implements AttackStrategy
++{
++    public function attack(int $baseDamage): int
++    {
++        return $baseDamage + $this->twoHandedSwordDamage();
++    }
++
++    private function twoHandedSwordDamage(): int
++    {
++        return Dice::roll(12) + Dice::roll(12);
++    }
++}
+diff --git a/src/Character/Archer.php b/src/Character/Archer.php
+index c9dbe8b..ee75668 100755
+--- a/src/Character/Archer.php
++++ b/src/Character/Archer.php
+@@ -2,7 +2,7 @@
+ 
+ namespace App\Character;
+ 
+-use App\Dice;
++use App\AttackType\ShootType;
+ 
+ class Archer extends Character
+ {
+@@ -12,11 +12,7 @@ class Archer extends Character
+         $this->currentHealth = $this->health;
+         $this->baseDamage = 10;
+         $this->armor = 0.15;
+-    }
+ 
+-    public function castSpell(): int
+-    {
+-        // I can't cast a spell
+-        return 0;
++        $this->attackType = new ShootType();
+     }
+ }
+diff --git a/src/Character/Character.php b/src/Character/Character.php
+index 4533663..a080ebc 100755
+--- a/src/Character/Character.php
++++ b/src/Character/Character.php
+@@ -2,7 +2,7 @@
+ 
+ namespace App\Character;
+ 
+-use App\Dice;
++use App\AttackType\AttackStrategy;
+ 
+ abstract class Character
+ {
+@@ -10,13 +10,11 @@ abstract class Character
+     protected float $armor;
+     protected int $health;
+     protected int $currentHealth;
+-
+-    abstract public function castSpell(): int;
++    protected AttackStrategy $attackType;
+ 
+     public function attack(): int
+     {
+-        // 1d6 (1 dice of 6)
+-        return $this->baseDamage + Dice::roll(1, 6);
++        return $this->attackType->attack($this->baseDamage);
+     }
+ 
+     public function receiveAttack(int $damage): int
+diff --git a/src/Character/Fighter.php b/src/Character/Fighter.php
+index c2f49f9..a99dcd9 100644
+--- a/src/Character/Fighter.php
++++ b/src/Character/Fighter.php
+@@ -2,6 +2,8 @@
+ 
+ namespace App\Character;
+ 
++use App\AttackType\TwoHandedSwordType;
++
+ class Fighter extends Character
+ {
+     public function __construct()
+@@ -10,11 +12,7 @@ class Fighter extends Character
+         $this->currentHealth = $this->health;
+         $this->baseDamage = 12;
+         $this->armor = 0.25;
+-    }
+ 
+-    public function castSpell(): int
+-    {
+-        // I can't cast a spell
+-        return 0;
++        $this->attackType = new TwoHandedSwordType();
+     }
+ }
+diff --git a/src/Character/Mage.php b/src/Character/Mage.php
+index af5e168..65431be 100755
+--- a/src/Character/Mage.php
++++ b/src/Character/Mage.php
+@@ -2,7 +2,7 @@
+ 
+ namespace App\Character;
+ 
+-use App\Dice;
++use App\AttackType\CastSpellType;
+ 
+ class Mage extends Character
+ {
+@@ -12,18 +12,7 @@ class Mage extends Character
+         $this->currentHealth = $this->health;
+         $this->baseDamage = 8;
+         $this->armor = 0.10;
+-    }
+ 
+-    public function castSpell(): int
+-    {
+-        return $this->castFireBolt();
+-    }
+-
+-    /**
+-     * Damage: 3d10
+-     */
+-    private function castFireBolt(): int
+-    {
+-        return Dice::roll(10) + Dice::roll(10) + Dice::roll(10);
++        $this->attackType = new CastSpellType();
+     }
+ }
+diff --git a/tests/Character/CharacterTest.php b/tests/Character/CharacterTest.php
+index 5a46a1c..9994134 100644
+--- a/tests/Character/CharacterTest.php
++++ b/tests/Character/CharacterTest.php
+@@ -15,8 +15,8 @@ class CharacterTest extends TestCase
+         $archer = new Archer();
+         $mage = new Mage();
+ 
+-        self::assertSame(0, $fighter->castSpell());
+-        self::assertSame(0, $archer->castSpell());
+-        self::assertGreaterThanOrEqual(3, $mage->castSpell());
++        self::assertGreaterThanOrEqual(14, $fighter->attack());
++        self::assertGreaterThanOrEqual(10, $archer->attack());
++        self::assertGreaterThanOrEqual(3, $mage->attack());
+     }
+ }

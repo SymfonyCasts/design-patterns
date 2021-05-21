@@ -4,7 +4,22 @@
             "id": "start",
             "name": "start",
             "description": null
+        },
+        {
+            "id": "strategy-add-cast-spell",
+            "name": "strategy-add-cast-spell",
+            "description": null
+        },
+        {
+            "id": "strategy-impl-weapon-strategy",
+            "name": "strategy-impl-weapon-strategy",
+            "description": null
+        },
+        {
+            "id": "strategy-add-armor-type-behavior",
+            "name": "Strategy: add armor type behavior",
+            "description": null
         }
     ],
-    "sha": "ff5a96c307edfe5a4d5f1353fb5b89e7d06a9066"
+    "sha": "b0c5dc171d4c551e6fde0b2c8faeb550da3fc68c"
 }
