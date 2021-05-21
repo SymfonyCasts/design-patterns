@@ -4,8 +4,11 @@ namespace App;
 
 class Dice
 {
-    public static function roll(int $min, int $max): int
+    /**
+     * It simulates the roll of a dice of N sides
+     */
+    public static function roll(int $sides): int
     {
-        return random_int($min, $max);
+        return random_int(1, $sides);
     }
 }

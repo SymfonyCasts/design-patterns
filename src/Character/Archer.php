@@ -13,14 +13,4 @@ class Archer extends Character
         $this->baseDamage = 10;
         $this->armor = 0.15;
     }
-
-    public function attack(Character $target): int
-    {
-        return $this->baseDamage + $this->shoot();
-    }
-
-    private function shoot(): int
-    {
-        return Dice::roll(3, 20);
-    }
 }

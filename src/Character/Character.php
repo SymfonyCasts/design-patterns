@@ -2,40 +2,28 @@
 
 namespace App\Character;
 
+use App\Dice;
+
 abstract class Character
 {
-    protected int $health;
     protected int $baseDamage;
-    protected int $currentHealth;
     protected float $armor;
+    protected int $health;
+    protected int $currentHealth;
 
-
-//    protected WeaponStrategy $weaponType;
-//    protected ArmorStrategy $armorType;
-
-    public function attack(Character $enemy): int
+    public function attack(): int
     {
-        $damage = $this->baseDamage;
-
-        return $enemy->receiveAttack($damage);
+        // 1d6 (1 dice of 6)
+        return $this->baseDamage + Dice::roll(1, 6);
     }
 
-    public function receiveAttack(int $enemyDamage): int
+    public function receiveAttack(int $damage): int
     {
-        $receivedDamage = $enemyDamage * (1 - $this->armor);
-        $this->currentHealth -= (int)$receivedDamage;
+        $armorReduction = (int) ($damage * $this->armor);
+        $damageTaken = $damage - $armorReduction;
+        $this->currentHealth -= $damageTaken;
 
-        return $receivedDamage;
-    }
-
-    protected function calculateDamage(): int
-    {
-        return $this->weaponType->getDamage($this->baseDamage);
-    }
-
-    protected function calculateDamageToReceive(int $enemyDamage): int
-    {
-        return (int)($enemyDamage * (1 - $this->armorReduction));
+        return $damageTaken;
     }
 
     public function getCurrentHealth(): int
