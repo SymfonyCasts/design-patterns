@@ -2,7 +2,7 @@
 
 namespace App\Character;
 
-class Warrior extends Character
+class Fighter extends Character
 {
     public function __construct()
     {
