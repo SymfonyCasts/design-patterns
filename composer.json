@@ -1,4 +1,6 @@
 {
+    "name": "symfonycasts/design-patterns",
+    "description": "A game app where characters battle against each other",
     "type": "project",
     "license": "proprietary",
     "minimum-stability": "stable",
