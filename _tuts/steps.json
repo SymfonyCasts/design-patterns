@@ -54,7 +54,27 @@
             "id": "strategy-armortype-interface",
             "name": "Strategy: ArmorType Interface",
             "description": null
+        },
+        {
+            "id": "strategy-armortype-derivatives",
+            "name": "Strategy: ArmorType derivatives",
+            "description": null
+        },
+        {
+            "id": "strategy-add-armortype-property",
+            "name": "Strategy: add ArmorType property",
+            "description": null
+        },
+        {
+            "id": "strategy-initialize-armortype",
+            "name": "Strategy: initialize ArmorType",
+            "description": null
+        },
+        {
+            "id": "strategy-update-receiveattack-method",
+            "name": "Strategy: update receiveAttack method",
+            "description": null
         }
     ],
-    "sha": "62fe66c18759dac1daab3028d66717fe779ee69e"
+    "sha": "928899a21ef8e8d78d58a54df6e674240b5f466a"
 }

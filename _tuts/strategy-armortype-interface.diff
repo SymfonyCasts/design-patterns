@@ -1,0 +1,14 @@
+diff --git a/src/ArmorType/ArmorType.php b/src/ArmorType/ArmorType.php
+new file mode 100644
+index 0000000..ce324ba
+--- /dev/null
++++ b/src/ArmorType/ArmorType.php
+@@ -0,0 +1,8 @@
++<?php
++
++namespace App\ArmorType;
++
++interface ArmorType
++{
++    public function getArmorReduction(int $damage): int;
++}

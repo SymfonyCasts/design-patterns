@@ -1,0 +1,19 @@
+diff --git a/src/Character/Character.php b/src/Character/Character.php
+index f522c0b..d09295c 100644
+--- a/src/Character/Character.php
++++ b/src/Character/Character.php
+@@ -2,12 +2,14 @@
+ 
+ namespace App\Character;
+ 
++use App\ArmorType\ArmorType;
+ use App\AttackType\AttackType;
+ use App\Dice;
+ 
+ abstract class Character
+ {
+     protected AttackType $attackType;
++    protected ArmorType $armorType;
+     protected int $baseDamage;
+     protected float $armor;
+     protected int $maxHealth;
