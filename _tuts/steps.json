@@ -31,10 +31,30 @@
             "description": null
         },
         {
+            "id": "strategy-update-attack-method",
+            "name": "Strategy: update attack method",
+            "description": null
+        },
+        {
             "id": "strategy-attack-type-on-characters",
-            "name": "Strategy: attack type on characters",
+            "name": "Strategy: Attack type on characters",
+            "description": null
+        },
+        {
+            "id": "strategy-create-magefighter-class",
+            "name": "Strategy: create MageFighter class",
+            "description": null
+        },
+        {
+            "id": "delete-1",
+            "name": "delete-1",
+            "description": null
+        },
+        {
+            "id": "strategy-armortype-interface",
+            "name": "Strategy: ArmorType Interface",
             "description": null
         }
     ],
-    "sha": "76c984c425b844a0fa6314ca7696f939056f5a12"
+    "sha": "62fe66c18759dac1daab3028d66717fe779ee69e"
 }

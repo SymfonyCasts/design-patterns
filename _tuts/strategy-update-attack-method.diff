@@ -1,0 +1,84 @@
+diff --git a/src/Character/Archer.php b/src/Character/Archer.php
+index 135dda4..ceb8173 100644
+--- a/src/Character/Archer.php
++++ b/src/Character/Archer.php
+@@ -2,6 +2,7 @@
+ 
+ namespace App\Character;
+ 
++use App\AttackType\ShootType;
+ use App\Dice;
+ 
+ class Archer extends Character
+@@ -12,5 +13,6 @@ class Archer extends Character
+         $this->currentHealth = $this->maxHealth;
+         $this->baseDamage = 10;
+         $this->armor = 0.15;
++        $this->attackType = new ShootType();
+     }
+ }
+diff --git a/src/Character/Character.php b/src/Character/Character.php
+index 64adcba..f522c0b 100644
+--- a/src/Character/Character.php
++++ b/src/Character/Character.php
+@@ -2,10 +2,12 @@
+ 
+ namespace App\Character;
+ 
++use App\AttackType\AttackType;
+ use App\Dice;
+ 
+ abstract class Character
+ {
++    protected AttackType $attackType;
+     protected int $baseDamage;
+     protected float $armor;
+     protected int $maxHealth;
+@@ -17,7 +19,7 @@ abstract class Character
+      */
+     public function attack(): int
+     {
+-        return $this->baseDamage + Dice::roll(6);
++        return $this->attackType->attack($this->baseDamage);
+     }
+ 
+     public function receiveAttack(int $damage): int
+diff --git a/src/Character/Fighter.php b/src/Character/Fighter.php
+index b8e353a..808c8f2 100644
+--- a/src/Character/Fighter.php
++++ b/src/Character/Fighter.php
+@@ -2,6 +2,8 @@
+ 
+ namespace App\Character;
+ 
++use App\AttackType\TwoHandedSwordType;
++
+ class Fighter extends Character
+ {
+     public function __construct()
+@@ -10,5 +12,6 @@ class Fighter extends Character
+         $this->currentHealth = $this->maxHealth;
+         $this->baseDamage = 12;
+         $this->armor = 0.25;
++        $this->attackType = new TwoHandedSwordType();
+     }
+ }
+diff --git a/src/Character/Mage.php b/src/Character/Mage.php
+index 4da2065..20e72e8 100644
+--- a/src/Character/Mage.php
++++ b/src/Character/Mage.php
+@@ -2,6 +2,7 @@
+ 
+ namespace App\Character;
+ 
++use App\AttackType\CastSpellType;
+ use App\Dice;
+ 
+ class Mage extends Character
+@@ -12,5 +13,6 @@ class Mage extends Character
+         $this->currentHealth = $this->maxHealth;
+         $this->baseDamage = 8;
+         $this->armor = 0.10;
++        $this->attackType = new CastSpellType();
+     }
+ }
