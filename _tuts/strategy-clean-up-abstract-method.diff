@@ -1,0 +1,60 @@
+diff --git a/src/Character/Archer.php b/src/Character/Archer.php
+index 79000df..135dda4 100644
+--- a/src/Character/Archer.php
++++ b/src/Character/Archer.php
+@@ -13,10 +13,4 @@ class Archer extends Character
+         $this->baseDamage = 10;
+         $this->armor = 0.15;
+     }
+-
+-    public function castSpell(): int
+-    {
+-        // I can't cast spells
+-        return 0;
+-    }
+ }
+diff --git a/src/Character/Character.php b/src/Character/Character.php
+index 9534e26..64adcba 100644
+--- a/src/Character/Character.php
++++ b/src/Character/Character.php
+@@ -12,8 +12,6 @@ abstract class Character
+     protected int $currentHealth;
+     private string $nickname = '';
+ 
+-    abstract public function castSpell(): int;
+-
+     /**
+      * Damage: 1d6 (1 dice of 6)
+      */
+diff --git a/src/Character/Fighter.php b/src/Character/Fighter.php
+index 8b800c0..b8e353a 100644
+--- a/src/Character/Fighter.php
++++ b/src/Character/Fighter.php
+@@ -11,10 +11,4 @@ class Fighter extends Character
+         $this->baseDamage = 12;
+         $this->armor = 0.25;
+     }
+-
+-    public function castSpell(): int
+-    {
+-        // I can't cast spells
+-        return 0;
+-    }
+ }
+diff --git a/src/Character/Mage.php b/src/Character/Mage.php
+index d977c5d..4da2065 100644
+--- a/src/Character/Mage.php
++++ b/src/Character/Mage.php
+@@ -13,12 +13,4 @@ class Mage extends Character
+         $this->baseDamage = 8;
+         $this->armor = 0.10;
+     }
+-
+-    /**
+-     * Damage: 3d10
+-     */
+-    public function castSpell(): int
+-    {
+-        return Dice::roll(10) + Dice::roll(10) + Dice::roll(10);
+-    }
+ }

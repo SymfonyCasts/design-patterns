@@ -1,0 +1,14 @@
+diff --git a/src/AttackType/AttackType.php b/src/AttackType/AttackType.php
+new file mode 100644
+index 0000000..8b22826
+--- /dev/null
++++ b/src/AttackType/AttackType.php
+@@ -0,0 +1,8 @@
++<?php
++
++namespace App\AttackType;
++
++interface AttackType
++{
++    public function attack(int $baseDamage): int;
++}

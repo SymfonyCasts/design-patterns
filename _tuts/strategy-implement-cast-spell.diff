@@ -1,0 +1,56 @@
+diff --git a/src/Character/Archer.php b/src/Character/Archer.php
+index 135dda4..79000df 100644
+--- a/src/Character/Archer.php
++++ b/src/Character/Archer.php
+@@ -13,4 +13,10 @@ class Archer extends Character
+         $this->baseDamage = 10;
+         $this->armor = 0.15;
+     }
++
++    public function castSpell(): int
++    {
++        // I can't cast spells
++        return 0;
++    }
+ }
+diff --git a/src/Character/Fighter.php b/src/Character/Fighter.php
+index b8e353a..8b800c0 100644
+--- a/src/Character/Fighter.php
++++ b/src/Character/Fighter.php
+@@ -11,4 +11,10 @@ class Fighter extends Character
+         $this->baseDamage = 12;
+         $this->armor = 0.25;
+     }
++
++    public function castSpell(): int
++    {
++        // I can't cast spells
++        return 0;
++    }
+ }
+diff --git a/src/Character/Mage.php b/src/Character/Mage.php
+index 963fe8b..d977c5d 100644
+--- a/src/Character/Mage.php
++++ b/src/Character/Mage.php
+@@ -2,6 +2,8 @@
+ 
+ namespace App\Character;
+ 
++use App\Dice;
++
+ class Mage extends Character
+ {
+     public function __construct()
+@@ -11,4 +13,12 @@ class Mage extends Character
+         $this->baseDamage = 8;
+         $this->armor = 0.10;
+     }
++
++    /**
++     * Damage: 3d10
++     */
++    public function castSpell(): int
++    {
++        return Dice::roll(10) + Dice::roll(10) + Dice::roll(10);
++    }
+ }

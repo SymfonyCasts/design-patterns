@@ -4,7 +4,37 @@
             "id": "start",
             "name": "start",
             "description": null
+        },
+        {
+            "id": "strategy-cast-spell",
+            "name": "strategy-cast-spell",
+            "description": null
+        },
+        {
+            "id": "strategy-implement-cast-spell",
+            "name": "Strategy: implement-cast-spell",
+            "description": null
+        },
+        {
+            "id": "strategy-attack-type-interface",
+            "name": "Strategy: Attack Type Interface",
+            "description": null
+        },
+        {
+            "id": "strategy-attack-type-impl",
+            "name": "Strategy: attack type impl",
+            "description": null
+        },
+        {
+            "id": "strategy-clean-up-abstract-method",
+            "name": "strategy-clean-up-abstract-method",
+            "description": null
+        },
+        {
+            "id": "strategy-attack-type-on-characters",
+            "name": "Strategy: attack type on characters",
+            "description": null
         }
     ],
-    "sha": "e0f8302a296d1a62767cd2575bf0e56e5cc04b0b"
+    "sha": "76c984c425b844a0fa6314ca7696f939056f5a12"
 }
