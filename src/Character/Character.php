@@ -17,7 +17,7 @@ abstract class Character
      */
     public function attack(): int
     {
-        return $this->baseDamage + Dice::roll(1);
+        return $this->baseDamage + Dice::roll(6);
     }
 
     public function receiveAttack(int $damage): int
