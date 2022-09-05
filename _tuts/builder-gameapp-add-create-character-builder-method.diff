@@ -1,0 +1,22 @@
+diff --git a/src/GameApplication.php b/src/GameApplication.php
+index 4d993ff..1efefc2 100644
+--- a/src/GameApplication.php
++++ b/src/GameApplication.php
+@@ -2,6 +2,7 @@
+ 
+ namespace App;
+ 
++use App\Builder\CharacterBuilder;
+ use App\Character\Archer;
+ use App\Character\Character;
+ use App\Character\Fighter;
+@@ -67,4 +68,9 @@ class GameApplication
+             'mage_fighter'
+         ];
+     }
++
++    private function createCharacterBuilder(): CharacterBuilder
++    {
++        return new CharacterBuilder();
++    }
+ }

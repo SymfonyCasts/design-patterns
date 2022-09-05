@@ -1,0 +1,66 @@
+diff --git a/src/GameApplication.php b/src/GameApplication.php
+index 1efefc2..54792e6 100644
+--- a/src/GameApplication.php
++++ b/src/GameApplication.php
+@@ -3,11 +3,7 @@
+ namespace App;
+ 
+ use App\Builder\CharacterBuilder;
+-use App\Character\Archer;
+ use App\Character\Character;
+-use App\Character\Fighter;
+-use App\Character\Mage;
+-use App\Character\MageFighter;
+ 
+ class GameApplication
+ {
+@@ -38,11 +34,35 @@ class GameApplication
+     public function createCharacter(string $character): Character
+     {
+         return match (strtolower($character)) {
+-            'fighter' => new Fighter(),
+-            'archer' => new Archer(),
+-            'mage' => new Mage(),
+-            'mage_fighter' => new MageFighter(),
+-            default => throw new \RuntimeException('Undefined Character'),
++            'fighter' => $this->createCharacterBuilder()
++                ->setBaseDamage(12)
++                ->setMaxHealth(90)
++                ->setAttackType('sword')
++                ->setArmorType('shield')
++                ->buildCharacter(),
++
++            'archer' => $this->createCharacterBuilder()
++                ->setBaseDamage(10)
++                ->setMaxHealth(80)
++                ->setAttackType('bow')
++                ->setArmorType('leather_armor')
++                ->buildCharacter(),
++
++            'mage' => $this->createCharacterBuilder()
++                ->setBaseDamage(8)
++                ->setMaxHealth(70)
++                ->setAttackType('fire_bolt')
++                ->setArmorType('ice_block')
++                ->buildCharacter(),
++
++            'mage_fighter' => $this->createCharacterBuilder()
++                ->setBaseDamage(12)
++                ->setMaxHealth(90)
++                ->setAttackType('fire_bolt')
++                ->setArmorType('shield')
++                ->buildCharacter(),
++
++            default => throw new \RuntimeException('Undefined Character')
+         };
+     }
+ 
+@@ -65,7 +85,7 @@ class GameApplication
+             'fighter',
+             'mage',
+             'archer',
+-            'mage_fighter'
++            'mage_fighter',
+         ];
+     }
+ 

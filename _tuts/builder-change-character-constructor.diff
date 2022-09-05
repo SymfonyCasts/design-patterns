@@ -1,0 +1,34 @@
+diff --git a/src/Character/Character.php b/src/Character/Character.php
+index 618553f..d066c20 100644
+--- a/src/Character/Character.php
++++ b/src/Character/Character.php
+@@ -4,18 +4,22 @@ namespace App\Character;
+ 
+ use App\ArmorType\ArmorType;
+ use App\AttackType\AttackType;
+-use App\Dice;
+ 
+-abstract class Character
++class Character
+ {
+-    protected AttackType $attackType;
+-    protected ArmorType $armorType;
+-    protected int $baseDamage;
+-    protected float $armor;
+-    protected int $maxHealth;
+     protected int $currentHealth;
+     private string $nickname = '';
+ 
++    public function __construct(
++        private readonly int $maxHealth,
++        private readonly int $baseDamage,
++        private readonly AttackType $attackType,
++        private readonly ArmorType $armorType
++    )
++    {
++        $this->currentHealth = $maxHealth;
++    }
++
+     /**
+      * Damage: 1d6 (1 dice of 6)
+      */

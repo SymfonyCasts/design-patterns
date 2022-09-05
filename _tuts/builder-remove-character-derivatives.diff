@@ -1,0 +1,102 @@
+diff --git a/src/Character/Archer.php b/src/Character/Archer.php
+deleted file mode 100644
+index d4848bf..0000000
+--- a/src/Character/Archer.php
++++ /dev/null
+@@ -1,20 +0,0 @@
+-<?php
+-
+-namespace App\Character;
+-
+-use App\ArmorType\LeatherArmorType;
+-use App\AttackType\BowType;
+-use App\Dice;
+-
+-class Archer extends Character
+-{
+-    public function __construct()
+-    {
+-        $this->maxHealth = 80;
+-        $this->currentHealth = $this->maxHealth;
+-        $this->baseDamage = 10;
+-        $this->armor = 0.15;
+-        $this->attackType = new BowType();
+-        $this->armorType = new LeatherArmorType();
+-    }
+-}
+diff --git a/src/Character/Fighter.php b/src/Character/Fighter.php
+deleted file mode 100644
+index 684f0c0..0000000
+--- a/src/Character/Fighter.php
++++ /dev/null
+@@ -1,19 +0,0 @@
+-<?php
+-
+-namespace App\Character;
+-
+-use App\ArmorType\ShieldType;
+-use App\AttackType\TwoHandedSwordType;
+-
+-class Fighter extends Character
+-{
+-    public function __construct()
+-    {
+-        $this->maxHealth = 90;
+-        $this->currentHealth = $this->maxHealth;
+-        $this->baseDamage = 12;
+-        $this->armor = 0.25;
+-        $this->attackType = new TwoHandedSwordType();
+-        $this->armorType = new ShieldType();
+-    }
+-}
+diff --git a/src/Character/Mage.php b/src/Character/Mage.php
+deleted file mode 100644
+index 52b7a4a..0000000
+--- a/src/Character/Mage.php
++++ /dev/null
+@@ -1,20 +0,0 @@
+-<?php
+-
+-namespace App\Character;
+-
+-use App\ArmorType\IceBlockType;
+-use App\AttackType\FireBoltType;
+-use App\Dice;
+-
+-class Mage extends Character
+-{
+-    public function __construct()
+-    {
+-        $this->maxHealth = 70;
+-        $this->currentHealth = $this->maxHealth;
+-        $this->baseDamage = 8;
+-        $this->armor = 0.10;
+-        $this->attackType = new FireBoltType();
+-        $this->armorType = new IceBlockType();
+-    }
+-}
+diff --git a/src/Character/MageFighter.php b/src/Character/MageFighter.php
+deleted file mode 100644
+index 932c7bd..0000000
+--- a/src/Character/MageFighter.php
++++ /dev/null
+@@ -1,19 +0,0 @@
+-<?php
+-
+-namespace App\Character;
+-
+-use App\ArmorType\ShieldType;
+-use App\AttackType\FireBoltType;
+-
+-class MageFighter extends Character
+-{
+-    public function __construct()
+-    {
+-        $this->maxHealth = 100;
+-        $this->currentHealth = $this->maxHealth;
+-        $this->baseDamage = 12;
+-        $this->armor = 0.25;
+-        $this->attackType = new FireBoltType();
+-        $this->armorType = new ShieldType();
+-    }
+-}

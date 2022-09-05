@@ -1,0 +1,28 @@
+diff --git a/src/GameApplication.php b/src/GameApplication.php
+index 359731d..4d993ff 100644
+--- a/src/GameApplication.php
++++ b/src/GameApplication.php
+@@ -6,6 +6,7 @@ use App\Character\Archer;
+ use App\Character\Character;
+ use App\Character\Fighter;
+ use App\Character\Mage;
++use App\Character\MageFighter;
+ 
+ class GameApplication
+ {
+@@ -39,6 +40,7 @@ class GameApplication
+             'fighter' => new Fighter(),
+             'archer' => new Archer(),
+             'mage' => new Mage(),
++            'mage_fighter' => new MageFighter(),
+             default => throw new \RuntimeException('Undefined Character'),
+         };
+     }
+@@ -62,6 +64,7 @@ class GameApplication
+             'fighter',
+             'mage',
+             'archer',
++            'mage_fighter'
+         ];
+     }
+ }

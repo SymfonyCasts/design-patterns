@@ -46,6 +46,11 @@
             "description": null
         },
         {
+            "id": "strategy-add-magefighter-to-game",
+            "name": "Strategy: Add MageFighter to Game",
+            "description": null
+        },
+        {
             "id": "delete-1",
             "name": "delete-1",
             "description": null
@@ -74,7 +79,47 @@
             "id": "strategy-update-receiveattack-method",
             "name": "Strategy: update receiveAttack method",
             "description": null
+        },
+        {
+            "id": "builder-change-character-constructor",
+            "name": "Builder: Change Character Constructor",
+            "description": null
+        },
+        {
+            "id": "builder-create-characterbuilder-class",
+            "name": "Builder: Create CharacterBuilder class",
+            "description": null
+        },
+        {
+            "id": "builder-characterbuilder-add-setters",
+            "name": "Builder: CharacterBuilder: add setters",
+            "description": null
+        },
+        {
+            "id": "builder-characterbuilder-add-properties",
+            "name": "Builder: CharacterBuilder add properties",
+            "description": null
+        },
+        {
+            "id": "builder-characterbuilder-implement-setters",
+            "name": "Builder: CharacterBuilder implement setters",
+            "description": null
+        },
+        {
+            "id": "builder-gameapp-add-create-character-builder-method",
+            "name": "Builder: GameApp add create character builder method",
+            "description": null
+        },
+        {
+            "id": "builder-gameapp-update-createcharacter-method",
+            "name": "Builder: GameApp update createCharacter method",
+            "description": null
+        },
+        {
+            "id": "builder-remove-character-derivatives",
+            "name": "Builder: remove character derivatives",
+            "description": null
         }
     ],
-    "sha": "928899a21ef8e8d78d58a54df6e674240b5f466a"
+    "sha": "b8cf897d1f47044cb15ee4ec876d35fa36d93b75"
 }

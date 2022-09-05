@@ -1,8 +1,29 @@
-diff --git a/src/AttackType/CastSpellType.php b/src/AttackType/CastSpellType.php
+diff --git a/src/AttackType/BowType.php b/src/AttackType/BowType.php
 new file mode 100644
-index 0000000..bd02fad
+index 0000000..0c2a3cb
 --- /dev/null
-+++ b/src/AttackType/CastSpellType.php
++++ b/src/AttackType/BowType.php
+@@ -0,0 +1,15 @@
++<?php
++
++namespace App\AttackType;
++
++use App\Dice;
++
++class BowType implements AttackType
++{
++    public function attack(int $baseDamage): int
++    {
++        $criticalChance = Dice::roll(100);
++
++        return $criticalChance > 70 ? $baseDamage * 3 : $baseDamage;
++    }
++}
+diff --git a/src/AttackType/FireBoltType.php b/src/AttackType/FireBoltType.php
+new file mode 100644
+index 0000000..0e3ba44
+--- /dev/null
++++ b/src/AttackType/FireBoltType.php
 @@ -0,0 +1,21 @@
 +<?php
 +
@@ -10,7 +31,7 @@ index 0000000..bd02fad
 +
 +use App\Dice;
 +
-+class CastSpellType implements AttackType
++class FireBoltType implements AttackType
 +{
 +    public function attack(int $baseDamage): int
 +    {
@@ -23,27 +44,6 @@ index 0000000..bd02fad
 +    private function castFireBolt(): int
 +    {
 +        return Dice::roll(10) + Dice::roll(10) + Dice::roll(10);
-+    }
-+}
-diff --git a/src/AttackType/ShootType.php b/src/AttackType/ShootType.php
-new file mode 100644
-index 0000000..ce2c3ac
---- /dev/null
-+++ b/src/AttackType/ShootType.php
-@@ -0,0 +1,15 @@
-+<?php
-+
-+namespace App\AttackType;
-+
-+use App\Dice;
-+
-+class ShootType implements AttackType
-+{
-+    public function attack(int $baseDamage): int
-+    {
-+        $criticalChance = Dice::roll(100);
-+
-+        return $criticalChance > 70 ? $baseDamage * 3 : $baseDamage;
 +    }
 +}
 diff --git a/src/AttackType/TwoHandedSwordType.php b/src/AttackType/TwoHandedSwordType.php

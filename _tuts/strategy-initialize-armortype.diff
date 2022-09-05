@@ -1,5 +1,5 @@
 diff --git a/src/Character/Archer.php b/src/Character/Archer.php
-index ceb8173..41c4997 100644
+index 17ca735..d4848bf 100644
 --- a/src/Character/Archer.php
 +++ b/src/Character/Archer.php
 @@ -2,6 +2,7 @@
@@ -7,13 +7,13 @@ index ceb8173..41c4997 100644
  namespace App\Character;
  
 +use App\ArmorType\LeatherArmorType;
- use App\AttackType\ShootType;
+ use App\AttackType\BowType;
  use App\Dice;
  
 @@ -14,5 +15,6 @@ class Archer extends Character
          $this->baseDamage = 10;
          $this->armor = 0.15;
-         $this->attackType = new ShootType();
+         $this->attackType = new BowType();
 +        $this->armorType = new LeatherArmorType();
      }
  }
@@ -37,7 +37,7 @@ index 808c8f2..684f0c0 100644
      }
  }
 diff --git a/src/Character/Mage.php b/src/Character/Mage.php
-index 20e72e8..eafd7d0 100644
+index 6d51b98..52b7a4a 100644
 --- a/src/Character/Mage.php
 +++ b/src/Character/Mage.php
 @@ -2,6 +2,7 @@
@@ -45,18 +45,18 @@ index 20e72e8..eafd7d0 100644
  namespace App\Character;
  
 +use App\ArmorType\IceBlockType;
- use App\AttackType\CastSpellType;
+ use App\AttackType\FireBoltType;
  use App\Dice;
  
 @@ -14,5 +15,6 @@ class Mage extends Character
          $this->baseDamage = 8;
          $this->armor = 0.10;
-         $this->attackType = new CastSpellType();
+         $this->attackType = new FireBoltType();
 +        $this->armorType = new IceBlockType();
      }
  }
 diff --git a/src/Character/MageFighter.php b/src/Character/MageFighter.php
-index 508e3db..8387490 100644
+index 1018012..932c7bd 100644
 --- a/src/Character/MageFighter.php
 +++ b/src/Character/MageFighter.php
 @@ -2,6 +2,7 @@
@@ -64,13 +64,15 @@ index 508e3db..8387490 100644
  namespace App\Character;
  
 +use App\ArmorType\ShieldType;
- use App\AttackType\CastSpellType;
+ use App\AttackType\FireBoltType;
  
  class MageFighter extends Character
-@@ -14,5 +15,6 @@ class MageFighter extends Character
+@@ -12,7 +13,7 @@ class MageFighter extends Character
+         $this->currentHealth = $this->maxHealth;
+         $this->baseDamage = 12;
          $this->armor = 0.25;
- 
-         $this->attackType = new CastSpellType();
+-
+         $this->attackType = new FireBoltType();
 +        $this->armorType = new ShieldType();
      }
  }

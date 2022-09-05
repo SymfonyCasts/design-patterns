@@ -1,0 +1,21 @@
+diff --git a/src/Character/Archer.php b/src/Character/Archer.php
+index ceb8173..17ca735 100644
+--- a/src/Character/Archer.php
++++ b/src/Character/Archer.php
+@@ -2,7 +2,7 @@
+ 
+ namespace App\Character;
+ 
+-use App\AttackType\ShootType;
++use App\AttackType\BowType;
+ use App\Dice;
+ 
+ class Archer extends Character
+@@ -13,6 +13,6 @@ class Archer extends Character
+         $this->currentHealth = $this->maxHealth;
+         $this->baseDamage = 10;
+         $this->armor = 0.15;
+-        $this->attackType = new ShootType();
++        $this->attackType = new BowType();
+     }
+ }

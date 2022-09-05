@@ -64,14 +64,14 @@ index b8e353a..808c8f2 100644
      }
  }
 diff --git a/src/Character/Mage.php b/src/Character/Mage.php
-index 4da2065..20e72e8 100644
+index 4da2065..6d51b98 100644
 --- a/src/Character/Mage.php
 +++ b/src/Character/Mage.php
 @@ -2,6 +2,7 @@
  
  namespace App\Character;
  
-+use App\AttackType\CastSpellType;
++use App\AttackType\FireBoltType;
  use App\Dice;
  
  class Mage extends Character
@@ -79,6 +79,6 @@ index 4da2065..20e72e8 100644
          $this->currentHealth = $this->maxHealth;
          $this->baseDamage = 8;
          $this->armor = 0.10;
-+        $this->attackType = new CastSpellType();
++        $this->attackType = new FireBoltType();
      }
  }
