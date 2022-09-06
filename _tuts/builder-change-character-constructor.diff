@@ -1,5 +1,5 @@
 diff --git a/src/Character/Character.php b/src/Character/Character.php
-index 618553f..d066c20 100644
+index 618553f..46c0a7c 100644
 --- a/src/Character/Character.php
 +++ b/src/Character/Character.php
 @@ -4,18 +4,22 @@ namespace App\Character;
@@ -20,10 +20,10 @@ index 618553f..d066c20 100644
      private string $nickname = '';
  
 +    public function __construct(
-+        private readonly int $maxHealth,
-+        private readonly int $baseDamage,
-+        private readonly AttackType $attackType,
-+        private readonly ArmorType $armorType
++        private int $maxHealth,
++        private int $baseDamage,
++        private AttackType $attackType,
++        private ArmorType $armorType
 +    )
 +    {
 +        $this->currentHealth = $maxHealth;

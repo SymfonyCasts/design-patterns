@@ -1,0 +1,23 @@
+diff --git a/src/Character/Character.php b/src/Character/Character.php
+index e1ac43d..dfbc9f6 100644
+--- a/src/Character/Character.php
++++ b/src/Character/Character.php
+@@ -55,6 +55,18 @@ class Character
+         $this->nickname = $nickname;
+     }
+ 
++    public function levelUp(): void
++    {
++        // +%15 bonus to stats
++        $bonus = 1.15;
++
++        $this->level++;
++        $this->maxHealth *= $bonus;
++        $this->baseDamage *= $bonus;
++
++        // todo: level up attack and armor type
++    }
++
+     public function getLevel(): int
+     {
+         return $this->level;

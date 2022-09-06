@@ -1,0 +1,36 @@
+diff --git a/src/GameApplication.php b/src/GameApplication.php
+index 54792e6..7bf5f4d 100644
+--- a/src/GameApplication.php
++++ b/src/GameApplication.php
+@@ -4,8 +4,10 @@ namespace App;
+ 
+ use App\Builder\CharacterBuilder;
+ use App\Character\Character;
++use App\Observer\GameObserverInterface;
++use App\Observer\GameSubjectInterface;
+ 
+-class GameApplication
++class GameApplication implements GameSubjectInterface
+ {
+     public function play(Character $player, Character $ai): FightResult
+     {
+@@ -93,4 +95,19 @@ class GameApplication
+     {
+         return new CharacterBuilder();
+     }
++
++    public function subscribe(GameObserverInterface $observer): void
++    {
++        // TODO: Implement subscribe() method.
++    }
++
++    public function unsubscribe(GameObserverInterface $observer): void
++    {
++        // TODO: Implement unsubscribe() method.
++    }
++
++    public function notify(FightResult $fightResult): void
++    {
++        // TODO: Implement notify() method.
++    }
+ }

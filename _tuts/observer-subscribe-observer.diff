@@ -1,0 +1,25 @@
+diff --git a/src/Command/GameCommand.php b/src/Command/GameCommand.php
+index aaf686c..ed4f107 100644
+--- a/src/Command/GameCommand.php
++++ b/src/Command/GameCommand.php
+@@ -5,6 +5,8 @@ namespace App\Command;
+ use App\Character\Character;
+ use App\FightResult;
+ use App\GameApplication;
++use App\Observer\XpEarnedObserver;
++use App\Service\XpEarnedService;
+ use Symfony\Component\Console\Attribute\AsCommand;
+ use Symfony\Component\Console\Command\Command;
+ use Symfony\Component\Console\Input\InputInterface;
+@@ -23,6 +25,11 @@ class GameCommand extends Command
+ 
+     protected function execute(InputInterface $input, OutputInterface $output): int
+     {
++        $xpObserver = new XpEarnedObserver(
++            new XpEarnedService()
++        );
++        $this->game->subscribe($xpObserver);
++
+         $io = new SymfonyStyle($input, $output);
+ 
+         $io->text('Welcome to the game where warriors fight against each other for honor and glory... and 🍕!');

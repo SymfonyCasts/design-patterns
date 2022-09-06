@@ -1,0 +1,14 @@
+diff --git a/src/Command/GameCommand.php b/src/Command/GameCommand.php
+index ed4f107..cc442ab 100644
+--- a/src/Command/GameCommand.php
++++ b/src/Command/GameCommand.php
+@@ -56,6 +56,9 @@ class GameCommand extends Command
+ 
+             $fightResult = $this->game->play($player, $aiCharacter);
+ 
++            // Notify all observers
++            $this->game->notify($fightResult);
++
+             $this->printResult($fightResult, $player, $io);
+ 
+             $answer = $io->choice('Want to keep playing?', [

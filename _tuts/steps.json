@@ -119,7 +119,62 @@
             "id": "builder-remove-character-derivatives",
             "name": "Builder: remove character derivatives",
             "description": null
+        },
+        {
+            "id": "observer-create-observer-interface",
+            "name": "Observer: create observer interface",
+            "description": null
+        },
+        {
+            "id": "observer-create-subject-interface",
+            "name": "Observer: create subject interface",
+            "description": null
+        },
+        {
+            "id": "observer-gameapplication-implement-interface",
+            "name": "Observer: GameApplication implement interface",
+            "description": null
+        },
+        {
+            "id": "observer-gameapplication-implement-methods",
+            "name": "Observer: GameApplication implement methods",
+            "description": null
+        },
+        {
+            "id": "observer-character-add-level-fields",
+            "name": "Observer: character add level fields",
+            "description": null
+        },
+        {
+            "id": "observer-character-add-level-up-method",
+            "name": "Observer: Character add level up method",
+            "description": null
+        },
+        {
+            "id": "observer-create-xpearnedobserver",
+            "name": "Observer: create XpEarnedObserver",
+            "description": null
+        },
+        {
+            "id": "observer-copy-xpearnedservice",
+            "name": "Observer: copy XpEarnedService",
+            "description": null
+        },
+        {
+            "id": "observer-xpearnedobserver-implementation",
+            "name": "Observer: XpEarnedObserver implementation",
+            "description": null
+        },
+        {
+            "id": "observer-subscribe-observer",
+            "name": "Observer: subscribe observer",
+            "description": null
+        },
+        {
+            "id": "observer-notify-observers",
+            "name": "Observer: notify observers",
+            "description": null
         }
     ],
-    "sha": "b8cf897d1f47044cb15ee4ec876d35fa36d93b75"
+    "sha": "590a91d39c21eb78a5232ee02c685ef2cb13ce15"
 }

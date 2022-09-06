@@ -1,0 +1,32 @@
+diff --git a/src/Character/Character.php b/src/Character/Character.php
+index 46c0a7c..e1ac43d 100644
+--- a/src/Character/Character.php
++++ b/src/Character/Character.php
+@@ -9,6 +9,8 @@ class Character
+ {
+     protected int $currentHealth;
+     private string $nickname = '';
++    private int $level = 1;
++    private int $xp = 0;
+ 
+     public function __construct(
+         private int $maxHealth,
+@@ -53,6 +55,18 @@ class Character
+         $this->nickname = $nickname;
+     }
+ 
++    public function getLevel(): int
++    {
++        return $this->level;
++    }
++
++    public function addXp(int $xpEarned): int
++    {
++        $this->xp += $xpEarned;
++
++        return $this->xp;
++    }
++
+     /**
+      * Restore player's health before next fight
+      */

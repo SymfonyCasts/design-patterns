@@ -1,0 +1,46 @@
+diff --git a/src/GameApplication.php b/src/GameApplication.php
+index 7bf5f4d..4d1790e 100644
+--- a/src/GameApplication.php
++++ b/src/GameApplication.php
+@@ -9,6 +9,9 @@ use App\Observer\GameSubjectInterface;
+ 
+ class GameApplication implements GameSubjectInterface
+ {
++    /** @var GameObserverInterface[] */
++    private array $observers = [];
++
+     public function play(Character $player, Character $ai): FightResult
+     {
+         $player->rest();
+@@ -98,16 +101,28 @@ class GameApplication implements GameSubjectInterface
+ 
+     public function subscribe(GameObserverInterface $observer): void
+     {
+-        // TODO: Implement subscribe() method.
++        foreach ($this->observers as $o) {
++            if ($observer === $o) {
++                return;
++            }
++        }
++
++        $this->observers[] = $observer;
+     }
+ 
+     public function unsubscribe(GameObserverInterface $observer): void
+     {
+-        // TODO: Implement unsubscribe() method.
++        foreach ($this->observers as $key => $o) {
++            if ($observer === $o) {
++                unset($this->observers[$key]);
++            }
++        }
+     }
+ 
+     public function notify(FightResult $fightResult): void
+     {
+-        // TODO: Implement notify() method.
++        foreach ($this->observers as $observer) {
++            $observer->onFightFinished($fightResult);
++        }
+     }
+ }
