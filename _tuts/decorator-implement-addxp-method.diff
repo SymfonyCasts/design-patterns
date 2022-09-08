@@ -1,0 +1,21 @@
+diff --git a/src/Decorator/OutputtingXpEarnedServiceDecorator.php b/src/Decorator/OutputtingXpEarnedServiceDecorator.php
+index dd73f51..3315f92 100644
+--- a/src/Decorator/OutputtingXpEarnedServiceDecorator.php
++++ b/src/Decorator/OutputtingXpEarnedServiceDecorator.php
+@@ -15,6 +15,16 @@ class OutputtingXpEarnedServiceDecorator implements XpEarnedServiceInterface
+ 
+     public function addXp(Character $winner, int $enemyLevel): void
+     {
++        $beforeLevel = $winner->getLevel();
++
+         $this->xpEarnedService->addXp($winner, $enemyLevel);
++
++        $afterLevel = $winner->getLevel();
++        if ($afterLevel > $beforeLevel) {
++            $this->output->writeln('--------------------------------');
++            $this->output->writeln('<bg=green;fg=white>Congratulations! You\'ve leveled up!</>');
++            $this->output->writeln(sprintf('You are now level "%d"', $winner->getLevel()));
++            $this->output->writeln('--------------------------------');
++        }
+     }
+ }

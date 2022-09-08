@@ -1,0 +1,15 @@
+diff --git a/src/Service/XpEarnedService.php b/src/Service/XpEarnedService.php
+index f761f4b..ffd0e7f 100644
+--- a/src/Service/XpEarnedService.php
++++ b/src/Service/XpEarnedService.php
+@@ -3,8 +3,9 @@
+ namespace App\Service;
+ 
+ use App\Character\Character;
++use App\Decorator\XpEarnedServiceInterface;
+ 
+-class XpEarnedService
++class XpEarnedService implements XpEarnedServiceInterface
+ {
+     public function addXp(Character $winner, int $enemyLevel): void
+     {

@@ -1,0 +1,19 @@
+diff --git a/src/Decorator/OutputtingXpEarnedServiceDecorator.php b/src/Decorator/OutputtingXpEarnedServiceDecorator.php
+index 4d3aa8c..4382209 100644
+--- a/src/Decorator/OutputtingXpEarnedServiceDecorator.php
++++ b/src/Decorator/OutputtingXpEarnedServiceDecorator.php
+@@ -3,11 +3,13 @@
+ namespace App\Decorator;
+ 
+ use App\Character\Character;
++use Symfony\Component\Console\Output\OutputInterface;
+ 
+ class OutputtingXpEarnedServiceDecorator implements XpEarnedServiceInterface
+ {
+     public function __construct(
+-        private readonly XpEarnedServiceInterface $xpEarnedService
++        private readonly XpEarnedServiceInterface $xpEarnedService,
++        private readonly OutputInterface $output,
+     ) {
+     }
+ }

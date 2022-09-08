@@ -1,0 +1,14 @@
+diff --git a/src/Decorator/OutputtingXpEarnedServiceDecorator.php b/src/Decorator/OutputtingXpEarnedServiceDecorator.php
+index 4382209..dd73f51 100644
+--- a/src/Decorator/OutputtingXpEarnedServiceDecorator.php
++++ b/src/Decorator/OutputtingXpEarnedServiceDecorator.php
+@@ -12,4 +12,9 @@ class OutputtingXpEarnedServiceDecorator implements XpEarnedServiceInterface
+         private readonly OutputInterface $output,
+     ) {
+     }
++
++    public function addXp(Character $winner, int $enemyLevel): void
++    {
++        $this->xpEarnedService->addXp($winner, $enemyLevel);
++    }
+ }

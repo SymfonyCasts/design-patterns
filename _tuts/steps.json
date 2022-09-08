@@ -174,7 +174,57 @@
             "id": "observer-notify-observers",
             "name": "Observer: notify observers",
             "description": null
+        },
+        {
+            "id": "decorator-create-xpearnedserviceinterface",
+            "name": "Decorator: create XpEarnedServiceInterface",
+            "description": null
+        },
+        {
+            "id": "decorator-implement-interface-on-service",
+            "name": "Decorator: implement interface on service",
+            "description": null
+        },
+        {
+            "id": "decorator-create-outputtingxpearnedservicedecorator",
+            "name": "Decorator: create OutputtingXpEarnedServiceDecorator",
+            "description": null
+        },
+        {
+            "id": "decorator-add-outputinterface-argument",
+            "name": "Decorator: add OutputInterface argument",
+            "description": null
+        },
+        {
+            "id": "decorator-decorate-addxp-method",
+            "name": "Decorator: decorate addXp method",
+            "description": null
+        },
+        {
+            "id": "decorator-implement-addxp-method",
+            "name": "Decorator: implement addXp method",
+            "description": null
+        },
+        {
+            "id": "decorator-gamecommand-use-decorator",
+            "name": "Decorator: GameCommand use decorator",
+            "description": null
+        },
+        {
+            "id": "decorator-update-observer-argument",
+            "name": "Decorator: Update observer argument",
+            "description": null
+        },
+        {
+            "id": "decorator-create-event-dispatcher-decorator",
+            "name": "Decorator: create event dispatcher decorator",
+            "description": null
+        },
+        {
+            "id": "decorator-eaeventdispatcher-delegate-all-methods",
+            "name": "Decorator: EaeventDispatcher delegate all methods",
+            "description": null
         }
     ],
-    "sha": "590a91d39c21eb78a5232ee02c685ef2cb13ce15"
+    "sha": "4e25e0631b6354a3244f479720548706ec7664bc"
 }
