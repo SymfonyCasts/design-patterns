@@ -224,7 +224,17 @@
             "id": "decorator-eaeventdispatcher-delegate-all-methods",
             "name": "Decorator: EaeventDispatcher delegate all methods",
             "description": null
+        },
+        {
+            "id": "decorator-decorate-dispatch-method",
+            "name": "Decorator: decorate dispatch method",
+            "description": null
+        },
+        {
+            "id": "decorator-configure-debugeventdispatcherdecorator",
+            "name": "Decorator: Configure DebugEventDispatcherDecorator",
+            "description": null
         }
     ],
-    "sha": "4e25e0631b6354a3244f479720548706ec7664bc"
+    "sha": "98ba592557059441ab76a07ed63a49b3b976d3b8"
 }

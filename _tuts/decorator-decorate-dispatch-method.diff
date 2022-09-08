@@ -1,0 +1,15 @@
+diff --git a/src/Decorator/DebugEventDispatcherDecorator.php b/src/Decorator/DebugEventDispatcherDecorator.php
+index f35fbdb..5f70ca5 100644
+--- a/src/Decorator/DebugEventDispatcherDecorator.php
++++ b/src/Decorator/DebugEventDispatcherDecorator.php
+@@ -14,6 +14,10 @@ class DebugEventDispatcherDecorator implements EventDispatcherInterface
+ 
+     public function dispatch(object $event, string $eventName = null): object
+     {
++        dump('--------------------');
++        dump('Dispatching event: ' . $event::class);
++        dump('--------------------');
++
+         return $this->eventDispatcher->dispatch($event, $eventName);
+     }
+ 
