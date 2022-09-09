@@ -6,8 +6,8 @@
             "description": null
         },
         {
-            "id": "strategy-cast-spell",
-            "name": "strategy-cast-spell",
+            "id": "strategy-add-castspell-abstract-method",
+            "name": "Strategy: Add castSpell() abstract method",
             "description": null
         },
         {
@@ -26,8 +26,8 @@
             "description": null
         },
         {
-            "id": "strategy-clean-up-abstract-method",
-            "name": "strategy-clean-up-abstract-method",
+            "id": "strategy-clean-up-the-abstract-method",
+            "name": "Strategy: Clean up the abstract method",
             "description": null
         },
         {
@@ -236,5 +236,5 @@
             "description": null
         }
     ],
-    "sha": "98ba592557059441ab76a07ed63a49b3b976d3b8"
+    "sha": "3ab53213da1214a9955bb885c6e312ac4be88003"
 }
