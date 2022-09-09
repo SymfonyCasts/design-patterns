@@ -51,11 +51,6 @@
             "description": null
         },
         {
-            "id": "delete-1",
-            "name": "delete-1",
-            "description": null
-        },
-        {
             "id": "strategy-armortype-interface",
             "name": "Strategy: ArmorType Interface",
             "description": null
@@ -208,11 +203,6 @@
         {
             "id": "decorator-gamecommand-use-decorator",
             "name": "Decorator: GameCommand use decorator",
-            "description": null
-        },
-        {
-            "id": "decorator-update-observer-argument",
-            "name": "Decorator: Update observer argument",
             "description": null
         },
         {
