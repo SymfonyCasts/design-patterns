@@ -6,9 +6,6 @@ class Fighter extends Character
 {
     public function __construct()
     {
-        $this->maxHealth = 90;
-        $this->currentHealth = $this->maxHealth;
-        $this->baseDamage = 12;
-        $this->armor = 0.25;
+        parent::__construct(90, 12, 0.25);
     }
 }

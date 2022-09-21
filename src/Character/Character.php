@@ -6,11 +6,16 @@ use App\Dice;
 
 abstract class Character
 {
-    protected int $baseDamage;
-    protected float $armor;
-    protected int $maxHealth;
-    protected int $currentHealth;
+    private int $currentHealth;
     private string $nickname = '';
+
+    public function __construct(
+        private int $maxHealth,
+        private int $baseDamage,
+        private float $armor
+    ) {
+        $this->currentHealth = $this->maxHealth;
+    }
 
     /**
      * Damage: 1d6 (1 dice of 6)
