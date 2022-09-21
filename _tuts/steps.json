@@ -36,8 +36,8 @@
             "description": null
         },
         {
-            "id": "strategy-attack-type-on-characters",
-            "name": "Strategy: Attack type on characters",
+            "id": "delete-1",
+            "name": "delete-1",
             "description": null
         },
         {
@@ -61,8 +61,8 @@
             "description": null
         },
         {
-            "id": "strategy-add-armortype-property",
-            "name": "Strategy: add ArmorType property",
+            "id": "strategy-add-armortype-argument",
+            "name": "Strategy: Add ArmorType Argument",
             "description": null
         },
         {
@@ -226,5 +226,5 @@
             "description": null
         }
     ],
-    "sha": "526fa6dcfc60f2b3f9387002b59d96300d78e95c"
+    "sha": "ba93b6c7e67d23caf2bcf79317111fcdc31cd31d"
 }

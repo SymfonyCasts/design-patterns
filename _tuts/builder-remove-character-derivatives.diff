@@ -60,10 +60,10 @@ index cb92ad9..0000000
 -}
 diff --git a/src/Character/MageFighter.php b/src/Character/MageFighter.php
 deleted file mode 100644
-index 932c7bd..0000000
+index 33dd300..0000000
 --- a/src/Character/MageFighter.php
 +++ /dev/null
-@@ -1,19 +0,0 @@
+@@ -1,14 +0,0 @@
 -<?php
 -
 -namespace App\Character;
@@ -75,11 +75,6 @@ index 932c7bd..0000000
 -{
 -    public function __construct()
 -    {
--        $this->maxHealth = 100;
--        $this->currentHealth = $this->maxHealth;
--        $this->baseDamage = 12;
--        $this->armor = 0.25;
--        $this->attackType = new FireBoltType();
--        $this->armorType = new ShieldType();
+-        parent::__construct(100, 12, new FireBoltType(), new ShieldType());
 -    }
 -}

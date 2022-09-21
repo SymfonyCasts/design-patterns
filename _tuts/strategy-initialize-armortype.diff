@@ -1,5 +1,5 @@
 diff --git a/src/Character/Archer.php b/src/Character/Archer.php
-index aa4c39f..825979b 100644
+index aa4c39f..b8a4d65 100644
 --- a/src/Character/Archer.php
 +++ b/src/Character/Archer.php
 @@ -2,12 +2,13 @@
@@ -14,11 +14,11 @@ index aa4c39f..825979b 100644
      public function __construct()
      {
 -        parent::__construct(80, 10, 0.15, new BowType());
-+        parent::__construct(80, 10, 0.15, new BowType(), new LeatherArmorType());
++        parent::__construct(80, 10, new BowType(), new LeatherArmorType());
      }
  }
 diff --git a/src/Character/Fighter.php b/src/Character/Fighter.php
-index 56c2bfa..35e2526 100644
+index 56c2bfa..75081b9 100644
 --- a/src/Character/Fighter.php
 +++ b/src/Character/Fighter.php
 @@ -2,12 +2,13 @@
@@ -33,11 +33,11 @@ index 56c2bfa..35e2526 100644
      public function __construct()
      {
 -        parent::__construct(90, 12, 0.25, new TwoHandedSwordType());
-+        parent::__construct(90, 12, 0.25, new TwoHandedSwordType(), new ShieldType());
++        parent::__construct(90, 12, new TwoHandedSwordType(), new ShieldType());
      }
  }
 diff --git a/src/Character/Mage.php b/src/Character/Mage.php
-index 9e2f416..8bb347c 100644
+index 9e2f416..cb92ad9 100644
 --- a/src/Character/Mage.php
 +++ b/src/Character/Mage.php
 @@ -2,12 +2,13 @@
@@ -52,14 +52,14 @@ index 9e2f416..8bb347c 100644
      public function __construct()
      {
 -        parent::__construct(70, 8, 0.10, new FireBoltType());
-+        parent::__construct(70, 8, 0.10, new FireBoltType(), new IceBlockType());
++        parent::__construct(70, 8, new FireBoltType(), new IceBlockType());
      }
  }
 diff --git a/src/Character/MageFighter.php b/src/Character/MageFighter.php
-index 1018012..932c7bd 100644
+index 17202fb..33dd300 100644
 --- a/src/Character/MageFighter.php
 +++ b/src/Character/MageFighter.php
-@@ -2,6 +2,7 @@
+@@ -2,12 +2,13 @@
  
  namespace App\Character;
  
@@ -67,12 +67,10 @@ index 1018012..932c7bd 100644
  use App\AttackType\FireBoltType;
  
  class MageFighter extends Character
-@@ -12,7 +13,7 @@ class MageFighter extends Character
-         $this->currentHealth = $this->maxHealth;
-         $this->baseDamage = 12;
-         $this->armor = 0.25;
--
-         $this->attackType = new FireBoltType();
-+        $this->armorType = new ShieldType();
+ {
+     public function __construct()
+     {
+-        parent::__construct(100, 12, 0.25, new FireBoltType());
++        parent::__construct(100, 12, new FireBoltType(), new ShieldType());
      }
  }

@@ -1,8 +1,8 @@
 diff --git a/src/Character/Character.php b/src/Character/Character.php
-index 31791aa..21c275a 100644
+index 19c45ba..51c8a1d 100644
 --- a/src/Character/Character.php
 +++ b/src/Character/Character.php
-@@ -30,8 +30,9 @@ abstract class Character
+@@ -29,8 +29,9 @@ abstract class Character
  
      public function receiveAttack(int $damage): int
      {

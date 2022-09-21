@@ -1,9 +1,9 @@
 diff --git a/src/Character/MageFighter.php b/src/Character/MageFighter.php
 new file mode 100644
-index 0000000..1018012
+index 0000000..17202fb
 --- /dev/null
 +++ b/src/Character/MageFighter.php
-@@ -0,0 +1,18 @@
+@@ -0,0 +1,13 @@
 +<?php
 +
 +namespace App\Character;
@@ -14,11 +14,6 @@ index 0000000..1018012
 +{
 +    public function __construct()
 +    {
-+        $this->maxHealth = 100;
-+        $this->currentHealth = $this->maxHealth;
-+        $this->baseDamage = 12;
-+        $this->armor = 0.25;
-+
-+        $this->attackType = new FireBoltType();
++        parent::__construct(100, 12, 0.25, new FireBoltType());
 +    }
 +}

@@ -1,17 +1,5 @@
-diff --git a/src/Character/Archer.php b/src/Character/Archer.php
-index 825979b..b8a4d65 100644
---- a/src/Character/Archer.php
-+++ b/src/Character/Archer.php
-@@ -9,6 +9,6 @@ class Archer extends Character
- {
-     public function __construct()
-     {
--        parent::__construct(80, 10, 0.15, new BowType(), new LeatherArmorType());
-+        parent::__construct(80, 10, new BowType(), new LeatherArmorType());
-     }
- }
 diff --git a/src/Character/Character.php b/src/Character/Character.php
-index 21c275a..d7b2b52 100644
+index 51c8a1d..d7b2b52 100644
 --- a/src/Character/Character.php
 +++ b/src/Character/Character.php
 @@ -5,7 +5,7 @@ namespace App\Character;
@@ -23,11 +11,7 @@ index 21c275a..d7b2b52 100644
  {
      private int $currentHealth;
      private string $nickname = '';
-@@ -13,11 +13,10 @@ abstract class Character
-     public function __construct(
-         private int $maxHealth,
-         private int $baseDamage,
--        private float $armor,
+@@ -16,7 +16,7 @@ abstract class Character
          private AttackType $attackType,
          private ArmorType $armorType
      ) {
@@ -36,27 +20,3 @@ index 21c275a..d7b2b52 100644
      }
  
      /**
-diff --git a/src/Character/Fighter.php b/src/Character/Fighter.php
-index 35e2526..75081b9 100644
---- a/src/Character/Fighter.php
-+++ b/src/Character/Fighter.php
-@@ -9,6 +9,6 @@ class Fighter extends Character
- {
-     public function __construct()
-     {
--        parent::__construct(90, 12, 0.25, new TwoHandedSwordType(), new ShieldType());
-+        parent::__construct(90, 12, new TwoHandedSwordType(), new ShieldType());
-     }
- }
-diff --git a/src/Character/Mage.php b/src/Character/Mage.php
-index 8bb347c..cb92ad9 100644
---- a/src/Character/Mage.php
-+++ b/src/Character/Mage.php
-@@ -9,6 +9,6 @@ class Mage extends Character
- {
-     public function __construct()
-     {
--        parent::__construct(70, 8, 0.10, new FireBoltType(), new IceBlockType());
-+        parent::__construct(70, 8, new FireBoltType(), new IceBlockType());
-     }
- }
