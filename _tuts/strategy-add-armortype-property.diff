@@ -1,19 +1,24 @@
 diff --git a/src/Character/Character.php b/src/Character/Character.php
-index f522c0b..d09295c 100644
+index cdec654..31791aa 100644
 --- a/src/Character/Character.php
 +++ b/src/Character/Character.php
-@@ -2,12 +2,14 @@
+@@ -2,8 +2,8 @@
  
  namespace App\Character;
  
 +use App\ArmorType\ArmorType;
  use App\AttackType\AttackType;
- use App\Dice;
+-use App\Dice;
  
  abstract class Character
  {
-     protected AttackType $attackType;
-+    protected ArmorType $armorType;
-     protected int $baseDamage;
-     protected float $armor;
-     protected int $maxHealth;
+@@ -14,7 +14,8 @@ abstract class Character
+         private int $maxHealth,
+         private int $baseDamage,
+         private float $armor,
+-        private AttackType $attackType
++        private AttackType $attackType,
++        private ArmorType $armorType
+     ) {
+         $this->currentHealth = $this->maxHealth;
+     }

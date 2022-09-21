@@ -1,27 +1,26 @@
 diff --git a/src/Character/Archer.php b/src/Character/Archer.php
-index 135dda4..ceb8173 100644
+index a57ccdd..aa4c39f 100644
 --- a/src/Character/Archer.php
 +++ b/src/Character/Archer.php
-@@ -2,6 +2,7 @@
+@@ -2,10 +2,12 @@
  
  namespace App\Character;
  
-+use App\AttackType\ShootType;
- use App\Dice;
- 
++use App\AttackType\BowType;
++
  class Archer extends Character
-@@ -12,5 +13,6 @@ class Archer extends Character
-         $this->currentHealth = $this->maxHealth;
-         $this->baseDamage = 10;
-         $this->armor = 0.15;
-+        $this->attackType = new ShootType();
+ {
+     public function __construct()
+     {
+-        parent::__construct(80, 10, 0.15);
++        parent::__construct(80, 10, 0.15, new BowType());
      }
  }
 diff --git a/src/Character/Character.php b/src/Character/Character.php
-index 64adcba..f522c0b 100644
+index 25ac7fd..cdec654 100644
 --- a/src/Character/Character.php
 +++ b/src/Character/Character.php
-@@ -2,10 +2,12 @@
+@@ -2,6 +2,7 @@
  
  namespace App\Character;
  
@@ -29,12 +28,17 @@ index 64adcba..f522c0b 100644
  use App\Dice;
  
  abstract class Character
- {
-+    protected AttackType $attackType;
-     protected int $baseDamage;
-     protected float $armor;
-     protected int $maxHealth;
-@@ -17,7 +19,7 @@ abstract class Character
+@@ -12,7 +13,8 @@ abstract class Character
+     public function __construct(
+         private int $maxHealth,
+         private int $baseDamage,
+-        private float $armor
++        private float $armor,
++        private AttackType $attackType
+     ) {
+         $this->currentHealth = $this->maxHealth;
+     }
+@@ -22,7 +24,7 @@ abstract class Character
       */
      public function attack(): int
      {
@@ -44,10 +48,10 @@ index 64adcba..f522c0b 100644
  
      public function receiveAttack(int $damage): int
 diff --git a/src/Character/Fighter.php b/src/Character/Fighter.php
-index b8e353a..808c8f2 100644
+index 48e31a6..56c2bfa 100644
 --- a/src/Character/Fighter.php
 +++ b/src/Character/Fighter.php
-@@ -2,6 +2,8 @@
+@@ -2,10 +2,12 @@
  
  namespace App\Character;
  
@@ -56,29 +60,27 @@ index b8e353a..808c8f2 100644
  class Fighter extends Character
  {
      public function __construct()
-@@ -10,5 +12,6 @@ class Fighter extends Character
-         $this->currentHealth = $this->maxHealth;
-         $this->baseDamage = 12;
-         $this->armor = 0.25;
-+        $this->attackType = new TwoHandedSwordType();
+     {
+-        parent::__construct(90, 12, 0.25);
++        parent::__construct(90, 12, 0.25, new TwoHandedSwordType());
      }
  }
 diff --git a/src/Character/Mage.php b/src/Character/Mage.php
-index 4da2065..6d51b98 100644
+index bdd87ee..9e2f416 100644
 --- a/src/Character/Mage.php
 +++ b/src/Character/Mage.php
-@@ -2,6 +2,7 @@
+@@ -2,12 +2,12 @@
  
  namespace App\Character;
  
+-use App\Dice;
 +use App\AttackType\FireBoltType;
- use App\Dice;
  
  class Mage extends Character
-@@ -12,5 +13,6 @@ class Mage extends Character
-         $this->currentHealth = $this->maxHealth;
-         $this->baseDamage = 8;
-         $this->armor = 0.10;
-+        $this->attackType = new FireBoltType();
+ {
+     public function __construct()
+     {
+-        parent::__construct(70, 8, 0.10);
++        parent::__construct(70, 8, 0.10, new FireBoltType());
      }
  }

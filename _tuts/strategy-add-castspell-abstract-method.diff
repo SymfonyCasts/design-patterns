@@ -1,13 +1,13 @@
 diff --git a/src/Character/Character.php b/src/Character/Character.php
-index 64adcba..9534e26 100644
+index 25ac7fd..1ed06d0 100644
 --- a/src/Character/Character.php
 +++ b/src/Character/Character.php
-@@ -12,6 +12,8 @@ abstract class Character
-     protected int $currentHealth;
+@@ -9,6 +9,8 @@ abstract class Character
+     private int $currentHealth;
      private string $nickname = '';
  
 +    abstract public function castSpell(): int;
 +
-     /**
-      * Damage: 1d6 (1 dice of 6)
-      */
+     public function __construct(
+         private int $maxHealth,
+         private int $baseDamage,

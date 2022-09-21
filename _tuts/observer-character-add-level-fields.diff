@@ -1,17 +1,17 @@
 diff --git a/src/Character/Character.php b/src/Character/Character.php
-index 46c0a7c..e1ac43d 100644
+index d7b2b52..bc123bd 100644
 --- a/src/Character/Character.php
 +++ b/src/Character/Character.php
 @@ -9,6 +9,8 @@ class Character
  {
-     protected int $currentHealth;
+     private int $currentHealth;
      private string $nickname = '';
 +    private int $level = 1;
 +    private int $xp = 0;
  
      public function __construct(
          private int $maxHealth,
-@@ -53,6 +55,18 @@ class Character
+@@ -52,6 +54,18 @@ class Character
          $this->nickname = $nickname;
      }
  

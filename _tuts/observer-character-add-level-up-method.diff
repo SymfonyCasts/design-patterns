@@ -1,8 +1,8 @@
 diff --git a/src/Character/Character.php b/src/Character/Character.php
-index e1ac43d..dfbc9f6 100644
+index bc123bd..4f56198 100644
 --- a/src/Character/Character.php
 +++ b/src/Character/Character.php
-@@ -55,6 +55,18 @@ class Character
+@@ -54,6 +54,18 @@ class Character
          $this->nickname = $nickname;
      }
  

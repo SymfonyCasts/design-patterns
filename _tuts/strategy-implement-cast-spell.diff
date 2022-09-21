@@ -1,10 +1,10 @@
 diff --git a/src/Character/Archer.php b/src/Character/Archer.php
-index 135dda4..79000df 100644
+index a57ccdd..cdf35a3 100644
 --- a/src/Character/Archer.php
 +++ b/src/Character/Archer.php
-@@ -13,4 +13,10 @@ class Archer extends Character
-         $this->baseDamage = 10;
-         $this->armor = 0.15;
+@@ -8,4 +8,10 @@ class Archer extends Character
+     {
+         parent::__construct(80, 10, 0.15);
      }
 +
 +    public function castSpell(): int
@@ -14,12 +14,12 @@ index 135dda4..79000df 100644
 +    }
  }
 diff --git a/src/Character/Fighter.php b/src/Character/Fighter.php
-index b8e353a..8b800c0 100644
+index 48e31a6..c491bbe 100644
 --- a/src/Character/Fighter.php
 +++ b/src/Character/Fighter.php
-@@ -11,4 +11,10 @@ class Fighter extends Character
-         $this->baseDamage = 12;
-         $this->armor = 0.25;
+@@ -8,4 +8,10 @@ class Fighter extends Character
+     {
+         parent::__construct(90, 12, 0.25);
      }
 +
 +    public function castSpell(): int
@@ -29,10 +29,10 @@ index b8e353a..8b800c0 100644
 +    }
  }
 diff --git a/src/Character/Mage.php b/src/Character/Mage.php
-index 963fe8b..d977c5d 100644
+index ce82c46..c45b15d 100644
 --- a/src/Character/Mage.php
 +++ b/src/Character/Mage.php
-@@ -2,6 +2,8 @@
+@@ -2,10 +2,20 @@
  
  namespace App\Character;
  
@@ -41,9 +41,8 @@ index 963fe8b..d977c5d 100644
  class Mage extends Character
  {
      public function __construct()
-@@ -11,4 +13,12 @@ class Mage extends Character
-         $this->baseDamage = 8;
-         $this->armor = 0.10;
+     {
+         parent::__construct(70, 8, 0.10);
      }
 +
 +    /**

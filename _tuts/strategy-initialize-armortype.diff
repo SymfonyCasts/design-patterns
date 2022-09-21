@@ -1,27 +1,27 @@
 diff --git a/src/Character/Archer.php b/src/Character/Archer.php
-index 17ca735..d4848bf 100644
+index aa4c39f..825979b 100644
 --- a/src/Character/Archer.php
 +++ b/src/Character/Archer.php
-@@ -2,6 +2,7 @@
+@@ -2,12 +2,13 @@
  
  namespace App\Character;
  
 +use App\ArmorType\LeatherArmorType;
  use App\AttackType\BowType;
- use App\Dice;
  
-@@ -14,5 +15,6 @@ class Archer extends Character
-         $this->baseDamage = 10;
-         $this->armor = 0.15;
-         $this->attackType = new BowType();
-+        $this->armorType = new LeatherArmorType();
+ class Archer extends Character
+ {
+     public function __construct()
+     {
+-        parent::__construct(80, 10, 0.15, new BowType());
++        parent::__construct(80, 10, 0.15, new BowType(), new LeatherArmorType());
      }
  }
 diff --git a/src/Character/Fighter.php b/src/Character/Fighter.php
-index 808c8f2..684f0c0 100644
+index 56c2bfa..35e2526 100644
 --- a/src/Character/Fighter.php
 +++ b/src/Character/Fighter.php
-@@ -2,6 +2,7 @@
+@@ -2,12 +2,13 @@
  
  namespace App\Character;
  
@@ -29,30 +29,30 @@ index 808c8f2..684f0c0 100644
  use App\AttackType\TwoHandedSwordType;
  
  class Fighter extends Character
-@@ -13,5 +14,6 @@ class Fighter extends Character
-         $this->baseDamage = 12;
-         $this->armor = 0.25;
-         $this->attackType = new TwoHandedSwordType();
-+        $this->armorType = new ShieldType();
+ {
+     public function __construct()
+     {
+-        parent::__construct(90, 12, 0.25, new TwoHandedSwordType());
++        parent::__construct(90, 12, 0.25, new TwoHandedSwordType(), new ShieldType());
      }
  }
 diff --git a/src/Character/Mage.php b/src/Character/Mage.php
-index 6d51b98..52b7a4a 100644
+index 9e2f416..8bb347c 100644
 --- a/src/Character/Mage.php
 +++ b/src/Character/Mage.php
-@@ -2,6 +2,7 @@
+@@ -2,12 +2,13 @@
  
  namespace App\Character;
  
 +use App\ArmorType\IceBlockType;
  use App\AttackType\FireBoltType;
- use App\Dice;
  
-@@ -14,5 +15,6 @@ class Mage extends Character
-         $this->baseDamage = 8;
-         $this->armor = 0.10;
-         $this->attackType = new FireBoltType();
-+        $this->armorType = new IceBlockType();
+ class Mage extends Character
+ {
+     public function __construct()
+     {
+-        parent::__construct(70, 8, 0.10, new FireBoltType());
++        parent::__construct(70, 8, 0.10, new FireBoltType(), new IceBlockType());
      }
  }
 diff --git a/src/Character/MageFighter.php b/src/Character/MageFighter.php
