@@ -1,5 +1,5 @@
 diff --git a/src/Character/Character.php b/src/Character/Character.php
-index b700b0e..4a8a78b 100644
+index a78f8fb..2f9b968 100644
 --- a/src/Character/Character.php
 +++ b/src/Character/Character.php
 @@ -9,6 +9,8 @@ class Character
@@ -11,7 +11,7 @@ index b700b0e..4a8a78b 100644
  
      public function __construct(
          private int $maxHealth,
-@@ -52,6 +54,18 @@ class Character
+@@ -49,6 +51,18 @@ class Character
          $this->nickname = $nickname;
      }
  

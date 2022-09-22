@@ -1,0 +1,18 @@
+diff --git a/src/Character/Character.php b/src/Character/Character.php
+index 1460a34..620a145 100644
+--- a/src/Character/Character.php
++++ b/src/Character/Character.php
+@@ -19,12 +19,9 @@ abstract class Character
+         $this->currentHealth = $this->maxHealth;
+     }
+ 
+-    /**
+-     * Damage: 1d6 (1 dice of 6)
+-     */
+     public function attack(): int
+     {
+-        return $this->baseDamage + Dice::roll(6);
++        return $this->attackType->attack($this->baseDamage);
+     }
+ 
+     public function receiveAttack(int $damage): int

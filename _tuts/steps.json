@@ -46,8 +46,8 @@
             "description": null
         },
         {
-            "id": "strategy-update-attack-method-2",
-            "name": "Strategy: Update attack method 2",
+            "id": "delete-4",
+            "name": "delete-4",
             "description": null
         },
         {
@@ -236,5 +236,5 @@
             "description": null
         }
     ],
-    "sha": "9774e905436044e173c869f42a1ff30407dece3d"
+    "sha": "20b71a1974f864f30097bcc5a7f0e85b104dbe68"
 }
