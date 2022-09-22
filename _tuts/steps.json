@@ -6,11 +6,6 @@
             "description": null
         },
         {
-            "id": "delete",
-            "name": "delete",
-            "description": null
-        },
-        {
             "id": "strategy-mage-override-attack-method",
             "name": "Strategy: mage override attack method",
             "description": null
@@ -26,28 +21,13 @@
             "description": null
         },
         {
-            "id": "delete-3",
-            "name": "delete 3",
-            "description": null
-        },
-        {
             "id": "strategy-update-attacktype-property",
             "name": "Strategy: Update AttackType property",
             "description": null
         },
         {
-            "id": "delete-1",
-            "name": "delete-1",
-            "description": null
-        },
-        {
             "id": "strategy-update-attack-method",
             "name": "Strategy: Update attack method",
-            "description": null
-        },
-        {
-            "id": "delete-4",
-            "name": "delete-4",
             "description": null
         },
         {
