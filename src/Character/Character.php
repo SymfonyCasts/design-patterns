@@ -4,7 +4,7 @@ namespace App\Character;
 
 use App\Dice;
 
-abstract class Character
+class Character
 {
     private const MAX_STAMINA = 100;
 

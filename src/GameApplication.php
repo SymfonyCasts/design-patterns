@@ -2,10 +2,7 @@
 
 namespace App;
 
-use App\Character\Archer;
 use App\Character\Character;
-use App\Character\Fighter;
-use App\Character\Mage;
 
 class GameApplication
 {
@@ -41,9 +38,9 @@ class GameApplication
     public function createCharacter(string $character): Character
     {
         return match (strtolower($character)) {
-            'fighter' => new Fighter(),
-            'archer' => new Archer(),
-            'mage' => new Mage(),
+            'fighter' => new Character(90, 12, 0.25),
+            'archer' => new Character(80, 10, 0.15),
+            'mage' => new Character(70, 8, 0.10),
             default => throw new \RuntimeException('Undefined Character'),
         };
     }
