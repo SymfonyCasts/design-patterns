@@ -11,6 +11,7 @@ class FightResult
     private int $rounds = 0;
     private int $damageDealt = 0;
     private int $damageReceived = 0;
+    private int $exhaustedTurns = 0;
 
     public function getWinner(): Character
     {
@@ -60,5 +61,15 @@ class FightResult
     public function addDamageReceived(int $damageReceived): void
     {
         $this->damageReceived += $damageReceived;
+    }
+
+    public function addExhaustedTurn(): void
+    {
+        $this->exhaustedTurns++;
+    }
+
+    public function getExhaustedTurns(): int
+    {
+        return $this->exhaustedTurns;
     }
 }

@@ -17,7 +17,12 @@ class GameApplication
         while (true) {
             $fightResult->addRound();
 
-            $damageDealt = $ai->receiveAttack($player->attack());
+            $damage = $player->attack();
+            if ($damage === 0) {
+                $fightResult->addExhaustedTurn();
+            }
+
+            $damageDealt = $ai->receiveAttack($damage);
             $fightResult->addDamageDealt($damageDealt);
 
             if ($this->didPlayerDie($ai)) {

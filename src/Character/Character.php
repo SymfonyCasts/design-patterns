@@ -6,6 +6,9 @@ use App\Dice;
 
 abstract class Character
 {
+    private const MAX_STAMINA = 100;
+
+    private int $currentStamina = self::MAX_STAMINA;
     private int $currentHealth;
     private string $nickname = '';
 
@@ -22,6 +25,14 @@ abstract class Character
      */
     public function attack(): int
     {
+        $this->currentStamina -= (25 + Dice::roll(20));
+        if ($this->currentStamina <= 0) {
+            // can't attack this turn
+            $this->currentStamina = self::MAX_STAMINA;
+
+            return 0;
+        }
+
         return $this->baseDamage + Dice::roll(6);
     }
 
@@ -55,5 +66,6 @@ abstract class Character
     public function rest(): void
     {
         $this->currentHealth = $this->maxHealth;
+        $this->currentStamina = self::MAX_STAMINA;
     }
 }
