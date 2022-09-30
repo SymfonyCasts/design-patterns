@@ -1,5 +1,5 @@
 diff --git a/src/GameApplication.php b/src/GameApplication.php
-index 7bf5f4d..4d1790e 100644
+index 95c0b29..c115554 100644
 --- a/src/GameApplication.php
 +++ b/src/GameApplication.php
 @@ -9,6 +9,9 @@ use App\Observer\GameSubjectInterface;
@@ -12,7 +12,7 @@ index 7bf5f4d..4d1790e 100644
      public function play(Character $player, Character $ai): FightResult
      {
          $player->rest();
-@@ -98,16 +101,28 @@ class GameApplication implements GameSubjectInterface
+@@ -103,16 +106,28 @@ class GameApplication implements GameSubjectInterface
  
      public function subscribe(GameObserverInterface $observer): void
      {

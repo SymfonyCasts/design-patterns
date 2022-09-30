@@ -1,5 +1,5 @@
 diff --git a/src/Command/GameCommand.php b/src/Command/GameCommand.php
-index aaf686c..ed4f107 100644
+index 0fcc2b0..e25f89b 100644
 --- a/src/Command/GameCommand.php
 +++ b/src/Command/GameCommand.php
 @@ -5,6 +5,8 @@ namespace App\Command;

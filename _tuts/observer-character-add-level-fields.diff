@@ -1,9 +1,9 @@
 diff --git a/src/Character/Character.php b/src/Character/Character.php
-index a78f8fb..2f9b968 100644
+index 7d04e8a..83aa3ee 100644
 --- a/src/Character/Character.php
 +++ b/src/Character/Character.php
-@@ -9,6 +9,8 @@ class Character
- {
+@@ -13,6 +13,8 @@ class Character
+     private int $currentStamina = self::MAX_STAMINA;
      private int $currentHealth;
      private string $nickname = '';
 +    private int $level = 1;
@@ -11,7 +11,7 @@ index a78f8fb..2f9b968 100644
  
      public function __construct(
          private int $maxHealth,
-@@ -49,6 +51,18 @@ class Character
+@@ -61,6 +63,18 @@ class Character
          $this->nickname = $nickname;
      }
  

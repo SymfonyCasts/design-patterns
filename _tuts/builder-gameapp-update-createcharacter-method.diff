@@ -1,27 +1,28 @@
 diff --git a/src/GameApplication.php b/src/GameApplication.php
-index 1efefc2..54792e6 100644
+index a40284b..e2ee7e3 100644
 --- a/src/GameApplication.php
 +++ b/src/GameApplication.php
-@@ -3,11 +3,7 @@
+@@ -3,12 +3,6 @@
  namespace App;
  
  use App\Builder\CharacterBuilder;
--use App\Character\Archer;
+-use App\ArmorType\IceBlockType;
+-use App\ArmorType\LeatherArmorType;
+-use App\ArmorType\ShieldType;
+-use App\AttackType\BowType;
+-use App\AttackType\FireBoltType;
+-use App\AttackType\TwoHandedSwordType;
  use App\Character\Character;
--use App\Character\Fighter;
--use App\Character\Mage;
--use App\Character\MageFighter;
  
  class GameApplication
- {
-@@ -38,11 +34,35 @@ class GameApplication
+@@ -45,11 +39,35 @@ class GameApplication
      public function createCharacter(string $character): Character
      {
          return match (strtolower($character)) {
--            'fighter' => new Fighter(),
--            'archer' => new Archer(),
--            'mage' => new Mage(),
--            'mage_fighter' => new MageFighter(),
+-            'fighter' => new Character(90, 12, new TwoHandedSwordType(), new ShieldType()),
+-            'archer' => new Character(80, 10, new BowType(), new LeatherArmorType()),
+-            'mage' => new Character(70, 8, new FireBoltType(), new IceBlockType()),
+-            'mage_fighter' => new Character(100, 12, new FireBoltType(), new ShieldType()),
 -            default => throw new \RuntimeException('Undefined Character'),
 +            'fighter' => $this->createCharacterBuilder()
 +                ->setBaseDamage(12)
@@ -55,7 +56,7 @@ index 1efefc2..54792e6 100644
          };
      }
  
-@@ -65,7 +85,7 @@ class GameApplication
+@@ -72,7 +90,7 @@ class GameApplication
              'fighter',
              'mage',
              'archer',

@@ -1,5 +1,5 @@
 diff --git a/src/Command/GameCommand.php b/src/Command/GameCommand.php
-index ed4f107..cc442ab 100644
+index e25f89b..304843a 100644
 --- a/src/Command/GameCommand.php
 +++ b/src/Command/GameCommand.php
 @@ -56,6 +56,9 @@ class GameCommand extends Command

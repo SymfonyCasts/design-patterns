@@ -1,17 +1,8 @@
 diff --git a/src/Character/Character.php b/src/Character/Character.php
-index 03ee5c0..a78f8fb 100644
+index 36aa595..7d04e8a 100644
 --- a/src/Character/Character.php
 +++ b/src/Character/Character.php
-@@ -5,7 +5,7 @@ namespace App\Character;
- use App\ArmorType\ArmorType;
- use App\AttackType\AttackType;
- 
--abstract class Character
-+class Character
- {
-     private int $currentHealth;
-     private string $nickname = '';
-@@ -16,7 +16,7 @@ abstract class Character
+@@ -20,7 +20,7 @@ class Character
          private AttackType $attackType,
          private ArmorType $armorType
      ) {

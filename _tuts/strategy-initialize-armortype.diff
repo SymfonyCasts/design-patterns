@@ -1,76 +1,41 @@
-diff --git a/src/Character/Archer.php b/src/Character/Archer.php
-index aa4c39f..b8a4d65 100644
---- a/src/Character/Archer.php
-+++ b/src/Character/Archer.php
-@@ -2,12 +2,13 @@
+diff --git a/src/Character/Character.php b/src/Character/Character.php
+index dab9e0b..6a5ab34 100644
+--- a/src/Character/Character.php
++++ b/src/Character/Character.php
+@@ -4,6 +4,7 @@ namespace App\Character;
  
- namespace App\Character;
+ use App\ArmorType\ArmorType;
+ use App\AttackType\AttackType;
++use App\Dice;
  
-+use App\ArmorType\LeatherArmorType;
- use App\AttackType\BowType;
- 
- class Archer extends Character
+ class Character
  {
-     public function __construct()
-     {
--        parent::__construct(80, 10, 0.15, new BowType());
-+        parent::__construct(80, 10, new BowType(), new LeatherArmorType());
-     }
- }
-diff --git a/src/Character/Fighter.php b/src/Character/Fighter.php
-index 56c2bfa..75081b9 100644
---- a/src/Character/Fighter.php
-+++ b/src/Character/Fighter.php
-@@ -2,12 +2,13 @@
+diff --git a/src/GameApplication.php b/src/GameApplication.php
+index 309760f..8c91c8e 100644
+--- a/src/GameApplication.php
++++ b/src/GameApplication.php
+@@ -2,6 +2,9 @@
  
- namespace App\Character;
- 
-+use App\ArmorType\ShieldType;
- use App\AttackType\TwoHandedSwordType;
- 
- class Fighter extends Character
- {
-     public function __construct()
-     {
--        parent::__construct(90, 12, 0.25, new TwoHandedSwordType());
-+        parent::__construct(90, 12, new TwoHandedSwordType(), new ShieldType());
-     }
- }
-diff --git a/src/Character/Mage.php b/src/Character/Mage.php
-index 9e2f416..cb92ad9 100644
---- a/src/Character/Mage.php
-+++ b/src/Character/Mage.php
-@@ -2,12 +2,13 @@
- 
- namespace App\Character;
+ namespace App;
  
 +use App\ArmorType\IceBlockType;
- use App\AttackType\FireBoltType;
- 
- class Mage extends Character
- {
-     public function __construct()
-     {
--        parent::__construct(70, 8, 0.10, new FireBoltType());
-+        parent::__construct(70, 8, new FireBoltType(), new IceBlockType());
-     }
- }
-diff --git a/src/Character/MageFighter.php b/src/Character/MageFighter.php
-index 17202fb..33dd300 100644
---- a/src/Character/MageFighter.php
-+++ b/src/Character/MageFighter.php
-@@ -2,12 +2,13 @@
- 
- namespace App\Character;
- 
++use App\ArmorType\LeatherArmorType;
 +use App\ArmorType\ShieldType;
+ use App\AttackType\BowType;
  use App\AttackType\FireBoltType;
- 
- class MageFighter extends Character
- {
-     public function __construct()
+ use App\AttackType\TwoHandedSwordType;
+@@ -41,10 +44,10 @@ class GameApplication
+     public function createCharacter(string $character): Character
      {
--        parent::__construct(100, 12, 0.25, new FireBoltType());
-+        parent::__construct(100, 12, new FireBoltType(), new ShieldType());
+         return match (strtolower($character)) {
+-            'fighter' => new Character(90, 12, 0.25, new TwoHandedSwordType()),
+-            'archer' => new Character(80, 10, 0.15, new BowType()),
+-            'mage' => new Character(70, 8, 0.10, new FireBoltType()),
+-            'mage_fighter' => new Character(100, 12, 0.25, new FireBoltType()),
++            'fighter' => new Character(90, 12, new TwoHandedSwordType(), new ShieldType()),
++            'archer' => new Character(80, 10, new BowType(), new LeatherArmorType()),
++            'mage' => new Character(70, 8, new FireBoltType(), new IceBlockType()),
++            'mage_fighter' => new Character(100, 12, new FireBoltType(), new ShieldType()),
+             default => throw new \RuntimeException('Undefined Character'),
+         };
      }
- }

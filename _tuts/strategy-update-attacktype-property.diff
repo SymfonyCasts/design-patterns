@@ -1,23 +1,5 @@
-diff --git a/src/Character/Archer.php b/src/Character/Archer.php
-index a57ccdd..aa4c39f 100644
---- a/src/Character/Archer.php
-+++ b/src/Character/Archer.php
-@@ -2,10 +2,12 @@
- 
- namespace App\Character;
- 
-+use App\AttackType\BowType;
-+
- class Archer extends Character
- {
-     public function __construct()
-     {
--        parent::__construct(80, 10, 0.15);
-+        parent::__construct(80, 10, 0.15, new BowType());
-     }
- }
 diff --git a/src/Character/Character.php b/src/Character/Character.php
-index 25ac7fd..1460a34 100644
+index 5d85136..8d41fea 100644
 --- a/src/Character/Character.php
 +++ b/src/Character/Character.php
 @@ -2,6 +2,7 @@
@@ -27,8 +9,8 @@ index 25ac7fd..1460a34 100644
 +use App\AttackType\AttackType;
  use App\Dice;
  
- abstract class Character
-@@ -12,7 +13,8 @@ abstract class Character
+ class Character
+@@ -15,7 +16,8 @@ class Character
      public function __construct(
          private int $maxHealth,
          private int $baseDamage,
@@ -38,53 +20,30 @@ index 25ac7fd..1460a34 100644
      ) {
          $this->currentHealth = $this->maxHealth;
      }
-diff --git a/src/Character/Fighter.php b/src/Character/Fighter.php
-index 48e31a6..56c2bfa 100644
---- a/src/Character/Fighter.php
-+++ b/src/Character/Fighter.php
-@@ -2,10 +2,12 @@
+diff --git a/src/GameApplication.php b/src/GameApplication.php
+index e941acc..bb3d1d9 100644
+--- a/src/GameApplication.php
++++ b/src/GameApplication.php
+@@ -2,6 +2,9 @@
  
- namespace App\Character;
+ namespace App;
  
-+use App\AttackType\TwoHandedSwordType;
-+
- class Fighter extends Character
- {
-     public function __construct()
-     {
--        parent::__construct(90, 12, 0.25);
-+        parent::__construct(90, 12, 0.25, new TwoHandedSwordType());
-     }
- }
-diff --git a/src/Character/Mage.php b/src/Character/Mage.php
-index 523fb50..9e2f416 100644
---- a/src/Character/Mage.php
-+++ b/src/Character/Mage.php
-@@ -2,25 +2,12 @@
- 
- namespace App\Character;
- 
--use App\Dice;
++use App\AttackType\BowType;
 +use App\AttackType\FireBoltType;
++use App\AttackType\TwoHandedSwordType;
+ use App\Character\Character;
  
- class Mage extends Character
- {
-     public function __construct()
+ class GameApplication
+@@ -38,9 +41,9 @@ class GameApplication
+     public function createCharacter(string $character): Character
      {
--        parent::__construct(70, 8, 0.10);
--    }
--    
--    public function attack(): int
--    {
--        return $this->castSpell();
--    }
--
--    /**
--     * Damage: 3d10
--     */
--    private function castSpell(): int
--    {
--        return Dice::roll(10) + Dice::roll(10) + Dice::roll(10);
-+        parent::__construct(70, 8, 0.10, new FireBoltType());
+         return match (strtolower($character)) {
+-            'fighter' => new Character(90, 12, 0.25),
+-            'archer' => new Character(80, 10, 0.15),
+-            'mage' => new Character(70, 8, 0.10),
++            'fighter' => new Character(90, 12, 0.25, new TwoHandedSwordType()),
++            'archer' => new Character(80, 10, 0.15, new BowType()),
++            'mage' => new Character(70, 8, 0.10, new FireBoltType()),
+             default => throw new \RuntimeException('Undefined Character'),
+         };
      }
- }

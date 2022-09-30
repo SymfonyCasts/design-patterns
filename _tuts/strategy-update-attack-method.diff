@@ -1,8 +1,8 @@
 diff --git a/src/Character/Character.php b/src/Character/Character.php
-index 1460a34..620a145 100644
+index 8d41fea..3fd262c 100644
 --- a/src/Character/Character.php
 +++ b/src/Character/Character.php
-@@ -19,12 +19,9 @@ abstract class Character
+@@ -22,9 +22,6 @@ class Character
          $this->currentHealth = $this->maxHealth;
      }
  
@@ -11,6 +11,11 @@ index 1460a34..620a145 100644
 -     */
      public function attack(): int
      {
+         $this->currentStamina -= (25 + Dice::roll(20));
+@@ -35,7 +32,7 @@ class Character
+             return 0;
+         }
+ 
 -        return $this->baseDamage + Dice::roll(6);
 +        return $this->attackType->attack($this->baseDamage);
      }

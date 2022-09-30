@@ -1,5 +1,5 @@
 diff --git a/src/Character/Character.php b/src/Character/Character.php
-index 620a145..6ab6383 100644
+index 3fd262c..dab9e0b 100644
 --- a/src/Character/Character.php
 +++ b/src/Character/Character.php
 @@ -2,8 +2,8 @@
@@ -10,9 +10,9 @@ index 620a145..6ab6383 100644
  use App\AttackType\AttackType;
 -use App\Dice;
  
- abstract class Character
+ class Character
  {
-@@ -13,8 +13,8 @@ abstract class Character
+@@ -16,8 +16,8 @@ class Character
      public function __construct(
          private int $maxHealth,
          private int $baseDamage,
