@@ -1,6 +1,6 @@
 diff --git a/src/AttackType/BowType.php b/src/AttackType/BowType.php
 new file mode 100644
-index 0000000..0c2a3cb
+index 0000000..45d2ba3
 --- /dev/null
 +++ b/src/AttackType/BowType.php
 @@ -0,0 +1,15 @@
@@ -12,7 +12,7 @@ index 0000000..0c2a3cb
 +
 +class BowType implements AttackType
 +{
-+    public function attack(int $baseDamage): int
++    public function performAttack(int $baseDamage): int
 +    {
 +        $criticalChance = Dice::roll(100);
 +
@@ -21,7 +21,7 @@ index 0000000..0c2a3cb
 +}
 diff --git a/src/AttackType/FireBoltType.php b/src/AttackType/FireBoltType.php
 new file mode 100644
-index 0000000..0e3ba44
+index 0000000..61eac1d
 --- /dev/null
 +++ b/src/AttackType/FireBoltType.php
 @@ -0,0 +1,21 @@
@@ -33,7 +33,7 @@ index 0000000..0e3ba44
 +
 +class FireBoltType implements AttackType
 +{
-+    public function attack(int $baseDamage): int
++    public function performAttack(int $baseDamage): int
 +    {
 +        return $this->castFireBolt();
 +    }
@@ -48,7 +48,7 @@ index 0000000..0e3ba44
 +}
 diff --git a/src/AttackType/TwoHandedSwordType.php b/src/AttackType/TwoHandedSwordType.php
 new file mode 100644
-index 0000000..b5c61d2
+index 0000000..d3138a7
 --- /dev/null
 +++ b/src/AttackType/TwoHandedSwordType.php
 @@ -0,0 +1,18 @@
@@ -60,7 +60,7 @@ index 0000000..b5c61d2
 +
 +class TwoHandedSwordType implements AttackType
 +{
-+    public function attack(int $baseDamage): int
++    public function performAttack(int $baseDamage): int
 +    {
 +        return $baseDamage + $this->twoHandedSwordDamage();
 +    }

@@ -1,5 +1,5 @@
 diff --git a/src/Character/Character.php b/src/Character/Character.php
-index 6a5ab34..36aa595 100644
+index e7f47c1..1cf7cf2 100644
 --- a/src/Character/Character.php
 +++ b/src/Character/Character.php
 @@ -38,8 +38,9 @@ class Character

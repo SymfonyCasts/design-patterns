@@ -1,5 +1,5 @@
 diff --git a/src/GameApplication.php b/src/GameApplication.php
-index 95c0b29..c115554 100644
+index d31e67a..6b78233 100644
 --- a/src/GameApplication.php
 +++ b/src/GameApplication.php
 @@ -9,6 +9,9 @@ use App\Observer\GameSubjectInterface;

@@ -1,5 +1,5 @@
 diff --git a/src/Character/Character.php b/src/Character/Character.php
-index dab9e0b..6a5ab34 100644
+index 0d4a15b..e7f47c1 100644
 --- a/src/Character/Character.php
 +++ b/src/Character/Character.php
 @@ -4,6 +4,7 @@ namespace App\Character;
@@ -11,7 +11,7 @@ index dab9e0b..6a5ab34 100644
  class Character
  {
 diff --git a/src/GameApplication.php b/src/GameApplication.php
-index 309760f..8c91c8e 100644
+index 647c8b3..abe3b02 100644
 --- a/src/GameApplication.php
 +++ b/src/GameApplication.php
 @@ -2,6 +2,9 @@
@@ -23,19 +23,19 @@ index 309760f..8c91c8e 100644
 +use App\ArmorType\ShieldType;
  use App\AttackType\BowType;
  use App\AttackType\FireBoltType;
- use App\AttackType\TwoHandedSwordType;
-@@ -41,10 +44,10 @@ class GameApplication
+ use App\AttackType\MultiAttackType;
+@@ -42,10 +45,10 @@ class GameApplication
      public function createCharacter(string $character): Character
      {
          return match (strtolower($character)) {
 -            'fighter' => new Character(90, 12, 0.25, new TwoHandedSwordType()),
 -            'archer' => new Character(80, 10, 0.15, new BowType()),
 -            'mage' => new Character(70, 8, 0.10, new FireBoltType()),
--            'mage_fighter' => new Character(100, 12, 0.25, new FireBoltType()),
+-            'mage_archer' => new Character(75, 9, .15, new MultiAttackType([new BowType(), new FireBoltType()])),
 +            'fighter' => new Character(90, 12, new TwoHandedSwordType(), new ShieldType()),
 +            'archer' => new Character(80, 10, new BowType(), new LeatherArmorType()),
 +            'mage' => new Character(70, 8, new FireBoltType(), new IceBlockType()),
-+            'mage_fighter' => new Character(100, 12, new FireBoltType(), new ShieldType()),
-             default => throw new \RuntimeException('Undefined Character'),
++            'mage_archer' => new Character(75, 9, new MultiAttackType([new BowType(), new FireBoltType()]), new ShieldType()),
          };
      }
+ 

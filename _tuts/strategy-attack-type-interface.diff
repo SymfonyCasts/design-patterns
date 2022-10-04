@@ -1,6 +1,6 @@
 diff --git a/src/AttackType/AttackType.php b/src/AttackType/AttackType.php
 new file mode 100644
-index 0000000..8b22826
+index 0000000..7259e83
 --- /dev/null
 +++ b/src/AttackType/AttackType.php
 @@ -0,0 +1,8 @@
@@ -10,5 +10,5 @@ index 0000000..8b22826
 +
 +interface AttackType
 +{
-+    public function attack(int $baseDamage): int;
++    public function performAttack(int $baseDamage): int;
 +}

@@ -1,8 +1,8 @@
 diff --git a/src/GameApplication.php b/src/GameApplication.php
-index a40284b..e2ee7e3 100644
+index b5ed0a5..ed64052 100644
 --- a/src/GameApplication.php
 +++ b/src/GameApplication.php
-@@ -3,12 +3,6 @@
+@@ -3,13 +3,6 @@
  namespace App;
  
  use App\Builder\CharacterBuilder;
@@ -11,19 +11,19 @@ index a40284b..e2ee7e3 100644
 -use App\ArmorType\ShieldType;
 -use App\AttackType\BowType;
 -use App\AttackType\FireBoltType;
+-use App\AttackType\MultiAttackType;
 -use App\AttackType\TwoHandedSwordType;
  use App\Character\Character;
  
  class GameApplication
-@@ -45,11 +39,35 @@ class GameApplication
+@@ -46,10 +39,35 @@ class GameApplication
      public function createCharacter(string $character): Character
      {
          return match (strtolower($character)) {
 -            'fighter' => new Character(90, 12, new TwoHandedSwordType(), new ShieldType()),
 -            'archer' => new Character(80, 10, new BowType(), new LeatherArmorType()),
 -            'mage' => new Character(70, 8, new FireBoltType(), new IceBlockType()),
--            'mage_fighter' => new Character(100, 12, new FireBoltType(), new ShieldType()),
--            default => throw new \RuntimeException('Undefined Character'),
+-            'mage_archer' => new Character(75, 9, new MultiAttackType([new BowType(), new FireBoltType()]), new ShieldType()),
 +            'fighter' => $this->createCharacterBuilder()
 +                ->setBaseDamage(12)
 +                ->setMaxHealth(90)
@@ -45,23 +45,14 @@ index a40284b..e2ee7e3 100644
 +                ->setArmorType('ice_block')
 +                ->buildCharacter(),
 +
-+            'mage_fighter' => $this->createCharacterBuilder()
++            'mage_archer' => $this->createCharacterBuilder()
 +                ->setBaseDamage(12)
 +                ->setMaxHealth(90)
-+                ->setAttackType('fire_bolt')
++                ->setAttackType('fire_bolt_TODO_and_bow')
 +                ->setArmorType('shield')
 +                ->buildCharacter(),
 +
 +            default => throw new \RuntimeException('Undefined Character')
          };
-     }
- 
-@@ -72,7 +90,7 @@ class GameApplication
-             'fighter',
-             'mage',
-             'archer',
--            'mage_fighter'
-+            'mage_fighter',
-         ];
      }
  

@@ -1,39 +1,29 @@
-diff --git a/src/Character/MageFighter.php b/src/Character/MageFighter.php
-deleted file mode 100644
-index 17202fb..0000000
---- a/src/Character/MageFighter.php
-+++ /dev/null
-@@ -1,13 +0,0 @@
--<?php
--
--namespace App\Character;
--
--use App\AttackType\FireBoltType;
--
--class MageFighter extends Character
--{
--    public function __construct()
--    {
--        parent::__construct(100, 12, 0.25, new FireBoltType());
--    }
--}
 diff --git a/src/GameApplication.php b/src/GameApplication.php
-index bb3d1d9..309760f 100644
+index bb3d1d9..647c8b3 100644
 --- a/src/GameApplication.php
 +++ b/src/GameApplication.php
-@@ -44,6 +44,7 @@ class GameApplication
+@@ -4,6 +4,7 @@ namespace App;
+ 
+ use App\AttackType\BowType;
+ use App\AttackType\FireBoltType;
++use App\AttackType\MultiAttackType;
+ use App\AttackType\TwoHandedSwordType;
+ use App\Character\Character;
+ 
+@@ -44,7 +45,7 @@ class GameApplication
              'fighter' => new Character(90, 12, 0.25, new TwoHandedSwordType()),
              'archer' => new Character(80, 10, 0.15, new BowType()),
              'mage' => new Character(70, 8, 0.10, new FireBoltType()),
-+            'mage_fighter' => new Character(100, 12, 0.25, new FireBoltType()),
-             default => throw new \RuntimeException('Undefined Character'),
+-            default => throw new \RuntimeException('Undefined Character'),
++            'mage_archer' => new Character(75, 9, .15, new MultiAttackType([new BowType(), new FireBoltType()])),
          };
      }
+ 
 @@ -67,6 +68,7 @@ class GameApplication
              'fighter',
              'mage',
              'archer',
-+            'mage_fighter'
++            'mage_archer'
          ];
      }
  }

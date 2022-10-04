@@ -6,8 +6,8 @@
             "description": null
         },
         {
-            "id": "strategy-mage-override-attack-method",
-            "name": "Strategy: mage override attack method",
+            "id": "delete-me-1",
+            "name": "delete me 1",
             "description": null
         },
         {
@@ -216,5 +216,5 @@
             "description": null
         }
     ],
-    "sha": "465d117c274a334fc95271a6fbefc5974b6902b5"
+    "sha": "823efaf79a33b2fb4c2eb126bb26feff8266091d"
 }
