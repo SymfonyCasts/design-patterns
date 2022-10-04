@@ -45,6 +45,15 @@ class GameApplication
         };
     }
 
+    public function getCharactersList(): array
+    {
+        return [
+            'fighter',
+            'mage',
+            'archer',
+        ];
+    }
+
     private function finishFightResult(FightResult $fightResult, Character $winner, Character $loser): FightResult
     {
         $fightResult->setWinner($winner);
@@ -56,14 +65,5 @@ class GameApplication
     private function didPlayerDie(Character $player): bool
     {
         return $player->getCurrentHealth() <= 0;
-    }
-
-    public function getCharactersList(): array
-    {
-        return [
-            'fighter',
-            'mage',
-            'archer',
-        ];
     }
 }
