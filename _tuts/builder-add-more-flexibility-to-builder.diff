@@ -64,7 +64,7 @@ index b711234..1b8a49f 100644
              'fire_bolt' => new FireBoltType(),
              'sword' => new TwoHandedSwordType(),
 diff --git a/src/GameApplication.php b/src/GameApplication.php
-index b6a130c..561a134 100644
+index 24415ed..54013bc 100644
 --- a/src/GameApplication.php
 +++ b/src/GameApplication.php
 @@ -63,7 +63,7 @@ class GameApplication

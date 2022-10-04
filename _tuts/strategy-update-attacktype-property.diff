@@ -21,7 +21,7 @@ index 5d85136..8d41fea 100644
          $this->currentHealth = $this->maxHealth;
      }
 diff --git a/src/GameApplication.php b/src/GameApplication.php
-index e941acc..bb3d1d9 100644
+index 21b5298..9cf057b 100644
 --- a/src/GameApplication.php
 +++ b/src/GameApplication.php
 @@ -2,6 +2,9 @@

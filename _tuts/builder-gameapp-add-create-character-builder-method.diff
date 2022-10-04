@@ -1,5 +1,5 @@
 diff --git a/src/GameApplication.php b/src/GameApplication.php
-index abe3b02..b5ed0a5 100644
+index d00ed8f..d04e500 100644
 --- a/src/GameApplication.php
 +++ b/src/GameApplication.php
 @@ -2,6 +2,7 @@
@@ -11,8 +11,8 @@ index abe3b02..b5ed0a5 100644
  use App\ArmorType\LeatherArmorType;
  use App\ArmorType\ShieldType;
 @@ -74,4 +75,9 @@ class GameApplication
-             'mage_archer'
-         ];
+     {
+         return $player->getCurrentHealth() <= 0;
      }
 +
 +    private function createCharacterBuilder(): CharacterBuilder

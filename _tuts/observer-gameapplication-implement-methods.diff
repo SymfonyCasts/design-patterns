@@ -1,10 +1,10 @@
 diff --git a/src/GameApplication.php b/src/GameApplication.php
-index b3c3851..f2f1dbb 100644
+index 1870269..30bddcc 100644
 --- a/src/GameApplication.php
 +++ b/src/GameApplication.php
-@@ -9,6 +9,9 @@ use App\Observer\GameSubjectInterface;
+@@ -8,6 +8,9 @@ use App\Observer\GameObserverInterface;
  
- class GameApplication implements GameSubjectInterface
+ class GameApplication
  {
 +    /** @var GameObserverInterface[] */
 +    private array $observers = [];
@@ -12,35 +12,24 @@ index b3c3851..f2f1dbb 100644
      public function play(Character $player, Character $ai): FightResult
      {
          $player->rest();
-@@ -103,16 +106,28 @@ class GameApplication implements GameSubjectInterface
+@@ -84,12 +87,18 @@ class GameApplication
  
      public function subscribe(GameObserverInterface $observer): void
      {
 -        // TODO: Implement subscribe() method.
-+        foreach ($this->observers as $o) {
-+            if ($observer === $o) {
-+                return;
-+            }
++        if (!in_array($observer, $this->observers, true)) {
++            $this->observers[] = $observer;
 +        }
-+
-+        $this->observers[] = $observer;
      }
  
      public function unsubscribe(GameObserverInterface $observer): void
      {
 -        // TODO: Implement unsubscribe() method.
-+        foreach ($this->observers as $key => $o) {
-+            if ($observer === $o) {
-+                unset($this->observers[$key]);
-+            }
++        $key = array_search($observer, $this->observers, true);
++
++        if ($key !== false) {
++            unset($this->observers[$key]);
 +        }
      }
  
-     public function notify(FightResult $fightResult): void
-     {
--        // TODO: Implement notify() method.
-+        foreach ($this->observers as $observer) {
-+            $observer->onFightFinished($fightResult);
-+        }
-     }
- }
+     private function finishFightResult(FightResult $fightResult, Character $winner, Character $loser): FightResult

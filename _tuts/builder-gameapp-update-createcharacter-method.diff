@@ -1,5 +1,5 @@
 diff --git a/src/GameApplication.php b/src/GameApplication.php
-index b5ed0a5..b6a130c 100644
+index d04e500..24415ed 100644
 --- a/src/GameApplication.php
 +++ b/src/GameApplication.php
 @@ -3,13 +3,6 @@

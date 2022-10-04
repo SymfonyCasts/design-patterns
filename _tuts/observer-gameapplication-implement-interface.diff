@@ -1,24 +1,19 @@
 diff --git a/src/GameApplication.php b/src/GameApplication.php
-index 561a134..b3c3851 100644
+index 54013bc..1870269 100644
 --- a/src/GameApplication.php
 +++ b/src/GameApplication.php
-@@ -4,8 +4,10 @@ namespace App;
+@@ -4,6 +4,7 @@ namespace App;
  
  use App\Builder\CharacterBuilder;
  use App\Character\Character;
 +use App\Observer\GameObserverInterface;
-+use App\Observer\GameSubjectInterface;
  
--class GameApplication
-+class GameApplication implements GameSubjectInterface
+ class GameApplication
  {
-     public function play(Character $player, Character $ai): FightResult
-     {
-@@ -98,4 +100,19 @@ class GameApplication
-     {
-         return new CharacterBuilder();
+@@ -81,6 +82,16 @@ class GameApplication
+         ];
      }
-+
+ 
 +    public function subscribe(GameObserverInterface $observer): void
 +    {
 +        // TODO: Implement subscribe() method.
@@ -29,8 +24,6 @@ index 561a134..b3c3851 100644
 +        // TODO: Implement unsubscribe() method.
 +    }
 +
-+    public function notify(FightResult $fightResult): void
-+    {
-+        // TODO: Implement notify() method.
-+    }
- }
+     private function finishFightResult(FightResult $fightResult, Character $winner, Character $loser): FightResult
+     {
+         $fightResult->setWinner($winner);

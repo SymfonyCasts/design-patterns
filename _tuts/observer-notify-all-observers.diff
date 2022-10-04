@@ -1,0 +1,25 @@
+diff --git a/src/GameApplication.php b/src/GameApplication.php
+index 30bddcc..7200acc 100644
+--- a/src/GameApplication.php
++++ b/src/GameApplication.php
+@@ -106,6 +106,8 @@ class GameApplication
+         $fightResult->setWinner($winner);
+         $fightResult->setLoser($loser);
+ 
++        $this->notify($fightResult);
++
+         return $fightResult;
+     }
+ 
+@@ -118,4 +120,11 @@ class GameApplication
+     {
+         return new CharacterBuilder();
+     }
++
++    private function notify(FightResult $fightResult): void
++    {
++        foreach ($this->observers as $observer) {
++            $observer->onFightFinished($fightResult);
++        }
++    }
+ }

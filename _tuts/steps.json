@@ -111,8 +111,8 @@
             "description": null
         },
         {
-            "id": "observer-create-subject-interface",
-            "name": "Observer: create subject interface",
+            "id": "delete-me-4",
+            "name": "delete me 4",
             "description": null
         },
         {
@@ -123,6 +123,11 @@
         {
             "id": "observer-gameapplication-implement-methods",
             "name": "Observer: GameApplication implement methods",
+            "description": null
+        },
+        {
+            "id": "observer-notify-all-observers",
+            "name": "Observer: Notify all observers",
             "description": null
         },
         {
@@ -156,8 +161,8 @@
             "description": null
         },
         {
-            "id": "observer-notify-observers",
-            "name": "Observer: notify observers",
+            "id": "observer-print-out-final-level",
+            "name": "Observer: print out final level",
             "description": null
         },
         {
@@ -216,5 +221,5 @@
             "description": null
         }
     ],
-    "sha": "c4c99b668e4cc4059ac7ea89802735126085521c"
+    "sha": "3b8fc1d1ea0fec19593668584ba1ad21ec9babbc"
 }

@@ -11,7 +11,7 @@ index 0d4a15b..e7f47c1 100644
  class Character
  {
 diff --git a/src/GameApplication.php b/src/GameApplication.php
-index 647c8b3..abe3b02 100644
+index 507e216..d00ed8f 100644
 --- a/src/GameApplication.php
 +++ b/src/GameApplication.php
 @@ -2,6 +2,9 @@
