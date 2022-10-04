@@ -22,7 +22,7 @@ index 0000000..9260f4e
 +}
 diff --git a/src/ArmorType/LeatherArmorType.php b/src/ArmorType/LeatherArmorType.php
 new file mode 100644
-index 0000000..5a2ebd1
+index 0000000..640c100
 --- /dev/null
 +++ b/src/ArmorType/LeatherArmorType.php
 @@ -0,0 +1,14 @@
@@ -37,7 +37,7 @@ index 0000000..5a2ebd1
 +     */
 +    public function getArmorReduction(int $damage): int
 +    {
-+        return $damage * 0.25;
++        return floor($damage * 0.25);
 +    }
 +}
 diff --git a/src/ArmorType/ShieldType.php b/src/ArmorType/ShieldType.php

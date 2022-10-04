@@ -1,5 +1,5 @@
 diff --git a/src/GameApplication.php b/src/GameApplication.php
-index b5ed0a5..ed64052 100644
+index b5ed0a5..b6a130c 100644
 --- a/src/GameApplication.php
 +++ b/src/GameApplication.php
 @@ -3,13 +3,6 @@
@@ -25,30 +25,30 @@ index b5ed0a5..ed64052 100644
 -            'mage' => new Character(70, 8, new FireBoltType(), new IceBlockType()),
 -            'mage_archer' => new Character(75, 9, new MultiAttackType([new BowType(), new FireBoltType()]), new ShieldType()),
 +            'fighter' => $this->createCharacterBuilder()
-+                ->setBaseDamage(12)
 +                ->setMaxHealth(90)
++                ->setBaseDamage(12)
 +                ->setAttackType('sword')
 +                ->setArmorType('shield')
 +                ->buildCharacter(),
 +
 +            'archer' => $this->createCharacterBuilder()
-+                ->setBaseDamage(10)
 +                ->setMaxHealth(80)
++                ->setBaseDamage(10)
 +                ->setAttackType('bow')
 +                ->setArmorType('leather_armor')
 +                ->buildCharacter(),
 +
 +            'mage' => $this->createCharacterBuilder()
-+                ->setBaseDamage(8)
 +                ->setMaxHealth(70)
++                ->setBaseDamage(8)
 +                ->setAttackType('fire_bolt')
 +                ->setArmorType('ice_block')
 +                ->buildCharacter(),
 +
 +            'mage_archer' => $this->createCharacterBuilder()
-+                ->setBaseDamage(12)
 +                ->setMaxHealth(90)
-+                ->setAttackType('fire_bolt_TODO_and_bow')
++                ->setBaseDamage(12)
++                ->setAttackType('fire_bolt') // TODO re-add bow!
 +                ->setArmorType('shield')
 +                ->buildCharacter(),
 +

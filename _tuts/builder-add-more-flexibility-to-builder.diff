@@ -1,0 +1,78 @@
+diff --git a/src/Builder/CharacterBuilder.php b/src/Builder/CharacterBuilder.php
+index b711234..1b8a49f 100644
+--- a/src/Builder/CharacterBuilder.php
++++ b/src/Builder/CharacterBuilder.php
+@@ -9,6 +9,7 @@ use App\ArmorType\ShieldType;
+ use App\AttackType\AttackType;
+ use App\AttackType\BowType;
+ use App\AttackType\FireBoltType;
++use App\AttackType\MultiAttackType;
+ use App\AttackType\TwoHandedSwordType;
+ use App\Character\Character;
+ 
+@@ -16,7 +17,7 @@ class CharacterBuilder
+ {
+     private int $maxHealth;
+     private int $baseDamage;
+-    private string $attackType;
++    private array $attackTypes;
+     private string $armorType;
+ 
+     public function setMaxHealth(int $maxHealth): self
+@@ -33,9 +34,13 @@ class CharacterBuilder
+         return $this;
+     }
+ 
+-    public function setAttackType(string $attackType): self
++    public function setAttackType(string|array $attackType): self
+     {
+-        $this->attackType = $attackType;
++        if (is_string($attackType)) {
++            $attackType = [$attackType];
++        }
++
++        $this->attackTypes = $attackType;
+ 
+         return $this;
+     }
+@@ -49,17 +54,24 @@ class CharacterBuilder
+ 
+     public function buildCharacter(): Character
+     {
++        if (count($this->attackTypes) === 1) {
++            $attackType = $this->createAttackType($this->attackTypes[0]);
++        } else {
++            $attackTypes = array_map(fn(string $attackType) => $this->createAttackType($attackType), $this->attackTypes);
++            $attackType = new MultiAttackType($attackTypes);
++        }
++
+         return new Character(
+             $this->maxHealth,
+             $this->baseDamage,
+-            $this->createAttackType(),
++            $attackType,
+             $this->createArmorType(),
+         );
+     }
+ 
+-    private function createAttackType(): AttackType
++    private function createAttackType(string $attackType): AttackType
+     {
+-        return match ($this->attackType) {
++        return match ($attackType) {
+             'bow' => new BowType(),
+             'fire_bolt' => new FireBoltType(),
+             'sword' => new TwoHandedSwordType(),
+diff --git a/src/GameApplication.php b/src/GameApplication.php
+index b6a130c..561a134 100644
+--- a/src/GameApplication.php
++++ b/src/GameApplication.php
+@@ -63,7 +63,7 @@ class GameApplication
+             'mage_archer' => $this->createCharacterBuilder()
+                 ->setMaxHealth(90)
+                 ->setBaseDamage(12)
+-                ->setAttackType('fire_bolt') // TODO re-add bow!
++                ->setAttackType(['fire_bolt', 'bow'])
+                 ->setArmorType('shield')
+                 ->buildCharacter(),
+ 

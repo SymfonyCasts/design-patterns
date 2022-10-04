@@ -1,5 +1,5 @@
 diff --git a/src/GameApplication.php b/src/GameApplication.php
-index ed64052..d31e67a 100644
+index 561a134..b3c3851 100644
 --- a/src/GameApplication.php
 +++ b/src/GameApplication.php
 @@ -4,8 +4,10 @@ namespace App;
