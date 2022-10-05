@@ -1,19 +1,17 @@
-diff --git a/src/Decorator/OutputtingXpEarnedServiceDecorator.php b/src/Decorator/OutputtingXpEarnedServiceDecorator.php
+diff --git a/src/Service/OutputtingXpCalculator.php b/src/Service/OutputtingXpCalculator.php
 new file mode 100644
-index 0000000..4d3aa8c
+index 0000000..1c8bd3a
 --- /dev/null
-+++ b/src/Decorator/OutputtingXpEarnedServiceDecorator.php
-@@ -0,0 +1,13 @@
++++ b/src/Service/OutputtingXpCalculator.php
+@@ -0,0 +1,11 @@
 +<?php
 +
-+namespace App\Decorator;
++namespace App\Service;
 +
-+use App\Character\Character;
-+
-+class OutputtingXpEarnedServiceDecorator implements XpEarnedServiceInterface
++class OutputtingXpCalculator implements XpCalculatorInterface
 +{
 +    public function __construct(
-+        private readonly XpEarnedServiceInterface $xpEarnedService
++        private readonly XpCalculatorInterface $innerCalculator
 +    ) {
 +    }
 +}

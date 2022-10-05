@@ -1,0 +1,48 @@
+diff --git a/src/Command/GameCommand.php b/src/Command/GameCommand.php
+index b3ea7e0..4f199d5 100644
+--- a/src/Command/GameCommand.php
++++ b/src/Command/GameCommand.php
+@@ -10,12 +10,14 @@ use Symfony\Component\Console\Command\Command;
+ use Symfony\Component\Console\Input\InputInterface;
+ use Symfony\Component\Console\Output\OutputInterface;
+ use Symfony\Component\Console\Style\SymfonyStyle;
++use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+ 
+ #[AsCommand('app:game:play')]
+ class GameCommand extends Command
+ {
+     public function __construct(
+-        private readonly GameApplication $game
++        private readonly GameApplication $game,
++        private readonly EventDispatcherInterface $eventDispatcher,
+     )
+     {
+         parent::__construct();
+diff --git a/src/GameApplication.php b/src/GameApplication.php
+index 7200acc..707ee56 100644
+--- a/src/GameApplication.php
++++ b/src/GameApplication.php
+@@ -4,15 +4,23 @@ namespace App;
+ 
+ use App\Builder\CharacterBuilder;
+ use App\Character\Character;
++use App\Event\FightStartingEvent;
+ use App\Observer\GameObserverInterface;
++use Symfony\Contracts\EventDispatcher\Event;
++use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+ 
+ class GameApplication
+ {
+     /** @var GameObserverInterface[] */
+     private array $observers = [];
+ 
++    public function __construct(private EventDispatcherInterface $eventDispatcher)
++    {
++    }
++
+     public function play(Character $player, Character $ai): FightResult
+     {
++        $this->eventDispatcher->dispatch(new FightStartingEvent());
+         $player->rest();
+ 
+         $fightResult = new FightResult();

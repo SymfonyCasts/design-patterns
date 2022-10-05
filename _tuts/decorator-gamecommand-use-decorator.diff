@@ -1,46 +1,19 @@
-diff --git a/src/Command/GameCommand.php b/src/Command/GameCommand.php
-index c723880..27ff0a3 100644
---- a/src/Command/GameCommand.php
-+++ b/src/Command/GameCommand.php
-@@ -3,6 +3,7 @@
- namespace App\Command;
- 
- use App\Character\Character;
-+use App\Decorator\OutputtingXpEarnedServiceDecorator;
- use App\FightResult;
- use App\GameApplication;
- use App\Observer\XpEarnedObserver;
-@@ -26,8 +27,12 @@ class GameCommand extends Command
-     protected function execute(InputInterface $input, OutputInterface $output): int
-     {
-         $xpObserver = new XpEarnedObserver(
--            new XpEarnedService()
-+            new OutputtingXpEarnedServiceDecorator(
-+                new XpEarnedService(),
-+                $output
-+            )
-         );
-+
-         $this->game->subscribe($xpObserver);
- 
-         $io = new SymfonyStyle($input, $output);
 diff --git a/src/Observer/XpEarnedObserver.php b/src/Observer/XpEarnedObserver.php
-index ba89be6..875e530 100644
+index 5dc9392..cafa88b 100644
 --- a/src/Observer/XpEarnedObserver.php
 +++ b/src/Observer/XpEarnedObserver.php
-@@ -2,13 +2,13 @@
- 
+@@ -3,12 +3,12 @@
  namespace App\Observer;
  
-+use App\Decorator\XpEarnedServiceInterface;
  use App\FightResult;
--use App\Service\XpEarnedService;
+-use App\Service\XpCalculator;
++use App\Service\XpCalculatorInterface;
  
  class XpEarnedObserver implements GameObserverInterface
  {
      public function __construct(
--        private readonly XpEarnedService $xpEarnedService
-+        private readonly XpEarnedServiceInterface $xpEarnedService
+-        private readonly XpCalculator $xpCalculator
++        private readonly XpCalculatorInterface $xpCalculator
      ) {
      }
  

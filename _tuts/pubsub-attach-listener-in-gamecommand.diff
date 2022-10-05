@@ -1,0 +1,31 @@
+diff --git a/src/Command/GameCommand.php b/src/Command/GameCommand.php
+index 4f199d5..4de4775 100644
+--- a/src/Command/GameCommand.php
++++ b/src/Command/GameCommand.php
+@@ -3,6 +3,7 @@
+ namespace App\Command;
+ 
+ use App\Character\Character;
++use App\Event\FightStartingEvent;
+ use App\FightResult;
+ use App\GameApplication;
+ use Symfony\Component\Console\Attribute\AsCommand;
+@@ -10,7 +11,7 @@ use Symfony\Component\Console\Command\Command;
+ use Symfony\Component\Console\Input\InputInterface;
+ use Symfony\Component\Console\Output\OutputInterface;
+ use Symfony\Component\Console\Style\SymfonyStyle;
+-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
++use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+ 
+ #[AsCommand('app:game:play')]
+ class GameCommand extends Command
+@@ -26,6 +27,9 @@ class GameCommand extends Command
+     protected function execute(InputInterface $input, OutputInterface $output): int
+     {
+         $io = new SymfonyStyle($input, $output);
++        $this->eventDispatcher->addListener(FightStartingEvent::class, function() use ($io) {
++            $io->note('Fight is starting...');
++        });
+ 
+         $io->text('Welcome to the game where warriors fight against each other for honor and glory... and 🍕!');
+ 

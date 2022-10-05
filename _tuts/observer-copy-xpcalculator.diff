@@ -1,8 +1,8 @@
-diff --git a/src/Service/XpEarnedService.php b/src/Service/XpEarnedService.php
+diff --git a/src/Service/XpCalculator.php b/src/Service/XpCalculator.php
 new file mode 100644
-index 0000000..f761f4b
+index 0000000..0a543ea
 --- /dev/null
-+++ b/src/Service/XpEarnedService.php
++++ b/src/Service/XpCalculator.php
 @@ -0,0 +1,58 @@
 +<?php
 +
@@ -10,7 +10,7 @@ index 0000000..f761f4b
 +
 +use App\Character\Character;
 +
-+class XpEarnedService
++class XpCalculator
 +{
 +    public function addXp(Character $winner, int $enemyLevel): void
 +    {

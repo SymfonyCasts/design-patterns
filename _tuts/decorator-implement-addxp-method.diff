@@ -1,14 +1,14 @@
-diff --git a/src/Decorator/OutputtingXpEarnedServiceDecorator.php b/src/Decorator/OutputtingXpEarnedServiceDecorator.php
-index dd73f51..3315f92 100644
---- a/src/Decorator/OutputtingXpEarnedServiceDecorator.php
-+++ b/src/Decorator/OutputtingXpEarnedServiceDecorator.php
-@@ -15,6 +15,16 @@ class OutputtingXpEarnedServiceDecorator implements XpEarnedServiceInterface
+diff --git a/src/Service/OutputtingXpCalculator.php b/src/Service/OutputtingXpCalculator.php
+index 1de1ac5..4065978 100644
+--- a/src/Service/OutputtingXpCalculator.php
++++ b/src/Service/OutputtingXpCalculator.php
+@@ -18,6 +18,16 @@ class OutputtingXpCalculator implements XpCalculatorInterface
  
      public function addXp(Character $winner, int $enemyLevel): void
      {
 +        $beforeLevel = $winner->getLevel();
 +
-         $this->xpEarnedService->addXp($winner, $enemyLevel);
+         $this->innerCalculator->addXp($winner, $enemyLevel);
 +
 +        $afterLevel = $winner->getLevel();
 +        if ($afterLevel > $beforeLevel) {

@@ -1,19 +1,21 @@
-diff --git a/src/Decorator/OutputtingXpEarnedServiceDecorator.php b/src/Decorator/OutputtingXpEarnedServiceDecorator.php
-index 4d3aa8c..4382209 100644
---- a/src/Decorator/OutputtingXpEarnedServiceDecorator.php
-+++ b/src/Decorator/OutputtingXpEarnedServiceDecorator.php
-@@ -3,11 +3,13 @@
- namespace App\Decorator;
+diff --git a/src/Service/OutputtingXpCalculator.php b/src/Service/OutputtingXpCalculator.php
+index 1c8bd3a..a1e64e7 100644
+--- a/src/Service/OutputtingXpCalculator.php
++++ b/src/Service/OutputtingXpCalculator.php
+@@ -2,10 +2,16 @@
  
- use App\Character\Character;
+ namespace App\Service;
+ 
++use Symfony\Component\Console\Output\ConsoleOutput;
 +use Symfony\Component\Console\Output\OutputInterface;
- 
- class OutputtingXpEarnedServiceDecorator implements XpEarnedServiceInterface
++
+ class OutputtingXpCalculator implements XpCalculatorInterface
  {
++    private OutputInterface $output;
++
      public function __construct(
--        private readonly XpEarnedServiceInterface $xpEarnedService
-+        private readonly XpEarnedServiceInterface $xpEarnedService,
-+        private readonly OutputInterface $output,
+         private readonly XpCalculatorInterface $innerCalculator
      ) {
++        $this->output = new ConsoleOutput();
      }
  }

@@ -146,8 +146,8 @@
             "description": null
         },
         {
-            "id": "observer-copy-xpearnedservice",
-            "name": "Observer: copy XpEarnedService",
+            "id": "observer-copy-xpcalculator",
+            "name": "Observer: copy XpCalculator",
             "description": null
         },
         {
@@ -163,6 +163,51 @@
         {
             "id": "observer-print-out-final-level",
             "name": "Observer: print out final level",
+            "description": null
+        },
+        {
+            "id": "observerdi-configuring-with-a-call",
+            "name": "ObserverDI: Configuring with a call",
+            "description": null
+        },
+        {
+            "id": "observerdi-add-autoconfiguration",
+            "name": "ObserverDI: Add autoconfiguration",
+            "description": null
+        },
+        {
+            "id": "observerdi-implement-compiler-pass-to-set-calls",
+            "name": "ObserverDI: Implement compiler pass to set calls",
+            "description": null
+        },
+        {
+            "id": "pubsub-add-fightstartingevent",
+            "name": "PubSub: Add FightStartingEvent",
+            "description": null
+        },
+        {
+            "id": "pubsub-dispatch-from-gameapp",
+            "name": "PubSub: Dispatch from GameApp",
+            "description": null
+        },
+        {
+            "id": "pubsub-attach-listener-in-gamecommand",
+            "name": "PubSub: Attach listener in GameCommand",
+            "description": null
+        },
+        {
+            "id": "pubsub-add-args-to-event",
+            "name": "PubSub: Add args to event",
+            "description": null
+        },
+        {
+            "id": "pubsub-create-event-subscriber",
+            "name": "PubSub: create event subscriber",
+            "description": null
+        },
+        {
+            "id": "pubsub-remove-duplicate-manual-registration",
+            "name": "PubSub: Remove duplicate manual registration",
             "description": null
         },
         {
@@ -201,6 +246,31 @@
             "description": null
         },
         {
+            "id": "decorator-back-up-and-show-in-raw-php",
+            "name": "Decorator: back up and show in raw php",
+            "description": null
+        },
+        {
+            "id": "decorator-show-decoration-in-php",
+            "name": "Decorator: show decoration in php",
+            "description": null
+        },
+        {
+            "id": "decorator-remove-manual-php-code",
+            "name": "Decorator: remove manual php code",
+            "description": null
+        },
+        {
+            "id": "decorator-add-interface-alias-to-decorator-service",
+            "name": "Decorator: Add interface alias to decorator service",
+            "description": null
+        },
+        {
+            "id": "decorator-fixing-argument-passed-into-decorator",
+            "name": "Decorator: fixing argument passed into decorator",
+            "description": null
+        },
+        {
             "id": "decorator-create-event-dispatcher-decorator",
             "name": "Decorator: create event dispatcher decorator",
             "description": null
@@ -221,5 +291,5 @@
             "description": null
         }
     ],
-    "sha": "3b8fc1d1ea0fec19593668584ba1ad21ec9babbc"
+    "sha": "54df1a2709588002e03ccfbc4382cbd2ee406af5"
 }

@@ -1,0 +1,12 @@
+diff --git a/config/services.yaml b/config/services.yaml
+index 9cbb88d..37a5ced 100644
+--- a/config/services.yaml
++++ b/config/services.yaml
+@@ -24,3 +24,7 @@ services:
+     # please note that last definitions always *replace* previous ones
+ 
+     App\Service\XpCalculatorInterface: '@App\Service\OutputtingXpCalculator'
++
++    App\Service\OutputtingXpCalculator:
++        arguments:
++            $innerCalculator: '@App\Service\XpCalculator'

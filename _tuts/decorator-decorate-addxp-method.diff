@@ -1,14 +1,22 @@
-diff --git a/src/Decorator/OutputtingXpEarnedServiceDecorator.php b/src/Decorator/OutputtingXpEarnedServiceDecorator.php
-index 4382209..dd73f51 100644
---- a/src/Decorator/OutputtingXpEarnedServiceDecorator.php
-+++ b/src/Decorator/OutputtingXpEarnedServiceDecorator.php
-@@ -12,4 +12,9 @@ class OutputtingXpEarnedServiceDecorator implements XpEarnedServiceInterface
-         private readonly OutputInterface $output,
+diff --git a/src/Service/OutputtingXpCalculator.php b/src/Service/OutputtingXpCalculator.php
+index a1e64e7..1de1ac5 100644
+--- a/src/Service/OutputtingXpCalculator.php
++++ b/src/Service/OutputtingXpCalculator.php
+@@ -2,6 +2,7 @@
+ 
+ namespace App\Service;
+ 
++use App\Character\Character;
+ use Symfony\Component\Console\Output\ConsoleOutput;
+ use Symfony\Component\Console\Output\OutputInterface;
+ 
+@@ -14,4 +15,9 @@ class OutputtingXpCalculator implements XpCalculatorInterface
      ) {
+         $this->output = new ConsoleOutput();
      }
 +
 +    public function addXp(Character $winner, int $enemyLevel): void
 +    {
-+        $this->xpEarnedService->addXp($winner, $enemyLevel);
++        $this->innerCalculator->addXp($winner, $enemyLevel);
 +    }
  }

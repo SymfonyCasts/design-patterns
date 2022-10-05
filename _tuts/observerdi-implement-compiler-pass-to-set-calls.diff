@@ -1,0 +1,44 @@
+diff --git a/config/services.yaml b/config/services.yaml
+index e268993..2d6a76f 100644
+--- a/config/services.yaml
++++ b/config/services.yaml
+@@ -22,7 +22,3 @@ services:
+ 
+     # add more service definitions when explicit configuration is needed
+     # please note that last definitions always *replace* previous ones
+-
+-    App\GameApplication:
+-        calls:
+-            - subscribe: ['@App\Observer\XpEarnedObserver']
+diff --git a/src/Kernel.php b/src/Kernel.php
+index e75623e..8743831 100644
+--- a/src/Kernel.php
++++ b/src/Kernel.php
+@@ -4,10 +4,12 @@ namespace App;
+ 
+ use App\Observer\GameObserverInterface;
+ use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
++use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+ use Symfony\Component\DependencyInjection\ContainerBuilder;
++use Symfony\Component\DependencyInjection\Reference;
+ use Symfony\Component\HttpKernel\Kernel as BaseKernel;
+ 
+-class Kernel extends BaseKernel
++class Kernel extends BaseKernel implements CompilerPassInterface
+ {
+     use MicroKernelTrait;
+ 
+@@ -16,4 +18,13 @@ class Kernel extends BaseKernel
+         $container->registerForAutoconfiguration(GameObserverInterface::class)
+             ->addTag('game.observer');
+     }
++
++    public function process(ContainerBuilder $container)
++    {
++        $definition = $container->findDefinition(GameApplication::class);
++        $taggedObservers = $container->findTaggedServiceIds('game.observer');
++        foreach ($taggedObservers as $id => $tags) {
++            $definition->addMethodCall('subscribe', [new Reference($id)]);
++        }
++    }
+ }

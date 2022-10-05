@@ -1,16 +1,16 @@
-diff --git a/src/Decorator/XpEarnedServiceInterface.php b/src/Decorator/XpEarnedServiceInterface.php
+diff --git a/src/Service/XpCalculatorInterface.php b/src/Service/XpCalculatorInterface.php
 new file mode 100644
-index 0000000..364c757
+index 0000000..f8c37c8
 --- /dev/null
-+++ b/src/Decorator/XpEarnedServiceInterface.php
++++ b/src/Service/XpCalculatorInterface.php
 @@ -0,0 +1,10 @@
 +<?php
 +
-+namespace App\Decorator;
++namespace App\Service;
 +
 +use App\Character\Character;
 +
-+interface XpEarnedServiceInterface
++interface XpCalculatorInterface
 +{
 +    public function addXp(Character $winner, int $enemyLevel): void;
 +}
