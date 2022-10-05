@@ -19,6 +19,9 @@
     "require-dev": {
     },
     "config": {
+        "platform": {
+            "php": "8.1.0"
+        },
         "allow-plugins": {
             "composer/package-versions-deprecated": true,
             "symfony/flex": true,
