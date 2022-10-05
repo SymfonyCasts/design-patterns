@@ -4,7 +4,7 @@ namespace App\Service;
 
 use App\Character\Character;
 
-class XpEarnedService
+class XpCalculator
 {
     public function addXp(Character $winner, int $enemyLevel): void
     {
