@@ -289,7 +289,17 @@
             "id": "decorator-configure-debugeventdispatcherdecorator",
             "name": "Decorator: Configure DebugEventDispatcherDecorator",
             "description": null
+        },
+        {
+            "id": "decoratordi-set-interface-back-to-normal-service",
+            "name": "DecoratorDi: Set interface back to normal service",
+            "description": null
+        },
+        {
+            "id": "decoratordi-use-asdecorator",
+            "name": "DecoratorDi: Use AsDecorator()",
+            "description": null
         }
     ],
-    "sha": "54df1a2709588002e03ccfbc4382cbd2ee406af5"
+    "sha": "7969753053689879c365fe2c92db459a97419b83"
 }
