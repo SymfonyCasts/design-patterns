@@ -91,7 +91,7 @@ class GameCommand extends Command
         $io->writeln('Total Rounds: ' . $fightResult->getRounds());
         $io->writeln('Damage dealt: ' . $fightResult->getDamageDealt());
         $io->writeln('Damage received: ' . $fightResult->getDamageReceived());
-        $io->writeln('Exhausted Turns:' . $fightResult->getExhaustedTurns());
+        $io->writeln('Exhausted Turns: ' . $fightResult->getExhaustedTurns());
         $io->writeln('------------------------------');
     }
 }
