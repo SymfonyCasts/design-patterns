@@ -1,1 +1,8 @@
-chapters: []
+chapters:
+  - patterns
+  - strategy
+  - builder
+  - observer
+  - pub-sub
+  - decorator
+
