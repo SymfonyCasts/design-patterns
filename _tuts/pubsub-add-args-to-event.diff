@@ -1,5 +1,5 @@
 diff --git a/src/Command/GameCommand.php b/src/Command/GameCommand.php
-index 4de4775..c102041 100644
+index 2c8920f..9564dda 100644
 --- a/src/Command/GameCommand.php
 +++ b/src/Command/GameCommand.php
 @@ -27,8 +27,8 @@ class GameCommand extends Command
@@ -30,10 +30,10 @@ index 38c56a1..64d8c1a 100644
 +    }
  }
 diff --git a/src/GameApplication.php b/src/GameApplication.php
-index 707ee56..e8761fe 100644
+index 76d47df..e45c785 100644
 --- a/src/GameApplication.php
 +++ b/src/GameApplication.php
-@@ -20,7 +20,7 @@ class GameApplication
+@@ -24,7 +24,7 @@ class GameApplication
  
      public function play(Character $player, Character $ai): FightResult
      {

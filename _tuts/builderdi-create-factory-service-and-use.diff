@@ -1,0 +1,45 @@
+diff --git a/src/Builder/CharacterBuilderFactory.php b/src/Builder/CharacterBuilderFactory.php
+new file mode 100644
+index 0000000..3db0b75
+--- /dev/null
++++ b/src/Builder/CharacterBuilderFactory.php
+@@ -0,0 +1,11 @@
++<?php
++
++namespace App\Builder;
++
++class CharacterBuilderFactory
++{
++    public function createBuilder(): CharacterBuilder
++    {
++        return new CharacterBuilder();
++    }
++}
+diff --git a/src/GameApplication.php b/src/GameApplication.php
+index fe9ce6a..28c70c8 100644
+--- a/src/GameApplication.php
++++ b/src/GameApplication.php
+@@ -3,10 +3,15 @@
+ namespace App;
+ 
+ use App\Builder\CharacterBuilder;
++use App\Builder\CharacterBuilderFactory;
+ use App\Character\Character;
+ 
+ class GameApplication
+ {
++    public function __construct(private CharacterBuilderFactory $characterBuilderFactory)
++    {
++    }
++
+     public function play(Character $player, Character $ai): FightResult
+     {
+         $player->rest();
+@@ -96,6 +101,6 @@ class GameApplication
+ 
+     private function createCharacterBuilder(): CharacterBuilder
+     {
+-        return new CharacterBuilder();
++        return $this->characterBuilderFactory->createBuilder();
+     }
+ }

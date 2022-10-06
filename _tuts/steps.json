@@ -31,8 +31,8 @@
             "description": null
         },
         {
-            "id": "strategy-create-magefighter-class",
-            "name": "Strategy: create MageFighter class",
+            "id": "strategy-add-multiattacktype",
+            "name": "Strategy: Add MultiAttackType",
             "description": null
         },
         {
@@ -103,6 +103,16 @@
         {
             "id": "builder-add-more-flexibility-to-builder",
             "name": "Builder: Add more flexibility to builder",
+            "description": null
+        },
+        {
+            "id": "builderdi-create-factory-service-and-use",
+            "name": "BuilderDi: Create factory service & use",
+            "description": null
+        },
+        {
+            "id": "builderdi-inject-logger-as-example",
+            "name": "BuilderDi: inject logger as example",
             "description": null
         },
         {
@@ -301,5 +311,5 @@
             "description": null
         }
     ],
-    "sha": "7969753053689879c365fe2c92db459a97419b83"
+    "sha": "512f8f1fc39864b4089335e7357b1bde95568a55"
 }

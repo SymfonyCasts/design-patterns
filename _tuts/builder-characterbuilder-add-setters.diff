@@ -1,9 +1,13 @@
 diff --git a/src/Builder/CharacterBuilder.php b/src/Builder/CharacterBuilder.php
-index 9be8fe7..e595f85 100644
+index 5755976..e595f85 100644
 --- a/src/Builder/CharacterBuilder.php
 +++ b/src/Builder/CharacterBuilder.php
-@@ -6,4 +6,28 @@ use App\Character\Character;
+@@ -2,6 +2,32 @@
  
+ namespace App\Builder;
+ 
++use App\Character\Character;
++
  class CharacterBuilder
  {
 +    public function setMaxHealth(int $maxHealth): self

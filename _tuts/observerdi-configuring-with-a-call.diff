@@ -11,7 +11,7 @@ index 2d6a76f..e268993 100644
 +        calls:
 +            - subscribe: ['@App\Observer\XpEarnedObserver']
 diff --git a/src/Command/GameCommand.php b/src/Command/GameCommand.php
-index 1a9214f..b3ea7e0 100644
+index 0467327..d844de1 100644
 --- a/src/Command/GameCommand.php
 +++ b/src/Command/GameCommand.php
 @@ -5,8 +5,6 @@ namespace App\Command;

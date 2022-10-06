@@ -1,5 +1,5 @@
 diff --git a/src/GameApplication.php b/src/GameApplication.php
-index d04e500..24415ed 100644
+index d04e500..cf8de5d 100644
 --- a/src/GameApplication.php
 +++ b/src/GameApplication.php
 @@ -3,13 +3,6 @@
@@ -46,8 +46,8 @@ index d04e500..24415ed 100644
 +                ->buildCharacter(),
 +
 +            'mage_archer' => $this->createCharacterBuilder()
-+                ->setMaxHealth(90)
-+                ->setBaseDamage(12)
++                ->setMaxHealth(75)
++                ->setBaseDamage(9)
 +                ->setAttackType('fire_bolt') // TODO re-add bow!
 +                ->setArmorType('shield')
 +                ->buildCharacter(),

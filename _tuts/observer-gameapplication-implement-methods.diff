@@ -1,18 +1,18 @@
 diff --git a/src/GameApplication.php b/src/GameApplication.php
-index 1870269..30bddcc 100644
+index 2e583c3..50d1d1d 100644
 --- a/src/GameApplication.php
 +++ b/src/GameApplication.php
-@@ -8,6 +8,9 @@ use App\Observer\GameObserverInterface;
+@@ -9,6 +9,9 @@ use App\Observer\GameObserverInterface;
  
  class GameApplication
  {
 +    /** @var GameObserverInterface[] */
 +    private array $observers = [];
 +
-     public function play(Character $player, Character $ai): FightResult
+     public function __construct(private CharacterBuilderFactory $characterBuilderFactory)
      {
-         $player->rest();
-@@ -84,12 +87,18 @@ class GameApplication
+     }
+@@ -89,12 +92,18 @@ class GameApplication
  
      public function subscribe(GameObserverInterface $observer): void
      {

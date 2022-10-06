@@ -1,5 +1,5 @@
 diff --git a/src/Builder/CharacterBuilder.php b/src/Builder/CharacterBuilder.php
-index b711234..1b8a49f 100644
+index b711234..ae931b1 100644
 --- a/src/Builder/CharacterBuilder.php
 +++ b/src/Builder/CharacterBuilder.php
 @@ -9,6 +9,7 @@ use App\ArmorType\ShieldType;
@@ -19,30 +19,26 @@ index b711234..1b8a49f 100644
      private string $armorType;
  
      public function setMaxHealth(int $maxHealth): self
-@@ -33,9 +34,13 @@ class CharacterBuilder
+@@ -33,9 +34,9 @@ class CharacterBuilder
          return $this;
      }
  
 -    public function setAttackType(string $attackType): self
-+    public function setAttackType(string|array $attackType): self
++    public function setAttackType(string ...$attackTypes): self
      {
 -        $this->attackType = $attackType;
-+        if (is_string($attackType)) {
-+            $attackType = [$attackType];
-+        }
-+
-+        $this->attackTypes = $attackType;
++        $this->attackTypes = $attackTypes;
  
          return $this;
      }
-@@ -49,17 +54,24 @@ class CharacterBuilder
+@@ -49,17 +50,24 @@ class CharacterBuilder
  
      public function buildCharacter(): Character
      {
-+        if (count($this->attackTypes) === 1) {
-+            $attackType = $this->createAttackType($this->attackTypes[0]);
++        $attackTypes = array_map(fn(string $attackType) => $this->createAttackType($attackType), $this->attackTypes);
++        if (count($attackTypes) === 1) {
++            $attackType = $attackTypes[0];
 +        } else {
-+            $attackTypes = array_map(fn(string $attackType) => $this->createAttackType($attackType), $this->attackTypes);
 +            $attackType = new MultiAttackType($attackTypes);
 +        }
 +
@@ -64,15 +60,15 @@ index b711234..1b8a49f 100644
              'fire_bolt' => new FireBoltType(),
              'sword' => new TwoHandedSwordType(),
 diff --git a/src/GameApplication.php b/src/GameApplication.php
-index 24415ed..54013bc 100644
+index cf8de5d..fe9ce6a 100644
 --- a/src/GameApplication.php
 +++ b/src/GameApplication.php
 @@ -63,7 +63,7 @@ class GameApplication
              'mage_archer' => $this->createCharacterBuilder()
-                 ->setMaxHealth(90)
-                 ->setBaseDamage(12)
+                 ->setMaxHealth(75)
+                 ->setBaseDamage(9)
 -                ->setAttackType('fire_bolt') // TODO re-add bow!
-+                ->setAttackType(['fire_bolt', 'bow'])
++                ->setAttackType('fire_bolt', 'bow')
                  ->setArmorType('shield')
                  ->buildCharacter(),
  

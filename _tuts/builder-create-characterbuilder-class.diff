@@ -1,14 +1,12 @@
 diff --git a/src/Builder/CharacterBuilder.php b/src/Builder/CharacterBuilder.php
 new file mode 100644
-index 0000000..9be8fe7
+index 0000000..5755976
 --- /dev/null
 +++ b/src/Builder/CharacterBuilder.php
-@@ -0,0 +1,9 @@
+@@ -0,0 +1,7 @@
 +<?php
 +
 +namespace App\Builder;
-+
-+use App\Character\Character;
 +
 +class CharacterBuilder
 +{

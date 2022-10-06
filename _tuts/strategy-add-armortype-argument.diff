@@ -1,18 +1,16 @@
 diff --git a/src/Character/Character.php b/src/Character/Character.php
-index 9a63e72..0d4a15b 100644
+index 9a63e72..e7f47c1 100644
 --- a/src/Character/Character.php
 +++ b/src/Character/Character.php
-@@ -2,8 +2,8 @@
+@@ -2,6 +2,7 @@
  
  namespace App\Character;
  
 +use App\ArmorType\ArmorType;
  use App\AttackType\AttackType;
--use App\Dice;
+ use App\Dice;
  
- class Character
- {
-@@ -16,8 +16,8 @@ class Character
+@@ -16,8 +17,8 @@ class Character
      public function __construct(
          private int $maxHealth,
          private int $baseDamage,

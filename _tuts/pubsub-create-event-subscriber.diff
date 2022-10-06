@@ -1,5 +1,5 @@
 diff --git a/src/Command/GameCommand.php b/src/Command/GameCommand.php
-index c102041..4badc6a 100644
+index 9564dda..fe9ccb0 100644
 --- a/src/Command/GameCommand.php
 +++ b/src/Command/GameCommand.php
 @@ -3,7 +3,7 @@

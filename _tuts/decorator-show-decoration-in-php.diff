@@ -1,5 +1,5 @@
 diff --git a/src/Command/GameCommand.php b/src/Command/GameCommand.php
-index a3a713a..ec5b01c 100644
+index 03518e2..b30a69e 100644
 --- a/src/Command/GameCommand.php
 +++ b/src/Command/GameCommand.php
 @@ -6,6 +6,7 @@ use App\Character\Character;

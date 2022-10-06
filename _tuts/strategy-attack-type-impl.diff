@@ -21,10 +21,10 @@ index 0000000..45d2ba3
 +}
 diff --git a/src/AttackType/FireBoltType.php b/src/AttackType/FireBoltType.php
 new file mode 100644
-index 0000000..61eac1d
+index 0000000..e98ac6a
 --- /dev/null
 +++ b/src/AttackType/FireBoltType.php
-@@ -0,0 +1,21 @@
+@@ -0,0 +1,13 @@
 +<?php
 +
 +namespace App\AttackType;
@@ -35,23 +35,15 @@ index 0000000..61eac1d
 +{
 +    public function performAttack(int $baseDamage): int
 +    {
-+        return $this->castFireBolt();
-+    }
-+
-+    /**
-+     * Damage: 3d10
-+     */
-+    private function castFireBolt(): int
-+    {
 +        return Dice::roll(10) + Dice::roll(10) + Dice::roll(10);
 +    }
 +}
 diff --git a/src/AttackType/TwoHandedSwordType.php b/src/AttackType/TwoHandedSwordType.php
 new file mode 100644
-index 0000000..d3138a7
+index 0000000..cb91732
 --- /dev/null
 +++ b/src/AttackType/TwoHandedSwordType.php
-@@ -0,0 +1,18 @@
+@@ -0,0 +1,15 @@
 +<?php
 +
 +namespace App\AttackType;
@@ -62,11 +54,8 @@ index 0000000..d3138a7
 +{
 +    public function performAttack(int $baseDamage): int
 +    {
-+        return $baseDamage + $this->twoHandedSwordDamage();
-+    }
++        $twoHandledSwordDamage = Dice::roll(12) + Dice::roll(12);
 +
-+    private function twoHandedSwordDamage(): int
-+    {
-+        return Dice::roll(12) + Dice::roll(12);
++        return $baseDamage + $twoHandledSwordDamage;
 +    }
 +}

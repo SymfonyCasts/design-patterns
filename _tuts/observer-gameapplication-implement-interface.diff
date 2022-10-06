@@ -1,16 +1,16 @@
 diff --git a/src/GameApplication.php b/src/GameApplication.php
-index 54013bc..1870269 100644
+index 28c70c8..2e583c3 100644
 --- a/src/GameApplication.php
 +++ b/src/GameApplication.php
-@@ -4,6 +4,7 @@ namespace App;
- 
+@@ -5,6 +5,7 @@ namespace App;
  use App\Builder\CharacterBuilder;
+ use App\Builder\CharacterBuilderFactory;
  use App\Character\Character;
 +use App\Observer\GameObserverInterface;
  
  class GameApplication
  {
-@@ -81,6 +82,16 @@ class GameApplication
+@@ -86,6 +87,16 @@ class GameApplication
          ];
      }
  

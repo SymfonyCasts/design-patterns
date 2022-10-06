@@ -1,8 +1,8 @@
 diff --git a/src/GameApplication.php b/src/GameApplication.php
-index 30bddcc..7200acc 100644
+index 50d1d1d..0b140ec 100644
 --- a/src/GameApplication.php
 +++ b/src/GameApplication.php
-@@ -106,6 +106,8 @@ class GameApplication
+@@ -111,6 +111,8 @@ class GameApplication
          $fightResult->setWinner($winner);
          $fightResult->setLoser($loser);
  
@@ -11,9 +11,9 @@ index 30bddcc..7200acc 100644
          return $fightResult;
      }
  
-@@ -118,4 +120,11 @@ class GameApplication
+@@ -123,4 +125,11 @@ class GameApplication
      {
-         return new CharacterBuilder();
+         return $this->characterBuilderFactory->createBuilder();
      }
 +
 +    private function notify(FightResult $fightResult): void

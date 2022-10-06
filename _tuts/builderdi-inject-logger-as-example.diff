@@ -1,0 +1,57 @@
+diff --git a/src/Builder/CharacterBuilder.php b/src/Builder/CharacterBuilder.php
+index ae931b1..6ade219 100644
+--- a/src/Builder/CharacterBuilder.php
++++ b/src/Builder/CharacterBuilder.php
+@@ -12,6 +12,7 @@ use App\AttackType\FireBoltType;
+ use App\AttackType\MultiAttackType;
+ use App\AttackType\TwoHandedSwordType;
+ use App\Character\Character;
++use Psr\Log\LoggerInterface;
+ 
+ class CharacterBuilder
+ {
+@@ -20,6 +21,10 @@ class CharacterBuilder
+     private array $attackTypes;
+     private string $armorType;
+ 
++    public function __construct(private LoggerInterface $logger)
++    {
++    }
++
+     public function setMaxHealth(int $maxHealth): self
+     {
+         $this->maxHealth = $maxHealth;
+@@ -50,6 +55,11 @@ class CharacterBuilder
+ 
+     public function buildCharacter(): Character
+     {
++        $this->logger->info('Creating a character!', [
++            'maxHealth' => $this->maxHealth,
++            'baseDamage' => $this->baseDamage,
++        ]);
++
+         $attackTypes = array_map(fn(string $attackType) => $this->createAttackType($attackType), $this->attackTypes);
+         if (count($attackTypes) === 1) {
+             $attackType = $attackTypes[0];
+diff --git a/src/Builder/CharacterBuilderFactory.php b/src/Builder/CharacterBuilderFactory.php
+index 3db0b75..f73ddd3 100644
+--- a/src/Builder/CharacterBuilderFactory.php
++++ b/src/Builder/CharacterBuilderFactory.php
+@@ -2,10 +2,16 @@
+ 
+ namespace App\Builder;
+ 
++use Psr\Log\LoggerInterface;
++
+ class CharacterBuilderFactory
+ {
++    public function __construct(private LoggerInterface $logger)
++    {
++    }
++
+     public function createBuilder(): CharacterBuilder
+     {
+-        return new CharacterBuilder();
++        return new CharacterBuilder($this->logger);
+     }
+ }
