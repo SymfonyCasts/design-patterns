@@ -1,5 +1,5 @@
 diff --git a/src/Command/GameCommand.php b/src/Command/GameCommand.php
-index 9564dda..fe9ccb0 100644
+index 8f7f941..fe9ccb0 100644
 --- a/src/Command/GameCommand.php
 +++ b/src/Command/GameCommand.php
 @@ -3,7 +3,7 @@
@@ -16,7 +16,7 @@ index 9564dda..fe9ccb0 100644
      {
          $io = new SymfonyStyle($input, $output);
 -        $this->eventDispatcher->addListener(FightStartingEvent::class, function(FightStartingEvent $event) use ($io) {
--            $io->note(sprintf('Fight is starting against %s', $event->ai->getNickname()));
+-            $io->note('Fight is starting against ' . $event->ai->getNickname());
 -        });
 +        $this->eventDispatcher->addSubscriber(new OutputFightStartingSubscriber());
  
@@ -24,24 +24,26 @@ index 9564dda..fe9ccb0 100644
  
 diff --git a/src/Event/OutputFightStartingSubscriber.php b/src/Event/OutputFightStartingSubscriber.php
 new file mode 100644
-index 0000000..fbadf33
+index 0000000..2dc9db4
 --- /dev/null
 +++ b/src/Event/OutputFightStartingSubscriber.php
-@@ -0,0 +1,23 @@
+@@ -0,0 +1,25 @@
 +<?php
 +
 +namespace App\Event;
 +
++use Symfony\Component\Console\Input\ArrayInput;
 +use Symfony\Component\Console\Output\ConsoleOutput;
++use Symfony\Component\Console\Style\SymfonyStyle;
 +use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 +
 +class OutputFightStartingSubscriber implements EventSubscriberInterface
 +{
 +    public function onFightStart(FightStartingEvent $event)
 +    {
-+        $output = new ConsoleOutput();
++        $io = new SymfonyStyle(new ArrayInput([]), new ConsoleOutput());
 +
-+        $output->writeln(sprintf('  // Fight is starting against %s', $event->ai->getNickname()));
++        $io->note('Fight is starting against ' . $event->ai->getNickname());
 +    }
 +
 +    public static function getSubscribedEvents(): array

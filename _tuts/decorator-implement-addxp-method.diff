@@ -1,8 +1,8 @@
 diff --git a/src/Service/OutputtingXpCalculator.php b/src/Service/OutputtingXpCalculator.php
-index 1de1ac5..4065978 100644
+index 11e5a9a..2f7789b 100644
 --- a/src/Service/OutputtingXpCalculator.php
 +++ b/src/Service/OutputtingXpCalculator.php
-@@ -18,6 +18,16 @@ class OutputtingXpCalculator implements XpCalculatorInterface
+@@ -19,6 +19,16 @@ class OutputtingXpCalculator implements XpCalculatorInterface
  
      public function addXp(Character $winner, int $enemyLevel): void
      {

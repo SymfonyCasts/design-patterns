@@ -1,5 +1,5 @@
 diff --git a/src/Command/GameCommand.php b/src/Command/GameCommand.php
-index 2c8920f..9564dda 100644
+index 2c8920f..8f7f941 100644
 --- a/src/Command/GameCommand.php
 +++ b/src/Command/GameCommand.php
 @@ -27,8 +27,8 @@ class GameCommand extends Command
@@ -9,7 +9,7 @@ index 2c8920f..9564dda 100644
 -        $this->eventDispatcher->addListener(FightStartingEvent::class, function() use ($io) {
 -            $io->note('Fight is starting...');
 +        $this->eventDispatcher->addListener(FightStartingEvent::class, function(FightStartingEvent $event) use ($io) {
-+            $io->note(sprintf('Fight is starting against %s', $event->ai->getNickname()));
++            $io->note('Fight is starting against ' . $event->ai->getNickname());
          });
  
          $io->text('Welcome to the game where warriors fight against each other for honor and glory... and 🍕!');

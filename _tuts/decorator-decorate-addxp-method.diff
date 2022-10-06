@@ -1,5 +1,5 @@
 diff --git a/src/Service/OutputtingXpCalculator.php b/src/Service/OutputtingXpCalculator.php
-index a1e64e7..1de1ac5 100644
+index 6c23707..11e5a9a 100644
 --- a/src/Service/OutputtingXpCalculator.php
 +++ b/src/Service/OutputtingXpCalculator.php
 @@ -2,6 +2,7 @@
@@ -10,8 +10,8 @@ index a1e64e7..1de1ac5 100644
  use Symfony\Component\Console\Output\ConsoleOutput;
  use Symfony\Component\Console\Output\OutputInterface;
  
-@@ -14,4 +15,9 @@ class OutputtingXpCalculator implements XpCalculatorInterface
-     ) {
+@@ -15,4 +16,9 @@ class OutputtingXpCalculator implements XpCalculatorInterface
+     {
          $this->output = new ConsoleOutput();
      }
 +

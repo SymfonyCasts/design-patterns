@@ -1,8 +1,8 @@
 diff --git a/src/Service/OutputtingXpCalculator.php b/src/Service/OutputtingXpCalculator.php
-index 1c8bd3a..a1e64e7 100644
+index 1c8bd3a..6c23707 100644
 --- a/src/Service/OutputtingXpCalculator.php
 +++ b/src/Service/OutputtingXpCalculator.php
-@@ -2,10 +2,16 @@
+@@ -2,10 +2,17 @@
  
  namespace App\Service;
  
@@ -15,7 +15,9 @@ index 1c8bd3a..a1e64e7 100644
 +
      public function __construct(
          private readonly XpCalculatorInterface $innerCalculator
-     ) {
+-    ) {
++    )
++    {
 +        $this->output = new ConsoleOutput();
      }
  }

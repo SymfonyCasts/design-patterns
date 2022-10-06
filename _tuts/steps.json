@@ -231,6 +231,11 @@
             "description": null
         },
         {
+            "id": "decorator-change-usage-to-use-interface",
+            "name": "Decorator: change usage to use interface",
+            "description": null
+        },
+        {
             "id": "decorator-create-outputtingxpearnedservicedecorator",
             "name": "Decorator: create OutputtingXpEarnedServiceDecorator",
             "description": null
@@ -251,8 +256,8 @@
             "description": null
         },
         {
-            "id": "decorator-gamecommand-use-decorator",
-            "name": "Decorator: GameCommand use decorator",
+            "id": "delete-me-6",
+            "name": "delete me 6",
             "description": null
         },
         {
@@ -311,5 +316,5 @@
             "description": null
         }
     ],
-    "sha": "512f8f1fc39864b4089335e7357b1bde95568a55"
+    "sha": "bd77350ee9dd24ed7aeda18c8e72b68e2367c67b"
 }

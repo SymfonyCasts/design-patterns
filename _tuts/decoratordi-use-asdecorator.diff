@@ -1,5 +1,5 @@
 diff --git a/src/Service/OutputtingXpCalculator.php b/src/Service/OutputtingXpCalculator.php
-index 4065978..06d071c 100644
+index 2f7789b..3a93915 100644
 --- a/src/Service/OutputtingXpCalculator.php
 +++ b/src/Service/OutputtingXpCalculator.php
 @@ -5,7 +5,9 @@ namespace App\Service;

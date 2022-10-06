@@ -1,5 +1,5 @@
 diff --git a/src/Command/GameCommand.php b/src/Command/GameCommand.php
-index 5498c7a..2c8920f 100644
+index d844de1..2c8920f 100644
 --- a/src/Command/GameCommand.php
 +++ b/src/Command/GameCommand.php
 @@ -3,6 +3,7 @@
@@ -10,16 +10,23 @@ index 5498c7a..2c8920f 100644
  use App\FightResult;
  use App\GameApplication;
  use Symfony\Component\Console\Attribute\AsCommand;
-@@ -10,7 +11,7 @@ use Symfony\Component\Console\Command\Command;
+@@ -10,12 +11,14 @@ use Symfony\Component\Console\Command\Command;
  use Symfony\Component\Console\Input\InputInterface;
  use Symfony\Component\Console\Output\OutputInterface;
  use Symfony\Component\Console\Style\SymfonyStyle;
--use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 +use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  
  #[AsCommand('app:game:play')]
  class GameCommand extends Command
-@@ -26,6 +27,9 @@ class GameCommand extends Command
+ {
+     public function __construct(
+-        private readonly GameApplication $game
++        private readonly GameApplication $game,
++        private readonly EventDispatcherInterface $eventDispatcher,
+     )
+     {
+         parent::__construct();
+@@ -24,6 +27,9 @@ class GameCommand extends Command
      protected function execute(InputInterface $input, OutputInterface $output): int
      {
          $io = new SymfonyStyle($input, $output);
