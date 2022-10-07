@@ -3,6 +3,7 @@ chapters:
   - strategy
   - strategy-benefits
   - builder
+  - builder-factory
   - observer
   - pub-sub
   - decorator
