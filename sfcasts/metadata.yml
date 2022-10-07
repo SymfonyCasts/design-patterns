@@ -1,6 +1,7 @@
 chapters:
   - patterns
   - strategy
+  - strategy-benefits
   - builder
   - observer
   - pub-sub
