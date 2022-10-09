@@ -1,119 +1,23 @@
 # Strategy Pattern
 
-Coming soon...
+The first pattern we'll talk about is the "strategy pattern". This is a *behavioral* pattern that helps you organize code into separate classes that can then interact with each other. Let's start with the *technical* definition: The strategy pattern defines a family of algorithms, encapsulates each one, and makes them *interchangeable*. It lets the algorithm vary independently from clients that use it. If that made sense to you, congrats! *You* should probably be teaching this course instead of me. So let's try that again. Here's *my* definition: The strategy pattern is a way to allow *part* of a class to be controlled from the *outside*.
 
-The first pattern we'll talk about is the strategy pattern, which is one of those
-behavioral patterns, the kind that help you organize code into separate classes that
-can then interact with each other. Let's start with the technical definition. The
-strategy pattern defines a family of algorithms, encapsulates each1 and makes them
-interchangeable. It lets the algorithm vary independently from clients that use it.
-Oh, if that made sense to you, congrats. You should probably be teaching this course
-instead of me. So let's try that again. Here's my definition. The strategy pattern is
-a way to allow part of a class to be controlled from the outside. Let's look at an
-imaginary example before we start coding. Suppose we have a payment service that does
-a bunch of stuff, including charging people via the credit card, but now we want to
-be able to use, sometimes use this exact same class except charge people via PayPal.
-Instead, how can we do that? The strategy pattern. Allow some new payment strategy
-interface object to be passed into payment service and just call that. Then create
-two classes that implement this credit card payment strategy and PayPal payment
-strategy.
+Let's talk about an *imaginary* example before we start coding. Suppose we have a payment service that does a bunch of stuff, including charging people via credit card. But *occasionally*, we'll want to use this exact same class to charge people via PayPal instead. How can we do that? The *strategy pattern*. We would allow a new payment strategy interface object to be passed into our payment service and just call *that*. Then we would create two classes that *implement* this: Credit card payment strategy and PayPal payment strategy. *You* now have control of which class you pass in. Yep! You just made part of the code *inside* payment service controllable by *outside* code. Cool! Now that we've got a quick preview, let's code a *real* example.
 
-You now have control which you pass in. Yep. You just made part of the code inside
-payment service controllable by outside code. Cool. Now that we've got a quick
-preview, let's code a real example. Right now we have three characters that are
-created inside of game application, but the fighter is dominating. To balance the
-game, we're going to, we want to add special attack abilities to each character. For
-example, the MA will be able to cast spells, which unlike the normal attack
-functionality, which is inside of character, where you just take the base damage plus
-the normal attack functionality is pretty boring. We take the base damage for the
-user and then we use this cool dice roll, which is going to roll a six-sided dice for
-some randomness. But when a MA cast a spell, that's going to have a much higher, uh,
-random variability that could do a lot more damage. So we basically need completely
-different, uh, code for when calculating the amount of damage to do so. How could we
-allow the MA to cast spells? Well, the first idea that comes to mind is to pass some
-flag into the character's constructor, like can cast spells and then in the attack
-method, add an if statement so that we have the two different types of attacks.
+Right now, we have three characters that are created inside of `GameApplication.php`, but the `fighter` is *dominating*. To balance the game, we want to add special attack abilities for each character. For example, the `mage` will be able to *cast spells*. The normal attack functionality is pretty *boring*. We take the `baseDamage` for the user and then we use this cool `Dice::roll`, which is going to roll a six-sided die for some randomness. But when a `mage` casts a spell, that's going to have a much *higher* random variability that *could* do a lot more damage. So basically, we need completely different code for calculating the amount of damage to do.
 
-But then what if an archer will need get a different type of attack? Then we'll have
-to pass another flag into here and then have three variations inside of attack. You
-can kind of see the problem. Okay, so another solution is that we could create a
-subclass of character. We could create like a major character and then override the
-attack method entirely. But darn it, we don't want to override all of attack, we just
-want to replace part of it. Yes, we could get fancy by moving the part we want to
-reuse into a protected function. So we could call that from our subclass, but this is
-just getting a little ugly. And whenever we can solve a problem without inheritance,
-that's a good idea. So backing up again, what I really want to be able to do here is
-just change this code for the, have this code be different for a MA versus the other
-characters on a character by character basis. And that is what the strategy pattern
-allows us to do. Exactly. All right, so let's do this. The logic we want to be able
-to change is just this part here where we determine how much an attack did. So step
-one to this pattern is to create an interface that describes this work.
+How could we enable the `mage` to cast spells with this new logic? The first idea that comes to mind is to pass some flag into the character's constructor, like `canCastSpells()`, and then in the `attack()` method, add an `if` statement so that we have both types of attacks. But what if an `archer` needed a *different* type of attack? We'd then have to pass *another* flag into this and end up with *three* variations inside of `attack()`. You can probably see the issue here.
 
-So I'm going to create a new attack type directory to organize things, and inside of
-there I'll got a newb class, pop it over to interface. There we go. And we'll call it
-attack type.
+Another solution is that we could create a sub-class of `Character()`. We could create a `mage` character and then override the attack method entirely. But darn it! We don't want to override *all* of `attack()`. We just want to replace *part* of it. We *could* get fancy by moving the part we want to reuse into a protected function so we could call that from our sub-class, but this is just getting a little ugly. We want to solve problems *without* inheritance as much as possible. So let's back up. What I *really* want to be able to do here is just have this code be different for a `mage` versus the other characters on a character-by-character basis. And that is *exactly* what the strategy pattern allows us to do.
 
-It's
+Let's do this! The logic we want to be able to change is just this part here, where we determine how much damage an attack did. Step one to this pattern is to create an interface that *describes* this work, so I'm going to create a new `/AttackType` directory to organize things. Inside, I'll create a new PHP class, change the template to "Interface", and call it `AttackType`. Cool! And inside of here, let's create one `public function` called `performAttack()`. This will pass in the `$baseDamage`, perform the attack, and return the final damage that should be applied. Awesome!
 
-Cool. And instead of here, let's create one public function called perform attack.
-And what this will do is it will will pass in the base damage, this will perform the
-attack and then return the final damage that should be um, applied. All right, cool.
-Step two is to create at least one implementation of this interface. So for our ma,
-let's pretend that they have this cool fire attack. So inside the same directory,
-I'll create a fire bolt type and we'll have this implement attack type. I'll go down
-here, I'll go to code generate or command N on a Mac and go to "Implement Methods" as
-a shortcut to build our method inside of here. I'm going to use that dice roll class
-three times. So dice roll 10 means you roll 10 sided dice. So we're actually going to
-roll a 10 sided dice three times our first attack type is done. And while we're here,
-let's create two other attack types. I'll create a bow type and I'm actually just
-going to paste in the code here. So this is a chance of doing some critical damage
-and then a two handed sword type. I'll also just paste in that code.
+Step two is to create at least one implementation of this interface. Let's pretend our `mage` has a cool fire attack. Inside the same directory, I'll create a `FireBoltType` and we'll have this implement `AttackType`. Then, go to code Generate or "command" + "N" on a Mac and select "Implement Methods" as a shortcut to build our method inside of here. I'm going to use our `Dice::roll()` class three times. This `Dice::roll(10)` means you'll roll a 10-sided die. So for this attack, we're actually going to roll a 10-sided die *three* times. And... our first attack type is done! While we're here, let's create two *other* attack types. I'll create a `BowType`... and I'll just paste in some code here. This attack has a chance of doing some *critical* damage. Finally, I'll add a `TwoHandedSwordType`... and paste in that code as well. This one is pretty straightforward. It's the `$baseDamage` plus some random rolls. Cool!
 
-And this one is pretty straightforward. It's the base damage plus some random roles.
-Cool. All right. The third and final step is to allow an attack type interface object
-to be passed into character via its construction so that we can use it down below. So
-quite literally we're going to add a new argument here called private that's also a
-property type in with the attack type interface. So we can allow any attack type we
-passed in and we'll call it attack type. And down here I'll take remember this
-comment because now instead of doing the logic manually, we'll say return
-this->attack type->perform attack. This->based damage passed in and done. Our
-character class is now leveraging this, the strategy pattern. It allows someone
-outside of this class to pass in an attack type object effectively letting them
-control just part of the code inside of the our class to take advantage of the
-pattern over in open up a game application and inside of great character, we're going
-to pass in the attack type for each of these. So we'll say new two handed sword
-attack for the fighter, new bow type attack for the archer and new fire bolt type for
-our ma
+All right, the third and final step is to allow an `AttackType` interface object to be passed in to `Character.php` via its constructor so that we can use it down below. So, quite literally, we're going to add a new argument here called `private` that's also a property, typehinted with the `AttackType` interface (so we can allow any `AttackType` we pass in) and we'll call it `$attackType`. And down here, I'll remove this comment... because now, instead of doing the logic *manually*, we'll say `return $this->attackType->performAttack($this->basedDamage)`. And we're done! Our `Character` class is now leveraging the *strategy* pattern. It allows someone outside of this class to pass in an `AttackType` object, effectively letting them control just *part* of the code inside of our class.
 
-Sweet to make sure we didn't break anything. Let's go over and try our app. And
-sweet. Looks like it's still working. What's great about the strategy pattern is that
-instead of trying to pass some options to character, like can cast spells = true to
-control how an attack happens, we have full control. We can do absolutely anything we
-want inside of these classes to prove it. I want to add a new character, a major
-archer, a legendary character that has a bow and can cast spells to support this.
-This idea of having two attacks, we're just going to create a new attack type. I'm
-going to call it multi attack type. Ooh, we'll make it implement our attack type
-interface. I'll implement the performed T method, and then in this case I'm going to
-create a constructor where we can pass in a an array of attack types. And to help out
-my editor, I'm going to put a little PHP doc above us so that knows this is an array
-specifically of attack type objects. Then down here, the way this character works is
-it will randomly choose between one of its available attack types. So I'll say type =
-$this->
+To take advantage of the pattern, open up `GameApplication.php`, and inside of `createCharacter()`, we're going to pass in the `AttackType` for each of these. So we'll say `new TwoHandedSwordType()` for the `fighter`, `new BowType()` for the `archer`, and `new FireBoltType()` for our `mage`. Sweet! To make sure we didn't break anything, let's go over and try our app. And... woohoo! It's *still* working!
 
-Attack type. Oh, I'm, I'm meant to call this attack types plural. There we go. And
-then array rand, this era attack types. So that funny looking line there will give us
-a random type and we can say return type arrow. Perform attack based damage. So this
-is really crazy. We're not leveraging multiple attack types inside of attack type.
-It's very custom, but the strategy pattern allows us to do whatever we want over
-inside game application. We'll now add our new major archer
+What's great about the "strategy pattern" is that, instead of trying to pass some options to `Character` like `canCastSpells = true` to control how an attack happens, we have *full* control. We can do absolutely *anything* we want inside of these classes. To prove it, I want to add a new character - a *mage archer* - a legendary character that has a bow *and* casts spells. To support this idea of having *two* attacks, we're just going to create a new `AttackType`. I'm going to call it `MultiAttackType`... and then we'll make it implement our `AttackType` interface. I'll also go to "Implement Methods" and implement the `performAttack()` method. In *this* case, I'm going to create a constructor where we can pass in an `array` of `$attackTypes`. And to help out my editor, I'm going to put a little PHP doc above this so that knows this is an array specifically of `$attackType` objects. The way this character works is by randomly choosing between one of its available `$attackTypes`. So, down here, I'll say `$type = $this->attackTypes[]` (Whoops! I meant to call this `attackTypes` with a "s".) And then `array_rand($this->attackTypes)`. This funny looking line will give us a random type and we can say `return $type->performAttack($baseDamage)`. So this is really crazy. We're now leveraging *multiple* `attackTypes` *inside* of `AttackType`. It's *very* custom, but the "strategy pattern" allows us to do whatever we want. Over in `GameApplication.php`, we'll add our new `mage_archer` character, and I'll copy the code above. Let's have this be... say... about `75, 9, 0.15`. Then, for the `AttackType`, let's say `new MultiAttackType([])` and, inside, pass in `new BowType()` and `new FireBoltType()`. Sweet! And below, we also need to update our `getCharacterList()` so that it shows up in our character selection list when we run it. Okay, let's try it and see how *legendary* this `mage_archer` is. I'll select `mage_archer` and... oh! That's a *stunning* victory against a normal `archer`. We've got it! How cool is that?
 
-And I'll copy the code above. Let's have this be, let's say about 75 9 0.15. And then
-for the attack type, it's going to be new multi attack type. And here as we pass in
-new bow type and new fireball type sweet. And in this app, we also need to update our
-little get character list down there so that it shows up in our selection list when
-we run it. All right, let's try it. See how legendary this may Archer is. I'll select
-May Archer and oh stunning victory against a normal archer. We've got it. How cool is
-that? All right. Next I'm going to use the strategy pattern one more time to make our
-character class even more flexible. Then we'll talk about where you see the strategy
-pattern in the wild, and specifically what benefits you get from it.
-
+Next, I'm going to use the "strategy pattern" one more time to make our `Character` class even *more* flexible. Then, we'll talk about where you can see the "strategy pattern" in the wild, and specifically what *benefits* you get from it.
