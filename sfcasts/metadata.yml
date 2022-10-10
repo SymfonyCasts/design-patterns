@@ -8,4 +8,5 @@ chapters:
   - observer-benefits
   - pub-sub
   - decorator
+  - decorator-di
 
