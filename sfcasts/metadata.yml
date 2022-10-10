@@ -5,6 +5,7 @@ chapters:
   - builder
   - builder-factory
   - observer
+  - observer-benefits
   - pub-sub
   - decorator
 
