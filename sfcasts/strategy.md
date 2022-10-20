@@ -23,12 +23,12 @@ Let's try that again. Here's *my* definition:
 
 Let's talk about an *imaginary* example before we start coding. Suppose we have a
 `PaymentService` that does a bunch of stuff... including charging people via credit
-card. But now, we discover that we need to use this *exact* same class to charge
-people via PayPal... or pirate treasure - that sounds more fun.
+card. But now, we discover that we need to use this *exact* same class to allow
+people to pay via PayPal... or via pirate treasure - that sounds more fun.
 
 Anyways, how can we do that? The *strategy pattern*! We would allow a new
 `PaymentStrategyInterface` object to be passed *into* `PaymentService` and then
-we would just call *that*.
+we would call *that*.
 
 Next, we would create two classes that *implement* the new interface:
 `CreditCardPaymentStrategy` and `PiratesBootyPaymentStrategy`. That's it! *We* now
@@ -40,7 +40,7 @@ have control of *which* class we pass in. Yep! We just made part of the code *in
 With that in mind, let's actually *code* this pattern.
 
 Right now, we have three characters that are created inside of `GameApplication`.
-But the `fighter` is *dominating*. To balance the game, we want to add special attack
+But the `fighter` is *dominating*. To balance the game, I want to add special attack
 abilities for each character. For example, the `mage` will be able to *cast spells*.
 
 Currently, the attack functionality is pretty *boring*: we take the character's
@@ -48,7 +48,7 @@ Currently, the attack functionality is pretty *boring*: we take the character's
 for some randomness.
 
 But when a `mage` casts a spell, the damage it causes will be *much* more variable:
-sometimes a spell work really well but... other times it makes like tiny fireworks
+sometimes a spell works really well but... other times it makes like tiny fireworks
 that do almost zero damage.
 
 Basically, for the mage, we need *completely* different code for calculating
@@ -61,13 +61,13 @@ different damage logic? The first idea that comes to *my* mind is to pass a flag
 into the character's constructor, like `$canCastSpells`. Then in the `attack()`
 method, add an `if` statement so that we have both types of attacks.
 
-Cool... but what if an `archer` needed yet a *different* type of attack? We'd then
+Cool... but what if an `archer` needs yet a *different* type of attack? We'd then
 have to pass *another* flag and we'd end up with *three* variations inside of
 `attack()`. Yikes.
 
 ## Sub-Class?
 
-Ok then, another solution could be that we sub-class `Character`. We create a
+Ok then, another solution might be that we sub-class `Character`. We create a
 `MageCharacter` that extends `Character`, then override the `attack()` method
 entirely. But, darn it! We don't want to override *all* of `attack()`, we just want
 to replace *part* of it. We *could* get fancy by moving the part we want to reuse
@@ -77,20 +77,20 @@ possible.
 
 ## Creating the "strategy" Interface
 
-So let's back up. What we *really* want to do is just allow this code to be different
+So let's back up. What we *really* want to do is allow this code to be different
 on a character-by-character basis. And that is *exactly* what the strategy pattern
 allows.
 
 Let's do this! The logic that we need the flexibility to change is this part here,
 where we determine how much damage an attack did.
 
-Ok, step 1 to this pattern is to create an interface that *describes* this work.
+Ok, step 1 to the pattern is to create an interface that *describes* this work.
 I'm going to add a new `AttackType/` directory to organize things. Inside,
 create a new PHP class, change the template to "Interface", and call it
 `AttackType`.
 
 Cool! Inside, add one `public function` called, how about, `performAttack()`. This
-will accept the character's `$baseDamage` because that might be useful, then return
+will accept the character's `$baseDamage` - because that might be useful - then return
 the final damage that should be applied.
 
 Awesome!
@@ -98,12 +98,12 @@ Awesome!
 ## Adding Implementation of the Interface
 
 Step 2 is to create at least one implementation of this interface. Let's pretend
-our `mage` has a cool fire attack. Inside the same directory, create an class
-called `FireBoltType`... and make this implement `AttackType`. Then, go to
+our `mage` has a cool fire attack. Inside the same directory, create a class
+called `FireBoltType`... and make it implement `AttackType`. Then, go to
 "Code -> Generate" - or "command" + "N" on a Mac - and select "Implement Methods"
 as a shortcut to add the method we need.
 
-For this magic attack, return `Dice::roll(10)` 3 times. So the damage done is
+For the magic attack, return `Dice::roll(10)` 3 times. So the damage done is
 the result of rolling 3 10-sided dice.
 
 And... our first attack type is done! While we're here, let's create two *others*.
@@ -114,14 +114,14 @@ one is pretty straightforward: it's the `$baseDamage` plus some random rolls.
 
 ## Passing in and Using the Strategy
 
-We're ready for the 3rd and final step fro this pattern: allow an `AttackType`
+We're ready for the 3rd and final step for this pattern: allow an `AttackType`
 interface to be passed into `Character` so that we can use it below. So, quite
-literally, we're going to add a new argument here: `private` - so it's also a
+literally, we're going to add a new argument: `private` - so it's also a
 property - type-hinted with the `AttackType` interface (so we can allow any `AttackType`
 to be passed in) and call it `$attackType`.
 
-Below,remove this comment... because now, instead of doing the logic *manually*,
-we'll say `return $this->attackType->performAttack($this->basedDamage)`.
+Below, remove this comment... because now, instead of doing the logic *manually*,
+we'll say `return $this->attackType->performAttack($this->baseDamage)`.
 
 And we're done! Our `Character` class is now leveraging the *strategy* pattern.
 It allows someone *outside* of this class to pass in an `AttackType` object,
@@ -130,11 +130,11 @@ effectively letting them control just *part* of its code.
 ## Taking Advantage of our Flexibility
 
 To take advantage of the new flexibility, open up `GameApplication`, and inside of
-`createCharacter()`, let's pass an `AttackType` to each of these. Say `new
-TwoHandedSwordType()` for the `fighter`, `new BowType()` for the `archer`, and
+`createCharacter()`, pass an `AttackType` to each of these, like
+`new TwoHandedSwordType()` for the `fighter`, `new BowType()` for the `archer`, and
 `new FireBoltType()` for the `mage`.
 
-Sweet! To make sure we didn't break anything, let's go over and try our app.
+Sweet! To make sure we didn't break anything, head over and try the game.
 
 ```terminal-silent
 php bin/console app:game:play
@@ -148,12 +148,12 @@ What's great about the "strategy pattern" is that, instead of trying to pass opt
 to `Character` like `$canCastSpells = true` to configure the attack, we have *full*
 control.
 
-To prove it, I want to add a new character - a *mage archer*: a legendary character
-that has a bow *and* casts spells. Dang, they sound sweet!
+To prove it, let's add a new character - a *mage archer*: a legendary character
+that has a bow *and* casts spells. Double threat!
 
-To support this idea of having *two* attacks, create a new `AttackType` called,
-how about, `MultiAttackType`. Make it implement the `AttackType` interface
-go to "Implement Methods" to add the `performAttack()` method.
+To support this idea of having *two* attacks, create a new `AttackType` called
+`MultiAttackType`. Make it implement the `AttackType` interface and go to
+"Implement Methods" to add the method.
 
 In *this* case, I'm going to create a constructor where we can pass in an `array`
 of `$attackTypes`. To help out my editor, I'll add some PHPDoc above to note that
@@ -161,8 +161,8 @@ this is an array specifically of `AttackType` objects.
 
 This class will work by randomly choosing between one of its available `$attackTypes`.
 So, down here, I'll say `$type = $this->attackTypes[]` - whoops! I meant to call this
-`attackTypes` with a "s" - then `array_rand($this->attackTypes)`. Then
-`return $type->performAttack($baseDamage)`.
+`attackTypes` with a "s" - then `array_rand($this->attackTypes)`. Return
+`$type->performAttack($baseDamage)`.
 
 Done! This is a *very* custom attack, but with the "strategy pattern", it's no
 problem. Over in `GameApplication`, add the new `mage_archer` character... and I'll

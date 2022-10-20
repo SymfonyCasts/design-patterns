@@ -7,13 +7,13 @@ it in when you create the `Character`.
 ## Naming Conventions?
 
 If you've read up on this pattern, you might be wondering why we didn't name the
-interface `AttackStrategy` after the Pattern. The answer is... because we don't *have*
-to. In all seriousness, the clarity and *purpose* of this class are much more valuable
-than hinting the name of a pattern. If we called this "attack strategy", it might
+interface `AttackStrategy` after the pattern. The answer is... because we don't *have*
+to. In all seriousness, the clarity and *purpose* of this class are more valuable
+than hinting the name of a pattern. If we called this "attack strategy"... it might
 sound like it's responsible for actually *planning* a strategy of attack. That's
 *not* what we intended. Hence our name: `AttackType`
 
-## Another Strategy Pattern Examle
+## Another Strategy Pattern Example
 
 Let's do one more quick strategy pattern example to further balance our characters.
 I want to be able to control the armor of each character beyond just the number that's
@@ -28,16 +28,16 @@ If we had also used inheritance for customizing how the attacks happen, we might
 end up with classes like `TwoHandedSwordWithShieldCharacter` or
 `SpellCastingAndBowUsingWearingLeatherArmorCharacter`. Yikes!
 
-So rather than navigate that nightmare of never-ending sub-classes, let's use the
+So rather than navigate that nightmare of never-ending sub-classes, we'll use the
 *Strategy Pattern*. Let's revisit the three steps from earlier. Step one is to
 *identify* the code that needs to change and create an interface for it.
 
-In our case, we need to determine out how much an attack should be reduced by.
-Cool: create a new `ArmorType/` directory and inside that, za new PHP class... which
+In our case, we need to determine how much an attack should be reduced by. Cool:
+create a new `ArmorType/` directory and inside that, a new PHP class... which
 will actually be an interface... and call it, how about, `ArmorType`.
 
 To hold the armor-reducing code, say `public function getArmorReduction()` where
-we pass in the `$damage` that we're about to do, and we'll return how much damage
+we pass in the `$damage` that we're about to do, and will return how much damage
 *reduction* the armor should apply.
 
 Step two is to create at least one implementation of this. Create a new PHP class
@@ -51,7 +51,7 @@ meaningless and reduce the damage by zero. Ouch!
 While we're here, let's create two other types of armor. The first is a
 `LeatherArmorType`. I'll paste in the logic: it absorbs 20% of the damage.
 
-And *then*, create the cool `IceBlockType`: a little something for our magic
+And *then* create the cool `IceBlockType`: a little something for our magic
 folk. I'll paste that logic in as well. This will absorb two eight-sided dice
 rolls added together.
 
@@ -62,7 +62,7 @@ number at all. Instead, add a `private ArmorType $armorType` argument.
 Down below, in `receiveAttack()`, say
 `$armorReduction = $this->armorType->getArmorReduction()` and pass in `$damage`.
 And just to make sure things don't drift negative, add a `max()` after `$damageTaken`
-passing `$damage - $armorReduction, 0`.
+passing `$damage - $armorReduction` and `0`.
 
 Done! `Character` now leverages the Strategy Pattern... again! Let's go take
 advantage of that over in `GameApplication`.
@@ -80,7 +80,7 @@ Let's go try this team. Head over and run:
 ```
 
 And... it looks like it's working! Let's play as a `mage-archer` and... sweet! Well,
-I *lost*. That's *not* sweet, but I tried hard! And you can see that the "damage
+I *lost*. That's *not* sweet, but I tried my best! And you can see that the "damage
 dealt" and the "damage received" still seem to be working. Awesome!
 
 ## Pattern Benefits
@@ -102,8 +102,8 @@ into smaller, more focused ones, but still have them interact with each other.
 That pleases SRP.
 
 And OCP is happy because we now have a way to modify or extend the behavior of the
-`Character` class without actually *changing* the `Character` class. We can pass
-in new armor and attack types instead.
+`Character` class without actually *changing* the code inside. We can pass in new
+armor and attack types instead.
 
 ## Strategy Pattern in the Real World
 
@@ -113,27 +113,27 @@ Finally, where might we see this pattern in the real world? One example, if you 
 data in different locations, like the filesystem or a database.
 
 Instead of trying to accomplish that with a bunch of code inside of the `Session`
-class itself, the `Session` class accepts a `SessionStorageInterface`. We can pass
+class itself, `Session` accepts a `SessionStorageInterface`. We can pass
 whatever session storage strategy we want. Heck, we could even use environment
 variables to swap to a different storage at runtime!
 
 Where else is the Strategy Pattern used? Well, it's subtle, but it's actually used in
-a lot of places. Anytime you have a class that accepts an Interface as a constructor
+a lot of places. Anytime you have a class that accepts an interface as a constructor
 argument, especially if that interface comes from the *same* library, that's quite
 possibly the Strategy Pattern. It means that the library author decided that, instead
 of putting a bunch of code in the middle of the class, it should be abstracted into
-another class. *And*, by type-hinting an *interface*, someone *else* can swap out
-the implementation (in this case, the session storage) for *any* implementation.
+another class. *And*, by type-hinting an *interface*, they're allowing someone
+*else* to pass in whatever implementation - or *strategy* they want.
 
 Here's another example. Over on GitHub, I'm on the Symfony repository. Hit "t"
-and search for `JsonLoginAuthenticator`. this is the code behind the `json_login`
-way of logging in with Symfony. One common need with the `JsonLoginAuthenticator`
+and search for `JsonLoginAuthenticator`. This is the code behind the `json_login`
+security authenticator. One common need with the `JsonLoginAuthenticator`
 is to use it like normal... but then take control of what happens on success: for
-example, to control what JSON that's returned after authenticating.
+example, to control the JSON that's returned after authentication.
 
 To allow for that `JsonLoginAuthenticator` allows you to pass in an
 `AuthenticationSuccessHandlerInterface`. So instead of *this* class trying to figure
-out what to do on success, it allows *us* to pass in a custom implementation of
+out what to do on success, it allows *us* to pass in a custom implementation
 that gives us complete control.
 
 Think you've got all that? Great! Let's talk about the Builder Pattern *next*.
