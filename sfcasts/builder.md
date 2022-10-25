@@ -1,51 +1,111 @@
 # Builder Pattern
 
-Time for "design pattern" number *two*: The "builder pattern". This is one of those creation patterns that help you instantiate and configure objects, and it's a bit easier to understand than the "strategy pattern".
+Time for "design pattern" number *two*: the "builder pattern". This is one of those
+creational patterns that help you instantiate and configure objects. And, it's a
+bit easier to understand than the "strategy pattern".
 
-The *official* definition of the "builder patter" is this: A creation design pattern that lets you build and configure object complex objects step-by-step. That... actually made sense. Part *two* of the official definition says that the pattern allows you to produce different types and representations of an object using the same construction code. In other words, the builder pattern is where you create a builder class that helps you *build* other objects, which might be of different classes or even the *same* class with different data.
+## Official Definition
 
-A simple example might be a pizza parlor that needs to create a bunch of pizzas, each which have different crust, toppings, etc. To make life easier, the owner of the pizza parlor, who is also a Symfony developer by night, decideds to create a `pizzaBuilder` class with easy methods like `addIngredient()`, `setDough()`, and `addCheese()`. Then, they create a `buildPizza()` method, which takes *all* of that info and does the heavy lifting of *creating* that `pizza` object and returning it. That `buildPizza()` method can be as complicated as needed. Anyone using this class to build a pizza doesn't know or care about any of that.
+The *official* definition of the "builder patter" is this:
 
-Let's create a builder in *our* app. If we head over to `GameApplication.php`, down here in `createCharacter()`, the *problem* is that we're building *four* different character objects and passing *quite* a bit of data to configure each one of these already. Suppose we need to create these character objects in *other* places in our code. They're not *super* easy to create right now. We *could* create some sub-class to `Character` that can set this stuff up automatically. But, like we talked about with the strategy pattern, that could get really ugly when we start having things like a `mage-archer` with an `IceBlockType` shield class. And what if creating a `Character` class object were even more difficult - like if it required making queries to the database or other operations? The goal here is to make the instantiation of the `Character` objects easier and more clear, and we can do that by creating a builder class.
+> A creational design pattern that lets you build and configure complex objects
+> step-by-step.
 
-Let's create a `/src/Builder` directory just for organization. Inside of that, create a new PHP class called `CharacterBuilder.php`. I'm creating this *class* but I am *not* creating a corresponding interface. These builder classes often implement a new interface like `CharacterBuilder` interface, but they don't *need* to. Later, we'll talk about why you might decide to add an interface in some situations.
+That... actually made sense. Part *two* of the official definition says:
 
-Okay, inside this class, we get to create whatever methods the outside world will need to call on this in order to craft their new character. For example, `public function setMaxHealth()`, which will accept an `int $maxHealth` argument. I'm going to leave this method empty for the moment and we'll fill it in later. We'll also eventually have this return *itself*, so it will actually return its own `CharacterBuilder`. This is really common in the builder pattern because it allows method chaining, but it's not a *requirement* of the pattern.
+> the pattern allows you to produce different types and representations of an object
+> using the same construction code.
 
-All right, let's quickly fill in a few more methods. We're also going to allow `setBaseDamage()`. And then the last two things are the armor and attack types, so say `setAttackType()`. Remember, attack types are an object, but instead of allowing an `AttackType` interface right here, I'm going to make this a `string` argument called `$attackType`. Why? I don't *have* to do it this way, but I'm trying to make it as easy as possible to create characters. So instead of making *someone else* instantiate the attack types, I'm going to allow them to pass in a simple string like the word "bow", and in a few minutes, we'll actually handle the complexity of instantiating the object for them.
+In other words, the builder pattern is where you create a builder class that helps
+you *build* other objects... which might be of *different* classes or the *same*
+class with different data.
 
-Okay, copy that, and we'll do the same thing for the `setArmorType()`. And... that's it! Those are the only four things that you can really control in a character. So the last method that our builder needs is the one that's actually going to *build* the character. You can call this anything you want. I'll call it `buildCharacter()`, and it is, of course, going to return a `Character` object. To store the character preferences of the user as they choose them, we're going to create *four* properties, which I'll just paste in: `private int $maxHealth`, `private int $baseDamage`, and then `private string $attackType` and `private string $armorType`. Then, in each method, *assign* that property and `return $this`. We'll do that for `$baseDamage`... `$attackType`... and `$armorType`. Beautiful!
+## Simple Example
 
-The `buildCharacter()` method is fairly straightforward. We do whatever ugly work we need to do to create the character, so I'll say `return new Character()`. The first two arguments for this are pretty simple. We can say `$this->maxHealth`, `$this->baseDamage`, and then the last two things we'll add are those `AttackType` objects. This *is* a little more complex, but that's okay. I don't mind if my builder gets a little complicated.
+A simple example might be a pizza parlor that needs to create a bunch of pizzas,
+each which have a different crust, toppings, etc. To make life easier, the owner
+of the pizza parlor, who is also a Symfony developer by night, decides to create
+a `PizzaBuilder` class with easy methods like `addIngredient()`, `setDough()`, and
+`addCheese()`. Then, they create a `buildPizza()` method, which takes *all* of that
+info and does the heavy lifting of *creating* that `Pizza` object and returning it.
+That `buildPizza()` method can be as complicated as needed. Anyone *using* this class
+to doesn't know or care about any of that.
 
-I'll also go to the bottom of this class and paste in two new `private` methods that will handle creating the `AttackType` and the `ArmorType`. Except... I need a bunch of `use` statements for this, which I forgot. Whoops. So I'm going to re-type these classes really quickly and hit "tab" to get their `use` statements. There we go! Okay, back to our two `private` methods. We're going to map that `AttackType` and `ArmorType` to the special objects. *This* is the heavy lifting, and the real value of our `CharacterBuilder`. Here, I'll say `$this->createAttackType()` and `$this->createArmorType()`. And... done!
+## Creating the Builder Class
 
-Over in `GameApplication.php`, we do have a case of the `mage_archer`, which has *two* different attack types. Our `CharacterBuilder` doesn't support that right now, but we'll add that in a second. And for the strings that we're about to pass in, it would also be a great idea to put constants on this class.
+Ok, let's create a builder in *our* app. If we head over to `GameApplication`, down
+here in `createCharacter()`, the *problem* is that we're building *four* different
+`Character` objects and passing *quite* a bit of data to configure each one.
+And, suppose we need to create these `Character` objects in *other* places in our
+code. They're not *super* easy to build right now. We *could* make some sub-class
+of `Character` that can set this data up automatically, like by calling the parent
+constructor. But, like we talked about with the strategy pattern, that could get
+really ugly when we start having things like a `mage-archer` with an `IceBlockType`
+shield class.
 
-Oh, one last thing! In the build method of a builder, after instantiating the object, it *may* reset itself sometimes. For example, if we set this to a variable, then before we actually encounter the *real* return statement, we would set the max health back to zero so that we could use this class over and over again. I'm *not* going to do that, which just means that a `CharacterBuilder` is meant to be used just *one* time to build *one* character.
+And what if creating a `Character` object were even *more* difficult? Like, if it
+required making queries to the database or other operations? The goal here is to
+make the instantiation of the `Character` objects easier and more clear. And we can
+accomplish that by creating a builder class.
 
-All right, let's go use this! Inside of `GameApplication.php`, first, just to make life a little easier, I'm going to create a `private function` at the bottom called `createCharacterBuilder()` which will return `CharacterBuilder`. And below, we'll say `return new CharacterBuilder()`. That's going to be nice because, up here in `createCharacter()`, we can use that. I'm going to clear out the old stuff in here... and now, we have a nice, fluid way to do this. Say `$this->createCharacterBuilder`, `->setMaxHealth(90)`, `->setBaseDamage(12)`, `->setAttackType('sword')` (that's where you could use a constant if you wanted to), and `->setArmorType('shield')`. And *finally*, say `->buildCharacter()` to *build* that character. That's really nice! And it would be even *nicer* if creating a character were even *more* complex, like involving database calls.
+Add a `src/Builder/` directory for organization and, inside of that, create
+a new PHP class called `CharacterBuilder`. I'm creating this class but I am
+*not* creating a corresponding interface. Builder classes *often* implement an
+interface like `CharacterBuilderInterface`, but they don't *need* to. Later, we'll
+talk about why you *might* decide to add an interface in *some* situations.
 
-Okay, to save us a little time here, I'm going to paste in the other three characters, which look very similar. Down here, for our `mage_archer`, I'm currently using the `fire_bolt` attack type. We do need to re-add a way to have both `fire_bolt` *and* `bow`, *but* this should work for now. Let's test it out! At your terminal, run:
+## Methods and Method Chaining
 
-```terminal
-./bin/console app:game:play
-```
+Okay, inside, we get to create whatever methods we want so that the outside world
+craft their new character. For example, `public function setMaxHealth()`, which will
+accept an `int $maxHealth` argument. I'm going to leave this method empty for the
+moment... but it well eventually return *itself*: it will return `CharacterBuilder`.
+This is really common in the builder pattern because it allows method chaining.
+But, it's not a *requirement* of the pattern.
 
-It doesn't explode! And if I fight as an `archer`... I win! Our app still works!
+All right, let's quickly fill in a few more methods, like `setBaseDamage()`... and
+the last two things are the armor and attack types. So say `setAttackType()`.
+Remember, attack types are *objects*. But instead of allowing an `AttackType`
+interface argument, I'm going to accept a `string` argument called `$attackType`.
+Why? I don't *have* to do it this way, but I'm trying to make it as *easy* as possible
+to create characters. So instead of making *someone else* instantiate the attack
+types, I'm going to allow them to pass a simple string - like the word `bow` - and,
+in a few minutes, *we* will handle the complexity of instantiating the object for
+them.
 
-So what about allowing our `mage_archer` two attack types? Well, that's the *beauty* of the builder pattern. Part of our job, when we create the builder class, is to make life as easy as possible for whoever uses this class. That's why I chose to use `string` `armorType` and `attackType` instead of *objects*. It just makes it *easier* when you actually use this class.
+Okay, copy that, and do the same thing for `setArmorType()`.
 
-We can solve handling *two* different `AttackTypes` however we want, but the *most* user-friendly way to do this just might be the builder. Personally, I think it would be cool to just be able to do *that*. So let's make it happen! Over in `CharacterBuilder`, I'm going to take change this to `...$attackTypes` with a "s" and using the fancy rest notation to accept any number of arguments. Then, since we really will have an array of `$attacktypes`, I'll change the property to `private array $attackTypes`... and down here, `$this->attackTypes = $attackTypes`. *Easy*.
+And... that's it! Those are the only four things that you can control in a character.
 
-Now I need to make a couple of changes down in `BuildCharacter`. The first thing I want to do is change the `$attackTypes` strings into proper `$attackTypes` objects. To do that, I'm going to say `$attackTypes =` and I'm going to get a little fancy here. You don't *have* to do this, but I'm going to use `array_map()` and then the new short `fn` syntax - `(string $attackType) => $this->createAttackType()`, passing in `$attackType`. For the *second* argument of `array_map()` - the array that we *actually* want to map - I'm going to pass in `$this->attackTypes`. Whew... Before I explain that, instead of *reading* the property, we're just going to read an `$attackType` argument, so let me change that down here.
+## The Creational Maethod
 
-I *could* have done this with a foreach loop, and if you like foreach loops better, *do it*. This basically says:
+The *final* method that our builder needs is the one that will actually *build*
+the `Character`. You can call this anything you want, how about `buildCharacter()`.
+And it is, of course, going to return a `Character` object.
 
-`I want you to loop over all of the $attackType strings and for each one, call this function where we change the $attackType string into an $attackType object. Then set all of those $attackType objects onto a *new* $attackType variable, so this is now an *array* of $attackType objects.`
+To store the character preferences of the user calls methods on this class, we're
+going to create *four* properties, which I'll just paste in: `private int $maxHealth`,
+`private int $baseDamage`, and then `private string $attackType` and
+`private string $armorType`. Then, in each method, *assign* that property and `return
+$this`. We'll do that for `$baseDamage`... `$attackType`... and `$armorType`.
 
-An easier way to handle the rest of this is to say `if (count($attackTypes) === 1)`, *then* `$attackType = $attackTypes[0]`. And it will just grab the `1` there, meaning we have a sword, for example. Otherwise, we'll say `$attackType = new MultiAttackType()`. And then, we'll pass in the attack types down here. Instead of calling `$this->createAttackType()`, we'll just pass that the `$attackType` variable. You can see it's get a little bit ugly in here, but that's okay, because it makes this class *very* user-friendly.
+Beautiful! The `buildCharacter()` method is fairly straightforward: we do whatever
+ugly work we need to do to create the character. So I'll say `return new Character()`.
+The first two arguments are pretty simple: `$this->maxHealth` and `$this->baseDamage`.
+The last two, which require objects, will be a bit more complex. But that's ok!
+I don't mind if my builder gets a little complicated.
 
-All right, let's try it out. I'll run our command... let's be a `mage_archer` and... awesome! No error! So... I'm going to assume that worked. In `GameApplication.php`, we are instantiating the `CharacterBuilder` *manually*. But what if the `CharacterBuilder` needs access to some service inside of it, like the EntityManager so it can make some database queries?
+## Doing some Heavy Lifting
 
-Next, I want to make this example a little more useful by seeing how we handle the creation of this `CharacterBuilder` object in a real Symfony app, leveraging the service container. We'll also talk about the *benefits* of the builder pattern.
+Go to the bottom of this class and paste in two new `private` methods. These
+handle creating the `AttackType` and `ArmorType` object. Except... I need a bunch
+of `use` statements for this, which I forgot. Whoops. So I'm going to re-type the
+end of these classes and hit "tab" to add those `use` statements. There we go!
+
+Okay, we can now use the two new `private` methods to map the strings to *objects*.
+*This* is the heavy lifting - and the real value - of our `CharacterBuilder`. Say
+`$this->createAttackType()` and `$this->createArmorType()`.
+
+And our builder is done! Next: let's use this in `GameApplication`. Then, we'll make
+our builder even *more* flexible (but not more difficult to use) by accounting for
+characters that use *multiple* attack types.

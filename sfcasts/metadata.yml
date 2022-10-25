@@ -3,6 +3,7 @@ chapters:
   - strategy
   - strategy-benefits
   - builder
+  - builder-improve
   - builder-factory
   - observer
   - observer-benefits
