@@ -43,9 +43,13 @@ Right now, we have three characters that are created inside of `GameApplication`
 But the `fighter` is *dominating*. To balance the game, I want to add special attack
 abilities for each character. For example, the `mage` will be able to *cast spells*.
 
+[[[ code('ad64313e0a') ]]]
+
 Currently, the attack functionality is pretty *boring*: we take the character's
 `baseDamage` then use this cool `Dice::roll()` function to roll a six-sided die
 for some randomness.
+
+[[[ code('fe778012c1') ]]]
 
 But when a `mage` casts a spell, the damage it causes will be *much* more variable:
 sometimes a spell works really well but... other times it makes like tiny fireworks
@@ -93,6 +97,8 @@ Cool! Inside, add one `public function` called, how about, `performAttack()`. Th
 will accept the character's `$baseDamage` - because that might be useful - then return
 the final damage that should be applied.
 
+[[[ code('c11c4a54ba') ]]]
+
 Awesome!
 
 ## Adding Implementation of the Interface
@@ -103,14 +109,22 @@ called `FireBoltType`... and make it implement `AttackType`. Then, go to
 "Code -> Generate" - or "command" + "N" on a Mac - and select "Implement Methods"
 as a shortcut to add the method we need.
 
+[[[ code('f9079aa907') ]]]
+
 For the magic attack, return `Dice::roll(10)` 3 times. So the damage done is
 the result of rolling 3 10-sided dice.
+
+[[[ code('c1b3e47c75') ]]]
 
 And... our first attack type is done! While we're here, let's create two *others*.
 I'll add a `BowType`... and paste in some code. You can copy this from the code
 block on this page. This attack has a chance of doing some *critical* damage.
 Finally, add a `TwoHandedSwordType`... and I'll paste in that code as well. This
 one is pretty straightforward: it's the `$baseDamage` plus some random rolls.
+
+[[[ code('9a356c3919') ]]]
+
+[[[ code('556fc5ee89') ]]]
 
 ## Passing in and Using the Strategy
 
@@ -120,8 +134,12 @@ literally, we're going to add a new argument: `private` - so it's also a
 property - type-hinted with the `AttackType` interface (so we can allow any `AttackType`
 to be passed in) and call it `$attackType`.
 
+[[[ code('13120ad101') ]]]
+
 Below, remove this comment... because now, instead of doing the logic *manually*,
 we'll say `return $this->attackType->performAttack($this->baseDamage)`.
+
+[[[ code('85ffef89de') ]]]
 
 And we're done! Our `Character` class is now leveraging the *strategy* pattern.
 It allows someone *outside* of this class to pass in an `AttackType` object,
@@ -133,6 +151,8 @@ To take advantage of the new flexibility, open up `GameApplication`, and inside 
 `createCharacter()`, pass an `AttackType` to each of these, like
 `new TwoHandedSwordType()` for the `fighter`, `new BowType()` for the `archer`, and
 `new FireBoltType()` for the `mage`.
+
+[[[ code('f6351d3c55') ]]]
 
 Sweet! To make sure we didn't break anything, head over and try the game.
 
@@ -155,22 +175,32 @@ To support this idea of having *two* attacks, create a new `AttackType` called
 `MultiAttackType`. Make it implement the `AttackType` interface and go to
 "Implement Methods" to add the method.
 
+[[[ code('6cafce6c02') ]]]
+
 In *this* case, I'm going to create a constructor where we can pass in an `array`
 of `$attackTypes`. To help out my editor, I'll add some PHPDoc above to note that
 this is an array specifically of `AttackType` objects.
+
+[[[ code('fceb356011') ]]]
 
 This class will work by randomly choosing between one of its available `$attackTypes`.
 So, down here, I'll say `$type = $this->attackTypes[]` - whoops! I meant to call this
 `attackTypes` with a "s" - then `array_rand($this->attackTypes)`. Return
 `$type->performAttack($baseDamage)`.
 
+[[[ code('1618495cf0') ]]]
+
 Done! This is a *very* custom attack, but with the "strategy pattern", it's no
 problem. Over in `GameApplication`, add the new `mage_archer` character... and I'll
 copy the code above. Let's have this be... `75, 9, 0.15`. Then, for the `AttackType`,
 say `new MultiAttackType([])` passing `new BowType()` and `new FireBoltType()`.
 
+[[[ code('2d0d25091c') ]]]
+
 Sweet! Below, we also need to update `getCharacterList()` so that it shows up in
 our character selection list.
+
+[[[ code('6d267e2cda') ]]]
 
 Okay, let's check out the *legendary* new character:
 
