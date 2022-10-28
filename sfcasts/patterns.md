@@ -86,6 +86,8 @@ This *is* a Symfony app, but a very *simple* Symfony app. It has a command class
 that sets things up and prints the results. You tell it which character you want
 to be and it starts the battle.
 
+[[[ code('325a344686') ]]]
+
 But most of the work is done via the `game` property, which is this
 `GameApplication` class. This takes these two `Character` objects and it goes through
 the logic of having them "attack" each other until one of them wins. At the bottom,
@@ -93,8 +95,12 @@ it also contains the three character types, which are represented by this
 `Character` class. You can pass in different stats for your character, like
 `$maxHealth`, the `$baseDamage` that you do, and different `$armor` levels.
 
+[[[ code('f677da3f6f') ]]]
+
 So `GameApplication` defines the three character types down here... then battles
 them up above. That's basically it!
+
+[[[ code('fcdec1f676') ]]]
 
 Next: let's dive into our first pattern - the "strategy pattern" - where we allow
 some characters to cast magical spells. To make that possible, we're going to need
