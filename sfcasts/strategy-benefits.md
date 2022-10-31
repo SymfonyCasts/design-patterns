@@ -13,6 +13,8 @@ than hinting the name of a pattern. If we called this "attack strategy"... it mi
 sound like it's responsible for actually *planning* a strategy of attack. That's
 *not* what we intended. Hence our name: `AttackType`
 
+[[[ code('1c5e5b3243') ]]]
+
 ## Another Strategy Pattern Example
 
 Let's do one more quick strategy pattern example to further balance our characters.
@@ -21,6 +23,8 @@ being passed in right now. This is used down in `receiveAttack()` to figure out 
 much an attack can be *reduced* by. This was fine before, but *now* I want to
 start creating very different *types* of armor that each have different properties
 beyond just a number. We'll need to upgrade our code to allow this.
+
+[[[ code('04f42f69bf') ]]]
 
 Once again, we *could* solve this by creating *sub-classes*, like
 `CharacterWithShield`. But now you can hopefully see why that's not a great plan.
@@ -40,6 +44,8 @@ To hold the armor-reducing code, say `public function getArmorReduction()` where
 we pass in the `$damage` that we're about to do, and will return how much damage
 *reduction* the armor should apply.
 
+[[[ code('f4c215f899') ]]]
+
 Step two is to create at least one implementation of this. Create a new PHP class
 called `ShieldType` and make it implement `ArmorType`. Below, I'll generate the
 `getArmorReduction()` method. The shield is cool because it's going to have a 20%
@@ -48,21 +54,31 @@ set to `Dice::roll(100)`. Then, if the `$chanceToBlock` is `> 80`, we're going t
 reduce *all* of the damage. So return `$damage`. *Else* our shield is going to be
 meaningless and reduce the damage by zero. Ouch!
 
+[[[ code('25ef037256') ]]]
+
 While we're here, let's create two other types of armor. The first is a
 `LeatherArmorType`. I'll paste in the logic: it absorbs 20% of the damage.
+
+[[[ code('d7e2620448') ]]]
 
 And *then* create the cool `IceBlockType`: a little something for our magic
 folk. I'll paste that logic in as well. This will absorb two eight-sided dice
 rolls added together.
 
+[[[ code('67947bca1a') ]]]
+
 Ok step three: allow an object of the `ArmorType` interface to be passed into
 `Character`... then use its logic. In this case, we won't need the `$armor`
 number at all. Instead, add a `private ArmorType $armorType` argument.
+
+[[[ code('643bf3e1ef') ]]]
 
 Down below, in `receiveAttack()`, say
 `$armorReduction = $this->armorType->getArmorReduction()` and pass in `$damage`.
 And just to make sure things don't drift negative, add a `max()` after `$damageTaken`
 passing `$damage - $armorReduction` and `0`.
+
+[[[ code('77d9d5dcee') ]]]
 
 Done! `Character` now leverages the Strategy Pattern... again! Let's go take
 advantage of that over in `GameApplication`.
@@ -72,6 +88,8 @@ Start by removing the armor number on each of these. Then I'll quickly pass in a
  `new IceBlockType()`. For our `mage-archer`, which is our weird character, we'll
 *keep it* weird by giving them a shield - `new ShieldType()`. That's a lot to carry!
 Oh, and I also need to make sure I take off the armor for that as well. Perfect!
+
+[[[ code('8abe1cfcc0') ]]]
 
 Let's go try this team. Head over and run:
 
