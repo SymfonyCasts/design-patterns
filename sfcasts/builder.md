@@ -55,6 +55,8 @@ corresponding interface. Builder classes *often* implement an interface like
 `CharacterBuilderInterface`, but they don't *need* to. Later, we'll talk about why
 you *might* decide to add an interface in *some* situations.
 
+[[[ code('43eafc54a6') ]]]
+
 ## Methods and Method Chaining
 
 Okay, inside, we get to create whatever methods we want to allow the outside world
@@ -76,6 +78,8 @@ them.
 
 Okay, copy that, and do the same for `setArmorType()`.
 
+[[[ code('023ae931c6') ]]]
+
 And... that's it! Those are the only four things that you can control in a character.
 
 ## The Creational Method
@@ -84,11 +88,15 @@ The *final* method that our builder needs is the one that will actually *build*
 the `Character`. You can call this anything you want, how about `buildCharacter()`.
 And it is, of course, going to return a `Character` object.
 
+[[[ code('a4a7a472ca') ]]]
+
 To store the character stats, we're going to create *four* properties, which I'll
 paste in: `private int $maxHealth`, `private int $baseDamage`, and then
 `private string $attackType` and `private string $armorType`. Then, in each method,
 *assign* that property and `return $this`. We'll do that for `$baseDamage`...
 `$attackType`... and `$armorType`.
+
+[[[ code('127be7b83e') ]]]
 
 Beautiful! The `buildCharacter()` method is fairly straightforward: we do whatever
 ugly work needed to create the `Character`. So I'll say `return new Character()`
@@ -106,6 +114,8 @@ end of these classes and hit "tab" to add those `use` statements. There we go!
 Okay, we can now use the two new `private` methods to map the strings to *objects*.
 *This* is the heavy lifting - and the real value - of `CharacterBuilder`. Say
 `$this->createAttackType()` and `$this->createArmorType()`.
+
+[[[ code('59e68ff2c8') ]]]
 
 And... our builder is done! Next: let's use this in `GameApplication`. Then, we'll
 make our builder even *more* flexible (but not more difficult to use) by accounting
