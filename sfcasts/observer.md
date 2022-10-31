@@ -1,39 +1,121 @@
-# Observer Pattern
+# The Observer Pattern
 
-Time for pattern number three - the *observer pattern*. Here's the technical definition: "The observer pattern defines a one-to-many dependency between objects so that when one object changes state, *all* of its dependants are notified and updated automatically." Okay, *not bad*, but let's try this: "The observer pattern allows a bunch of different objects to be notified by a *central* object when something happens." This is the classic situation where you write some code that needs to be called when something *else* happens. There are actually *two* strategies to solve this - the observer pattern and the pub-sub pattern. We'll talk about both, but first up - the *observer* pattern.
+Time for pattern number three - the *observer pattern*. Here's the technical
+definition:
 
-There are two different types of classes that go into creating this pattern. The first is called the "subject". That's the central thing that will do some work and then notify *other* objects before or after it finishes. Those other objects are the second type, and they're called "observers". This is pretty simple. Each observer tells the subject that it wants to be notified. Later, the subject loops over all of the observers and calls a method on them. Back in our real app, we're going to make our game a bit more interesting by introducing *levels* to each of the characters. Each time you win a fight, your character will earn some XP or "experience points". After you've earned enough points, the character will "level up", meaning it's base stats, like `$maxhealth` and `$baseDamage`, will increase.
+## The Definition
 
-To write this new functionality, we *could* put the code right here inside of `GameApplication.php` after the fight finishes. So... maybe down here after `finishFightResult`, we would do the XP calculation and see if the character can level up. *But*, to better organize our code, I want to put this new logic somewhere else and use the observer pattern to connect things. Our `GameApplication.php` will be the *subject*, and it will notify any *observers* when a battle finishes. Another reason the observer pattern might be used is if `GameApplication.php` were actually third party code, like some vendor library, and that vendor library wanted to give us the *user* of the library in some way to run code after a battle finishes.
+> The observer pattern defines a one-to-many dependency between objects so
+> that when one object changes state, *all* of its dependents are notified
+> and updated automatically.
 
-The first step to this pattern is to create an interface that all the observers will implement. For organization's sake, I'll create an `/Observer` directory. Inside of this, create a new PHP class, make sure "Interface" is selected, and we'll call it `GameObserverInterface`. Inside of *that*, we just need one `public` method. We can call it anything, so how about `onFightFinished()`.
+Okay, *not bad*, but let's try this:
 
-Why do we need this interface? Because, in a minute, we're going to write code that loops over *all* of the observers inside of `GameApplication.php` and calls a method on them, so we need a way to *guarantee* that each observer *has* a method, like `onFightFinished()`. And we can actually pass `onFightFinished()` to whatever arguments we want. In this case, let's pass it a `FightResult` argument because, if you're listening to this, it will probably be useful to know the result of the fight. I'll also add a `void` return type.
+> The observer pattern allows a bunch of different objects to be notified by a
+> *central* object when something happens.
 
-Okay, step two: We need a way for every observer to *subscribe* to be notified on `GameApplication.php`. To do that, I'm going to create a `public function` inside `GameApplication.php` called `subscribe()`. This is going to accept any `GameObserverInterface` and I'll call it `$observer`, which will return `void`. I'll fill in the logic in a moment. The *second* part, which is *optional*, is to add a way to *unsubscribe* from the changes, so I'll just copy everything we just did here... paste... and change this to `unsubscribe()`. Perfect!
+This is the classic situation where you write some code that needs to be called
+whenever something *else* happens. And there are actually *two* strategies to solve
+this: the observer pattern and the pub-sub pattern. We'll talk about both. But first
+up - the *observer* pattern.
 
-For the top of the class, let's create a new array property that's going to hold all of the observers. Say `private array $observers = []` and then, to help my editor out, I'll add some documentation: `@var GameObserverInterface`. Back down in `subscribe()`, let's populate this. I'll add a little check for uniqueness by saying `if (!in_array($observer, $this->observers, true))`, and inside of that, `$this->observers[] = $observer`. We'll do something similar down in `unsubscribe()`. Say `$key = array_search($observer, $this->observers)`. Below that, `if ($key !== false)`, then `unset($this->observers[$key])`. So if the key *doesn't* equal `false`, that means we found it in there, and the next line will `unset` it. These are just two functions that help us add and remove things from `$this->observers`.
+## Anatomy of Observer
 
-Finally, we're ready to *notify* these observers. We'll put this right after the fight finishes, so every time a fight ends, `$fightResult` is called. Right here, I'll say `$this->notify($fightResult)`. We don't *have* to do this, but I'm going to isolate this logic of notifying the observers to a new `private function` down here called `notify()`. It will accept the `FightResult $fightResult` argument and return `void`. It will then `foreach ($this->observers as $observer)`. And because we know that those are all a `GameObserverInterface`, we can call `$observer->onFightFinished` and pass `$fightResult`. And... the *subject* `GameApplication.php` is *done*.
+There are two different types of classes that go into creating this pattern. The
+first is called the "subject". That's the central thing that will do some work and
+then notify *other* objects before or after it finishes. Those other objects are
+the second type, and they're called "observers".
 
-Now, let's implement a concrete *observer* that will calculate how much XP the winner should earn and detect if the character should level up. But first, we need to add a couple of things to the `Character` class to help with this. On top, add a `private int $level` that will default to `1` and a `private int $xp` that will default to `0`. Down here a bit, I'll add `public function getLevel(): int` which will `return $this->level`, and another convenient function called `addXp()` that will accept the new `$xpEarned`. And we actually need to return the new XP number, so inside I'll say `$this->xp += $xpEarned`, and `return $this->xp`. Finally, right after this, I'm going to paste in one more method in called `levelUp()`. This is the method we'll call when the user's character levels up, and you can see that it increases the `level`, `maxHealth`, and `baseDamage` by a little bit. We can level up the attack and armor type if we wanted to as well. Perfect!
+This is pretty simple. Each observer tells the subject that it wants to be notified.
+Later, the subject loops over all of the observers and calls a method on them.
 
-We're now ready to *implement* that observer. Inside the `/src/Observer` directory, create a new PHP class. Let's call it `XpEarnedObserver`. All of our observers need to `implement` the `GameObserverInterface`, and I'll go to Code Generate, or "command" + "N" on a Mac, to implement the `onFightFinished()` method. In the actual *guts* of `onFightFinished()`, we're going to delegate the real work to a service called `XpEarnedService`.
+## The Real-Life Challenge
 
-If you downloaded the course code, then you *should* have a `/tutorial` directory with `XpCalculator.php` inside. I'm going to copy that, and in `/src`, create a new `/Service` directory and paste that inside. You can check this out if you want to, but basically what it's doing is taking the `Character` that won, the *enemy's* level, and it's figuring out how much XP it should award to the character. Then, if they're eligible to level up, it will level up that character.
+Back in our real app, we're going to make our game a bit more interesting by
+introducing *levels* to the characters. Each time you win a fight, your character
+will earn some XP or "experience points". After you've earned enough points, the
+character will "level up", meaning it's base stats, like `$maxhealth` and
+`$baseDamage`, will increase.
 
-Over in `XpEarnedObserver`, we can use that. Create a constructor so that we can autowire in a `private readonly` (so we can be super trendy) `XpCalculator $xpCalculator`. Then, down here, let's set the `$winner` to a variable - `$fightResult->getWinner()`, and set the `$loser` to `$fightResult->getLoser()`. Below, say `$this->xpCalculator->addXp()` and pass `$winner, $loser->getLevel()`. Beautiful!
+To write this new functionality, we *could* put the code right here inside of
+`GameApplication` after the fight finishes. So... maybe down here after
+`finishFightResult()`, we would do the XP calculation and see if the character can
+level up.
 
-The subject *and* observer for `GameApplication.php` are *done*. The final step is to instantiate the observer and make it *subscribe* to `GameApplication.php`. We're going to do this manually inside of `GameCommand.php`. Go to `/src/Command/GameCommand.php`, and find `execute()`, which is where we're currently initializing all of the code inside of our application. In a few minutes, we'll see a more *Symfony* way of connecting all of this. For right now, we'll say `$xpObserver = new XpEarnedObserver()`. We'll pass that a `new XpCalculator()` service so it's happy. Then, we can say `$this->game` (to use the game property) `->subscribe($xpObserver)`. So we're *subscribing* the observer before we actually run our application down here.
+*But*, to better organize our code, I want to put this new logic somewhere *else*
+and use the observer pattern to connect things. `GameApplication` will be the
+*subject*, which means *it* will be responsible for notifying any *observers* when
+a battle finishes.
 
-And we're ready! But, just to make it a bit more obvious if this is working, head back to `Character` and add *one more* function here called `getXp()`, which will return `int`, and that will `return $this->xp`. This will allow us inside of `GameCommand.php`. If you scroll down a little bit to `printResults()`... here we go... we'll add a couple of new things in here like `$io->writeIn('XP: ' . $player->getXp())`, and we'll do the same thing for `Final Level`, or the level they are after they finish their battle, `$player->getLevel()`.
+Another reason, beyond code organization, that someone might choose the observer
+pattern is if `GameApplication` lived in a third-party vendor library and that vendor
+library wanted to give *us* - the *user* of the library - some way to run code
+*after* a battle finishes... since we don't have the luxury to just hack code into
+`GameApplication`.
 
-All right, let's try this out! Spin over, run
+## Creating the Observer Interface
 
-```terminal
-./bin/console app:game:play
-```
+Step one to this pattern is to create an interface that all the observers will
+implement. For organization's sake, I'll create an `Observer/` directory. Inside of
+this, create a new PHP class, make sure "Interface" is selected, and call it,
+how about, `GameObserverInterface`... since these classes will be "observing"
+something related to each game. `FightObserver` would also have been a good name.
 
-and let's play as the `fighter`, because that's still one of the toughest characters. And... awesome! Because we won, we received 30 XP. We're *still* Level 1, so let's fight a few more times. Aw... we lost, so no XP there. Now we have 60 XP... 90 XP... woo! We leveled up! It says `Final Level: 2`. It's working! What's great about this is that `GameApplication.php` doesn't need to know or care about the XP and the leveling up logic. It just notifies its subscribers and they can do whatever they want.
+Inside we just need one `public` method. We can call it anything, so how about
+`onFightFinished()`.
 
-Next, let's see how we could wire all of this up using Symfony's *container*. We'll also talk about the *benefits* of this pattern and what parts of SOLID it helps with.
+Why do we need this interface? Because, in a minute, we're going to write code that
+loops over *all* of the observers inside of `GameApplication` and calls a method
+on them. So... we need a way to *guarantee* that each observer *has* a method, like
+`onFightFinished()`. And we can actually pass `onFightFinished()` whatever
+arguments we want. In this case, let's pass it a `FightResult` argument because,
+if you're listening to this, it'll probably be useful to know the *result* of the
+fight. I'll also add a `void` return type.
+
+## Adding the Subscribe Code
+
+Okay, step two: We need a way for every observer to *subscribe* to be notified on
+`GameApplication`. To do that, create a `public function` inside `GameApplication`
+called, how about, `subscribe()`. You can name this anything. This is going to accept
+any `GameObserverInterface`, I'll call it `$observer` and it will return `void`.
+I'll fill in the logic in a moment.
+
+The *second* part, which is *optional*, is to add a way to *unsubscribe* from the
+changes. I'll copy everything we just did... paste... and change this to
+`unsubscribe()`.
+
+Perfect!
+
+At the top of the class, create a new array property that's going to hold all of
+the observers. Say `private array $observers = []` and then, to help my editor,
+I'll add some documentation: `@var GameObserverInterface[]`.
+
+Back down in `subscribe()`, let's populate this. I'll add a little check for
+uniqueness by saying `if (!in_array($observer, $this->observers, true))`, and inside
+of that, `$this->observers[] = $observer`.
+
+Do something similar down in `unsubscribe()`. Say
+`$key = array_search($observer, $this->observers)` and then `if ($key !== false)`,
+meaning we *did* found that observer, `unset($this->observers[$key])`.
+
+## Notifying the Observers
+
+Finally, we're ready to *notify* these observers. Right after the fight finishes,
+so every time a fight ends, `finishFightResult()` is called. So, right here, I'll
+say `$this->notify($fightResult)`.
+
+We don't *need* to do this... but I'm going to isolate this logic of notifying the
+observers to a new `private function` down here called `notify()`. It will accept
+the `FightResult $fightResult` argument and return `void`. Then
+`foreach` over `$this->observers as $observer`. And because we know that those are
+all `GameObserverInterface` instances, we can call `$observer->onFightFinished()`
+and pass `$fightResult`.
+
+And... the *subject* - `GameApplication` - is *done*! By the way, sometimes the
+code that notifies the observers - so `notify()` in our case - is `public` and
+meant to be called by someone *outside* of this class. That's just a variation
+on the pattern. Like with many of the small details of these patterns, you can
+do whatever you feel is best. I'm showing you the way *I* like to do things.
+
+Next: let's implement an *observer* class, right the level up logic, then hook
+it into our system.
