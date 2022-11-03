@@ -13,6 +13,8 @@ set the `Character` to a variable, then, before we return it, reset
 we do this? Because it would allow for a *single* builder to be used over and over
 again to create *many* objects - or, characters in this case.
 
+[[[ code('b8abf2868c') ]]]
+
 However, I'm *not* going to do that... which just means that a single `CharacterBuilder`
 will be meant to be used just *one* time to build *one* character. You can choose
 either option in your app: there isn't a right or wrong way for the builder pattern.
@@ -24,6 +26,8 @@ easier, I'm going to create a `private function` at the bottom called
 `createCharacterBuilder()` which will return `CharacterBuilder`. Inside,
 `return new CharacterBuilder()`.
 
+[[[ code('f692613059') ]]]
+
 That's going to be nice because... up here in `createCharacter()`, we can use that.
 I'm going to clear out the old stuff... and now, use the fluid way to
 make characters: `$this->createCharacterBuilder()`, `->setMaxHealth(90)`,
@@ -33,6 +37,8 @@ for these strings, like `sword` and `shield`.
 
 Finally, call `->buildCharacter()` to... *build* that character!
 
+[[[ code('5df4a1e0a6') ]]]
+
 That's really nice! And it would be even *nicer* if creating a character were even
 *more* complex, like involving database calls.
 
@@ -40,6 +46,8 @@ To save some time, I'm going to paste in the other three characters, which
 look similar. Down here for our `mage_archer`, I'm currently using the
 `fire_bolt` attack type. We *do* need to re-add a way to have both `fire_bolt` *and*
 `bow`, *but* this should work for now.
+
+[[[ code('4d91597390') ]]]
 
 Let's try it out! At your terminal, run:
 
@@ -66,6 +74,8 @@ using the fancy `...` to accept any number of arguments. Then, since this will
 now hold an *array*, change the property to `private array $attackTypes`... and
 down here, `$this->attackTypes = $attackTypes`.
 
+[[[ code('aea3d4c901') ]]]
+
 Easy. Next we need to make a few changes down in `buildCharacter()`, like
 changing the `$attackTypes` strings into objects. To do that, I'm going to
 say `$attackTypes =` and... get a little fancy. You don't *have* to do this, but
@@ -74,8 +84,12 @@ $attackType) => $this->createAttackType($attackType)`. For the *second*
 argument of `array_map()` - the array that we *actually* want to map - use
 `$this->attackTypes`.
 
+[[[ code('1c906efee4') ]]]
+
 Now, in the private method, instead of reading the *property*, read an `$attackType`
 argument.
+
+[[[ code('891e62b0e6') ]]]
 
 Ok, we *could* have done this with a `foreach` loop... and if you like `foreach`
 loops better, *do it*. Honestly, I think I've been writing too much JavaScript lately.
@@ -91,6 +105,8 @@ To finish this, say `if (count($attackTypes) === 1)`, *then*
 `$attackType = $attackTypes[0]` to grab the first and only attack type. Otherwise,
 say `$attackType = new MultiAttackType()` passing `$attackTypes`. Finally, at
 the bottom, use the `$attackType` variable.
+
+[[[ code('6e376e40ab') ]]]
 
 Phew! You can see it's a bit ugly, but that's okay! We're hiding the creation
 complexity *inside* this class. And we could easily unit test it.
