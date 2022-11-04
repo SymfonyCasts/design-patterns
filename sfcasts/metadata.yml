@@ -9,5 +9,6 @@ chapters:
   - observer-class
   - observer-benefits
   - pub-sub
+  - pub-sub-di
   - decorator
   - decorator-di
