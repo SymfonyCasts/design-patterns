@@ -1,138 +1,42 @@
 # Publish-Subscriber (PubSub)
 
-Coming soon...
+The next pattern pattern I want to talk about maybe *isn't* its own pattern. In reality, it's more of a *variation* of the observer pattern. It's called "pub/sub" or "publish subscribe". The key difference be between observer and pub/sub is simply *who* handles notifying the observers. With the observer pattern, it's the *subject* - the thing (in our case, `GameApplication`) that does the work. With pub/sub, there's a third object called a "publisher". I'm going to call it an "event dispatcher" - a name that's probably more familiar to most of us. With pub/sub, the observers (also called "listeners") tell the dispatcher which events it wants to listen to. Then, the subject (whatever is doing the work) simply tells the dispatcher to dispatch the event. The dispatcher is then responsible for actually *calling* the methods on those objects. You *could* argue that pub/sub better follows the Single Responsibility pattern. Battling characters and then registering and calling the observers are two separate responsibilities that we've jammed inside of a `GameApplication`. So let's use the pub/sub pattern to add new functionality to our app.
 
-The next pattern pattern I want to talk about maybe isn't its own pattern in reality
-it's more of a variation on the observer pattern. It's called pub sub or publish
-subscribe. The key difference be between observer and pub sub is simply who handles
-notifying the observers with the observer pattern. It's the
+I want a way to run code *before* a battle starts. Step one is to create an event class. This will be the object that is passed as an argument to all of your listeners. It's pretty much *identical* to the `FightResult` that we pass to our observers, but with the pub/sub pattern, it's customary to create an event class *just* for the event system. So inside of `/src`, I'm going to create a new `/Event` directory. Inside of that, create a new PHP class. You can call it whatever you want, but for this tutorial, let's call it `FightStartingEvent`. This class doesn't need to look like or extend anything, and we'll talk more about it in a minute.
 
-Subject, it's the thing in our case game application that does the work. It does the
-work and it's responsible for notifying the observers with pubsub. There's a third
-object called a publisher, or what I'm going to call it is an event dispatcher, a
-name that's probably more familiar to a lot of us with Pubsub. The observers also
-call listeners tell the dispatcher which events it wants to listen to. Then the
-subject, whatever is doing the work simply tells the dispatcher to dispatch this
-event. The dispatcher is then responsible for actually calling the methods on those
-objects. You could argue that Pubsub better follows the single responsibility
-pattern, battling characters and registering and then calling the observers. Ours are
-kind of two separate responsibilities that we've jammed inside of a game application.
-So let's use the pubs up pattern to be to add new functionality to our app. I want a
-way to run code before a battle starts. So step one is we are going to create an
-event class. This will be the object that is passed as an argument to all of your
-listeners. It's basically identical to the fight result that we pass to our
-observers. But with the pub sub pattern, it's customary to create a an event class
-just for the event system. So inside of a inside of source I'm going to create a new
-event directory.
+Step *two* is dispatching this event *inside* of `GameApplication`. Instead of writing our own event dispatcher, we're going to use Symfony's EventDispatcher. Let me break the constructor onto multiple lines... and let's add a new `private EventDispatcherInterface $eventDispatcher` so that it autowires Symfony's EventDispatcher here. Then, down in `play()`, right at the very beginning, we'll say `$this->eventDispatcher->dispatch()`, and then create a `new FightStartingEvent()`. That's *it*! That's enough for the dispatcher to notify all of the code that is listening to the `FightStartingEvent()`. At the moment, *nothing* is listening.
 
-Inside of there a new, new peach with classic could be called anything. We're going
-to call it fight Starting event. This class doesn't need to look like anything. It
-doesn't need to extend anything though. We will talk more about it in a minute. All
-right, step two is we're going to dispatch this event from inside of Game App
-location. Now instead of writing our own event dispatcher, we are going to use
-Symfony Event Dispatcher. So let me break the instructor multiple lines. Let's add a
-new private event dispatcher interface event dispatcher so that an auto wire Symfony
-event dispatcher here. Then down in play right at the very beginning we'll say this
-area event dispatcher,->dispatch, and then create a new fight starting event. That's
-it. That's enough for the dispatcher to notify all of the code that is listening to
-the Fight Starting event right now. That's nobody.
+So *finally*, we're going to register a listener for this event. To start, find `GameCommand` - the place where we're setting up and initializing our app. We'll see how to do all of this properly with Symfony's container in a minute, but I want to keep it simple starting out. We need to do the same thing here and get access to `$eventDispatcher`. So let's autowire it: `private readonly EventDispatcherInterface $eventDispatcher`. I *am* being a little inconsistent when I use `readonly` and `not`. Technically, I *could* use `readonly` on *all* of the construct arguments. It's not really important.
 
-So finally we are going to register a listener for this event to start, let's do this
-inside of a game command, the place where we're kind of setting up and initializing
-our app. We will see how to do all of this properly with Symfony's container in a
-minute, but I want to keep it simple to start. So same thing here. We need to get
-access to that same event dispatcher. So we are going to auto wire it, Private read
-only event dispatch or interface. Yes, I am being a little inconsistent with when I
-use Read only and not technically. I could use Read only on all of the construct
-arguments. It's not really important. Now down here kind of before, anywhere before
-our application actually starts, I'm going to say this-> the event dispatcher->at
+Down here, anywhere before our application actually starts, I'm going to say `$this->eventDispatcher->`. Notice that the only method on this is called `dispatch`. This is actually a *tiny* mistake I made. Let's back up for a second. In `GameApplication`, when I autowired `EventDispatcherInterface`, I actually got the one from `Psr\EventDispatcher\EventDispatcherInterface`, which is *great*. And inside of `GameCommand`, you can see that I did the *same* thing. But if you want the ability to actually attach listeners at *run time*, you'll want to get the one from `Symfony\Component\EventDispatcher` instead of `Psr`. In reality, even though we're using two different type hints in these classes, this is going to pass us the same `EventDispatcher` object. That object has a method on it called `addListener()`, so even if I had used the *old* interface, this method *would* have existed. It just would have looked funny inside of my editor.
 
-Shoot
+The first argument of this is the *name* of the event, which is going to match the class name that we're dispatching. So we can say `FightStartingEvent::class`. And then, to keep it simple, I'm going to be lazy and just pass an inline `function()`. Sweet! I'll also `use ($io)` function so I can get that inside of here. Say `$io->note('Fight is starting...')` and... that's it! We're dispatching the event inside of `GameApplication` and we've already registered the listener here, so it should call it.
 
-Arrow. And notice the only method on this is actually called dispatch. This is a
-little mistake I made. Let me back up here a second. In game application when I auto
-wired event dispatcher interface, I actually got the one from PSR event dispatcher.
-Event dispatcher interface. Um, which is, which is great and it's said game command.
-I actually did the same thing. I got the PSR event dispatcher. But if you want the
-ability to actually attach listeners at run time instead of the one from psr, get the
-one from Symfony Component Event dispatcher. In reality, even though we're using two
-different type hints in these classes, this is going to pass as the same event
-dispatcher object. That event dispatcher object has a method on it called a listener.
-So even if I'd used the old interface, this method would have existed. It would've
-just looked funny inside of my inside of my editor. Um, now the first argument of
-this is the name of the event. This is going to match the class name that we're
-dispatching. So we can actually say fight starting event call on class. And then to
-keep it really simple, I'm going to be lazy here, just pass an inline function.
+Let's try it! At your terminal, say:
 
-Sweet and I'm going to u use the IO function so I can get that inside of here. We'll
-say IO note fight is starting and that's it. We are dispatching defense inside of
-game application and we've already registered the listener here, so it should call it
-let's try it. Pin console, app game play, choose our character and got it note fight
-is starting. If a fight, again we get the same thing again, awesome, but it would be
-cooler if we had a little bit more information inside of our listener, like who won
-the fu the battle. That's the job of this event class. It can really carry whatever
-data we want. So for example, let's create a public function unders corner score
-construct. And for simplicity I going to create two public properties called Player
-ai. Awesome and then a game application. We did actually pass those in. So pass
-player and AI and then over in our listener, now our function's going to get past a
-fight starting event. Object. It always was, it just wasn't very useful before. So
-now you can say fight is starting against and then say Event-> AI->get nickname
+```terminal
+./bin/console app:game:play
+```
 
-Super nice, let's give it a try. I'll run the command again. And Sweet Fight is
-starting against AI age. The only thing I did is miss my space there to make it look
-nicer. So as I mentioned, you can really put whatever data you want on this fight
-starting event. Heck, you could create a public should battle property if you wanted
-to. And then your listener if you wanted to, you could say Event->should battle
-false. And in game application you could actually use that. You could set this event
-to a new event, object, dispatch it, and if they shouldn't battle, you could just
-return. Or I guess you guys return fight results and maybe throw an exception.
-Whatever you see the point, you can actually even kind of send signals back about
-what you want to do. So let me actually undo all of that inside of game application
-and Fight starting event and also game command. All right? Now as easy as this in
-Line Listener is, it's more common to create a separate class for your listener. You
-can either create a listener class, which is basically a class that has this code
-here as a public function
+We'll choose our character and... got it - `[NOTE] Fight is starting...`. If we fight again... we get the *same* thing. *Awesome*! But it would be *cooler* if we had a little more information inside of our listener, like who *won* the battle. That's the job of this event class. It can carry whatever data we want. For example, let's create a `public function __construct()`. For simplicity, I'm going to create two `public` properties called `$player` and `$ai`. *Awesome*! Over in `GameApplication`, we need to actually pass those in, so pass `$player` and `$ai` here. Then, over in our listener, our function will be passed a `FightStartingEvent` object. It always *was* - it just wasn't very useful before. Now we can say `Fight is starting against`, followed by `$event->ai->getNickname()`. *Super nice*. Let's give it a try! I'll run the command again and... sweet! We see `[NOTE] Fight is starting againstAI: Mage`. The only thing I did is miss my space after "against" so it looks nicer. I'll fix that really quick.
 
-Or you can create a class called a subscriber. Both are completely valid ways to use
-the pub sub pattern. The only difference is how you register a listener versus a
-subscriber, which is a pretty minor difference and you'll see it in a minute. So
-let's refactor this to a subscriber in the event directory operated PHP class called
-How about Output Fight Starting subscriber because this subscriber's going to output
-that a battle is beginning. Now, events don't need to event listeners don't need to
-extend any base class or implement any interface. But event subscribers do they need
-to implement the event subscriber interface. Then I'll go Code Degenerate or Command
-N on a Mac. You can go to "Implement Methods" and say Get Subscribed events. So
-within Event subscriber, you actually say right inside this class with which events
-you subscribe to. So here we'll say fight starting event, Call, call class, and then
-say, set that to you on Fight Start. So this says, when that event happens, I want
-you to call an on Fight Start method in this class. So we'll create that public
-function on Fight Start. This will get the Fight Starting event object of course.
+As I mentioned, you can really put whatever data you want on this `FightStartingEvent`. Heck, you could create a `public $shouldBattle =  true` property if you wanted to. And for your listener, you could say `$event->shouldBattle = false`. In `GameApplication`, you could actually set this event to a new `$event` object, dispatch it, and if they *shouldn't* battle, it would just `return`. Or you could `return FightResults()` and maybe throw an exception. Either way, you see the point. You can even send signals back about what you want to do. I'll undo all of that inside of `GameApplication`, `FightStartingEvent` and also `GameCommand`.
 
-And then for the guts of this, I'm going to go over to game command and steal our io.
-And the only thing is the IO is actually kind of a hard thing to pass from console
-commands into other parts of your code. I'm going to ignore that complexity here and
-just create a new IO by saying New Symfony style, new array input, passing an empty
-array and new console outputs. I'm creating an object that's just like the normal IO
-object so I can kind of cheat inside of here. Finally, now that we have a subscriber
-back in game Command, we're going to hook that up. So instead of add event listener,
-add subscriber, and I'll say, New output fight, starting a subscriber, awesome
-testing time, moment of truth, I'll exit and choose my guy. And wow, it's working so
-well. It's outputting twice. Why? This is thanks to once again auto configuration. We
-are using auto configuration inside of our application. So whenever we create a class
-that implements event subscriber interface, Symfony containers, automatically taking
-that class, taking that subscriber and registering it on the event dispatcher. In
-other words, Symfony internally is already calling this line right here. So that kind
-of answers the question of how we use the events. The pops up pattern in Symfony,
+As easy as this inline listener is, it's more common to create a separate class for your listener. You can either create a *listener* class, which is basically a class that has this code here as a public function, *or* you can create a class called a *subscriber*. Both are completely valid ways to use the pub/sub pattern. The only difference is how you *register* a listener versus a subscriber, which is pretty minor, and you'll see that in a minute. So let's refactor this to a subscriber.
 
-Delete that line inside of Game Command. All you need to do is create an event
-subscriber like we've done here and Symfony will automatically register it. And then
-to dispatch an event, you'll create a new event class. And anywhere in your code you
-can dispatch that event. So you can see how easy it is to create the event dispatcher
-and dispatch all kinds of events all over your application. Now the benefits of the
-pub up now if we try this over here, I'll exit I battle again, it only outputs once.
-Now the benefits of Pubsub are really the same as the observer, but in practice the
-pump up is a bit more common probably because Symfony is such a great event
-dispatcher. So honestly, half of the work is already done for you. Next, let's dive
-into our final pattern and one of my favorite and the most powerful and Symfony, the
-decorator pattern.
+In the `/Event` directory, create a new PHP class called... how about... `OutputFightStartingSubscriber`, since this subscriber's going to *output* that a battle is beginning. Events listeners don't need to extend any base class or implement any interface, but event *subscribers* do. They need to implement the `EventSubscriberInterface`. Then I'll go "Code Generate" or "Command" + "N" on a Mac, go to "Implement Methods", and select `getSubscribedEvents()`. Nice! With an event subscriber, you'll list which events you subscribe to right inside this class. So we'll say `FightStartingEvent::class => 'onFightStart'`. This basically says:
 
+`When that event happens, I want you to call the
+onFightStart method in this class`.
+
+So we'll create that with `public function onFightStart(FightStartingEvent $event)`. This will get the `FightStartingEvent` object. Then, for the guts of this, I'll go over to `GameCommand` and steal our `$io`. It's important to note that the `$io` is kind of hard to pass from console commands into other parts of your code. I'm going to ignore that complexity here and just create a new `$io` by saying `$io = new SymfonyStyle(new ArrayInput([]), new ConsoleOutput()`. I'm creating an object that's just like the normal `$io` object so I can cheat a little here.
+
+Now that we have a subscriber, back in `GameCommand`, we're going to hook that up. So instead of `addListener()`, say `addSubscriber()`, and inside of that, `new OutputFightStartingSubscriber()`. Awesome!
+
+Testing time! Moment of *truth*. I'll exit, choose my character and... wow! It's working *so* well, it's outputting *twice*. Why? This is, once again, thanks to auto configuration. We're using auto configuration inside of our application, so whenever we create a class that implements `EventSubscriberInterface`, the Symfony container is automatically taking that subscriber and registering it on the `eventDispatcher`. In other words, Symfony, internally, is already calling this line right here. So that answers the question of how we use the pub/sub pattern in Symfony.
+
+I'll go delete that line inside of `GameCommand`. All you need to do is create an event subscriber like we've done here, and Symfony will automatically register it. Then, to *dispatch* an event, you'll create a new event class and dispatch that event anywhere in your code.
+
+So you can see how easy it is to create the `eventDispatcher` and dispatch *all kinds* of events all over your application. If we try this again (I'll exit I battle first)... it only outputs *once*. Great! The benefits of pub/sub are really the same as the observer, but in practice, pub/sub is a bit more common. That's probably because Symfony has this great event dispatcher. Half of the work is already done *for* you.
+
+Next, let's dive into our final pattern! It's one of my favorites *and* the most powerful in Symfony: The *decorator* pattern.
