@@ -17,13 +17,18 @@ me undo all of the changes I just made to `GameApplication`... and `CharacterBui
 
 ## Creating a Factory
 
-Over in the `Builder/` directory, create a new class called `CharacterBuilderFactory`.
-By the way, there *is* a pattern called the factory pattern, which we won't
+Over in the `Builder/` directory, create a new class called `CharacterBuilderFactory`:
+
+[[[ code('3e60167997') ]]]
+
+By the way, there *is* a pattern called the *factory pattern*, which we won't
 *specifically* cover in this tutorial. But a "factory" is just a class whose job
 is to create *another* class. It, like the builder pattern, is a *creational pattern*.
 Inside of the factory class, create a new method called, how about...
 `createBuilder()`, which will return a `CharacterBuilder`. And inside of *that*,
-just `return new CharacterBuilder()`.
+just `return new CharacterBuilder()`:
+
+[[[ code('b5f993c014') ]]]
 
 This `CharacterBuilderFactory` *is* a service. Even if we need *five*
 `CharacterBuilder` objects in our app, we only need *one* `CharacterBuilderFactory`.
@@ -31,10 +36,14 @@ We'll just call this method on it *five* times.
 
 That means, over in `GameApplication`, we can create a `public function __construct()`
 and autowire `CharacterBuilderFactory $characterBuilderFactory`. I'll also add
-`private` in front to make it a property.
+`private` in front to make it a property:
+
+[[[ code('143d0cd6f8') ]]]
 
 Then, down inside `createCharacterBuilder()`, instead of creating this by
-hand, rely on the factory: `return $this->characterBuilderFactory->createBuilder()`.
+hand, rely on the factory: `return $this->characterBuilderFactory->createBuilder()`:
+
+[[[ code('030b3e5ed4') ]]]
 
 The nice thing about this factory (and this is really the *purpose* of the factory
 pattern in general) is that we have *centralized* the instantiation of this object.
@@ -42,22 +51,32 @@ pattern in general) is that we have *centralized* the instantiation of this obje
 ## Getting Services into the Builder
 
 How does that help our situation? Remember, the problem I imagined was this:
-What if our character builder needed a service like the EntityManager?
+What if our character builder needed a service like the `EntityManager`?
 
 With our new setup, we can make that happen. I don't actually have Doctrine installed
-in this project, so instead of the EntityManager, let's require
+in this project, so instead of the `EntityManager`, let's require
 `LoggerInterface $logger`... and I'll again add `private` in front to turn that into
-a property.
+a property:
+
+[[[ code('20943113c3') ]]]
 
 Then, down in `buildCharacter()`, just to test that this is working, use it:
 `$this->logger->info('Creating a character')`. I'll also pass a second argument
 with some extra info like `'maxHealth' => $this->maxHealth` and
-`'baseDamage' => $this->baseDamage`.
+`'baseDamage' => $this->baseDamage`:
+
+[[[ code('96b0798cd8') ]]]
 
 `CharacterBuilder` now requires a `$logger`... but `CharacterBuilder` is *not* a
 service that we'll fetch directly from the container. We'll get it via
 `CharacterBuilderFactory`, which *is* a service. So autowiring `LoggerInterface`
-will work here. Then, pass that *manually* into the builder as `$this->logger`.
+will work here:
+
+[[[ code('ca2d80546d') ]]]
+
+Then, pass that *manually* into the builder as `$this->logger`:
+
+[[[ code('bea49ea816') ]]]
 
 We're seeing some of the benefits of the factory pattern here. Since we've already
 centralized the instantiation of `CharacterBuilder`, anywhere that *needs* a
