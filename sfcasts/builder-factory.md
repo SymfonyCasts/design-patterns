@@ -130,14 +130,45 @@ make-believe interface.
 
 And where do we see the builder pattern in the wild? This one is pretty easy to spot
 because method chaining is such a common feature of builders. The first example
-that comes to mind is Doctrine's `QueryBuilder`. It allows us to configure a query
-with a bunch of nice methods before finally calling `getQuery()` to actually create
-the `Query` object. It also leverages the factory pattern: to create the builder,
-you call `createQueryBuilder()`. That method, which lives on the base
-`EntityRepository` is the "factory" responsible for instantiating the `QueryBuilder`.
+that comes to mind is Doctrine's `QueryBuilder`:
 
-Another example is Symfony's `FormBuilder`. In that case, *we* don't call the
-`buildForm()` method, but *Symfony* eventually *does* call this once we're done
-configuring it.
+```php
+class CharacterRepository extends ServiceEntityRepository
+{
+    public function findHealthyCharacters(int $healthMin): array
+    {
+        return $this->createQueryBuilder('character')
+            ->orderBy('character.name', 'DESC')
+            ->andWhere('character.maxHealth > :healthMin')
+            ->setParameter('healthMin', $healthMin)
+            ->getQuery()
+            ->getResult();
+    }
+}
+```
+
+It allows us to configure a query with a bunch of nice methods before finally
+calling `getQuery()` to actually create the `Query` object. It also leverages
+the factory pattern: to create the builder, you call `createQueryBuilder()`.
+That method, which lives on the base `EntityRepository` is the "factory"
+responsible for instantiating the `QueryBuilder`.
+
+Another example is Symfony's `FormBuilder`:
+
+```php
+public function buildForm(FormBuilderInterface $builder, $options)
+{
+    $animals = ['🐑', '🦖', '🦄', '🐖'];
+    $builder
+        ->add('name', TextType::class)
+        ->add('animal', ChoiceType::class, [
+            'placeholder' => 'Choose an animal',
+            'choices' => array_combine($animals, $animals),
+        ]);
+}
+```
+
+In that example, *we* don't call the `buildForm()` method, but *Symfony* eventually
+*does* call this once we're done configuring it.
 
 Ok team, let's talk about the *observer pattern* next.
