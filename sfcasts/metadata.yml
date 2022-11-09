@@ -12,3 +12,4 @@ chapters:
   - pub-sub-di
   - decorator
   - decorator-di
+  - as-decorator
