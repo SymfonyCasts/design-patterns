@@ -16,7 +16,7 @@ Okay, *not bad*, but let's try my version:
 
 This is the classic situation where you write some code that needs to be called
 whenever something *else* happens. And there are actually *two* strategies to solve
-this: the observer pattern and the pub-sub pattern. We'll talk about both. But first
+this: the *observer pattern* and the *pub-sub* pattern. We'll talk about both. But first
 up - the *observer* pattern.
 
 ## Anatomy of Observer
@@ -41,7 +41,9 @@ will increase.
 To write this new functionality, we *could* put the code right here inside of
 `GameApplication` after the fight finishes. So... maybe down here in
 `finishFightResult()`, we would do the XP calculation and see if the character can
-level up.
+level up:
+
+[[[ code('ca802bb003') ]]]
 
 *But*, to better organize our code, I want to put this new logic somewhere *else*
 and use the observer pattern to connect things. `GameApplication` will be the
@@ -60,10 +62,14 @@ Ok, step one to this pattern is to create an interface that all the observers wi
 implement. For organization's sake, I'll create an `Observer/` directory. Inside,
 add a new PHP class, make sure "Interface" is selected, and call it, how about,
 `GameObserverInterface`... since these classes will be "observing" something related
-to each game. `FightObserverInterface` would also have been a good name.
+to each game. `FightObserverInterface` would also have been a good name:
+
+[[[ code('d1df415b49') ]]]
 
 Inside we just need one `public` method. We can call it anything: how about
-`onFightFinished()`.
+`onFightFinished()`:
+
+[[[ code('7b81b7cff2') ]]]
 
 Why do we need this interface? Because, in a minute, we're going to write code that
 loops over *all* of the observers inside of `GameApplication` and calls a method
@@ -71,7 +77,9 @@ on them. So... we need a way to *guarantee* that each observer *has* a method, l
 `onFightFinished()`. And we can actually pass `onFightFinished()` whatever
 arguments we want. Let's pass it a `FightResult` argument because, if I want to run
 some code after a fight finishes, it'll probably be useful to know the *result*
-of that fight. I'll also add a `void` return type.
+of that fight. I'll also add a `void` return type:
+
+[[[ code('5d135d0fb7') ]]]
 
 ## Adding the Subscribe Code
 
@@ -79,37 +87,51 @@ Okay, step two: We need a way for every observer to *subscribe* to be notified o
 `GameApplication`. To do that, create a `public function` called, how about,
 `subscribe()`. You can name this anything. This is going to accept any
 `GameObserverInterface`, I'll call it `$observer` and it will return `void`.
-I'll fill in the logic in a moment.
+I'll fill in the logic in a moment:
+
+[[[ code('eaa486a415') ]]]
 
 The *second* part, which is *optional*, is to add a way to *unsubscribe* from the
 changes. Copy everything we just did... paste... and change this to
-`unsubscribe()`.
+`unsubscribe()`:
+
+[[[ code('1b5bc1b59a') ]]]
 
 Perfect!
 
 At the top of the class, create a new array property that's going to hold all of
 the observers. Say `private array $observers = []` and then, to help my editor,
-I'll add some documentation: `@var GameObserverInterface[]`.
+I'll add some documentation: `@var GameObserverInterface[]`:
+
+[[[ code('5c6ef4af5d') ]]]
 
 Back down in `subscribe()`, populate this. I'll add a check for
 uniqueness by saying `if (!in_array($observer, $this->observers, true))`, then
-`$this->observers[] = $observer`.
+`$this->observers[] = $observer`:
+
+[[[ code('153f6cc498') ]]]
 
 Do something similar down in `unsubscribe()`. Say
 `$key = array_search($observer, $this->observers)` and then `if ($key !== false)` -
-meaning we *did* find that observer - `unset($this->observers[$key])`.
+meaning we *did* find that observer - `unset($this->observers[$key])`:
+
+[[[ code('b90ac73090') ]]]
 
 ## Notifying the Observers
 
 Finally, we're ready to *notify* these observers. Right after the fight ends,
-`finishFightResult()` is called. So, right here, I'll say `$this->notify($fightResult)`.
+`finishFightResult()` is called. So, right here, I'll say `$this->notify($fightResult)`:
+
+[[[ code('4f1b1cd9b9') ]]]
 
 We don't *need* to do this... but I'm going to isolate the logic of notifying the
 observers to a new `private function` down here called `notify()`. It will accept
 the `FightResult $fightResult` argument and return `void`. Then `foreach` over
 `$this->observers as $observer`. And because we know that those are all
 `GameObserverInterface` instances, we can call `$observer->onFightFinished()`
-and pass `$fightResult`.
+and pass `$fightResult`:
+
+[[[ code('9c8d0896d2') ]]]
 
 And... the *subject* - `GameApplication` - is *done*! By the way, sometimes the
 code that notifies the observers - so `notify()` in our case - lives in a `public`
