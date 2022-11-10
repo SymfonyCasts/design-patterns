@@ -7,21 +7,33 @@ and whether or not the character should level up.
 
 But first, we need to add a few things to the `Character` class to help. On top,
 add `private int $level` that will default to `1` and a `private int $xp` that
-will default to `0`. Down here a bit, add `public function getLevel(): int`
-which will `return $this->level`... and another convenience method called `addXp()`
+will default to `0`:
+
+[[[ code('d74fd395f2') ]]]
+
+Down here a bit, add `public function getLevel(): int` which will
+`return $this->level`... and another convenience method called `addXp()`
 that will accept the new `$xpEarned` and return the *new* XP number. Inside say
-`$this->xp += $xpEarned`... and `return $this->xp`.
+`$this->xp += $xpEarned`... and `return $this->xp`:
+
+[[[ code('136a0fe3ec') ]]]
 
 Finally, right after, I'm going to paste in one more method called `levelUp()`.
 We'll call *this* when a character levels up: it increases the `$level`, `$maxHealth`,
-and `$baseDamage`. We *could* also level-up the attack and armor types if we wanted.
+and `$baseDamage`:
+
+[[[ code('2fed6787cd') ]]]
+
+We *could* also level-up the attack and armor types if we wanted.
 
 ## Creating the Observer Class
 
 Ok, *now* let's create that observer. Inside the `src/Observer/` directory, add
 a new PHP class. Let's call it `XpEarnedObserver`. And all of our observers need to
-`implement` the `GameObserverInterface`. Go to Code Generate, or "command" + "N"
-on a Mac to implement the `onFightFinished()` method.
+`implement` the `GameObserverInterface`. Go to "Code generate", or `Command`+`N`
+on a Mac to implement the `onFightFinished()` method:
+
+[[[ code('2896640a22') ]]]
 
 For the *guts* of `onFightFinished()`, I'm going to delegate the *real* work
 to a service called `XpCalculator`.
@@ -29,15 +41,25 @@ to a service called `XpCalculator`.
 If you downloaded the course code, you should have a `tutorial/` directory with
 `XpCalculator.php` inside. Copy that, in `src/`, create a new
 `Service/` directory and paste that inside. You can check this out if you want to,
-but it's nothing fancy. It takes the `Character` that won, the enemy's level,
-and it figures out how much XP it should award to the winner. Then, if they're
-eligible to level up, it levels-up that character.
+but it's nothing fancy:
+
+[[[ code('94d6787e7c') ]]]
+
+It takes the `Character` that won, the enemy's level, and it figures out
+how much XP it should award to the winner. Then, if they're eligible to level up,
+it levels-up that character.
 
 Over in `XpEarnedObserver`, we can use that. Create a constructor so that we can
 autowire in a `private readonly` (`readonly` just to be super trendy) `XpCalculator
-$xpCalculator`. Below, let's set the `$winner` to a variable -
-`$fightResult->getWinner()` - and `$loser` to `$fightResult->getLoser()`.
-Finally, say `$this->xpCalculator->addXp()` and pass `$winner` and `$loser->getLevel()`.
+$xpCalculator`:
+
+[[[ code('1c0c2a8fb5') ]]]
+
+Below, let's set the `$winner` to a variable - `$fightResult->getWinner()` - and
+`$loser` to `$fightResult->getLoser()`. Finally, say `$this->xpCalculator->addXp()`
+and pass `$winner` and `$loser->getLevel()`:
+
+[[[ code('b20527cbbb') ]]]
 
 ## Connecting the Subject & Observer
 
@@ -50,18 +72,24 @@ currently initializing all of the code inside our app. In a few minutes, we'll
 see a more *Symfony* way of connecting all of this. For right now, say
 `$xpObserver = new XpEarnedObserver()`... and pass that a `new XpCalculator()` service
 so it's happy. Then, we can say `$this->game` (which is the `GameApplication`)
-`->subscribe($xpObserver)`.
+`->subscribe($xpObserver)`:
+
+[[[ code('b5f9e14530') ]]]
 
 So we're *subscribing* the observer before we actually run our app down here.
 
 This means... we're ready! But, just to make it a bit more obvious if this is working,
 head back to `Character` and add *one more* function here called `getXp()`, which
-will return `int` via `return $this->xp`.
+will return `int` via `return $this->xp`:
+
+[[[ code('1f3c26341a') ]]]
 
 This will allow us, inside of `GameCommand`... if you scroll down a bit to
 `printResults()`... here we go... to add a few things like
 `$io->writeIn('XP: ' . $player->getXp())`... and the same thing for `Final Level`,
-with `$player->getLevel()`.
+with `$player->getLevel()`:
+
+[[[ code('41aedf9c68') ]]]
 
 Ok team - testing time! Spin over, run
 
