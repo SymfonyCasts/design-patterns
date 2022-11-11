@@ -72,7 +72,7 @@ But we *should*, at least, be able to see it. Spin over and run:
 ./bin/console debug:container xpearnedobserver
 ```
 
-Beautiful! It found our service! And check it out: `TAGS` `game.observer`.
+It found our service! And check it out: `TAGS` `game.observer`.
 
 Ok, now that our service has a tag, we're going to write a little more code
 that automatically calls the `subscribe` method on `GameApplication` for *every*
