@@ -4,7 +4,11 @@ We've implemented the Observer Pattern! The `GameApplication` is our subject, wh
 notifies all of the observers... and we have *one* at the moment:
 `XpEarnedObserver`. Inside `GameCommand`, we connected all of this by *manually*
 instantiating the observer and `XpCalculator`... then calling
-`$this->game->subscribe()`. But... that isn't very Symfony-like.
+`$this->game->subscribe()`:
+
+[[[ code('b81246b495') ]]]
+
+But... that isn't very Symfony-like.
 
 Both `XpEarnedObserver` and `XpCalculator` are *services*. So we would *normally*
 autowire them from the container, not instantiate them manually. We *are* autowiring
@@ -15,14 +19,19 @@ have *already* hooked up all of its observers so that it's ready to use
 
 ## Manually Specifying the Services
 
-Remove all of the manual code inside of `GameCommand`. We're
-going to recreate this same setup... but inside `services.yaml`. Open that... and
-at the bottom, we need to modify the service `App\GameApplication`.
+Remove all of the manual code inside of `GameCommand`:
+
+[[[ code('b393cb46bc') ]]]
+
+We're going to recreate this same setup... but inside `services.yaml`. Open that...
+and at the bottom, we need to modify the service `App\GameApplication`.
 But we don't need to configure any arguments. In this case, we need to configure
 some `calls`. Here, I'm basically telling Symfony:
 
 > Yo! After you instantiate `GameApplication`, call the `subscribe()` method on
 > it and pass, as an argument, the `@App\Observer\XpEarnedObserver` service.
+
+[[[ code('9680bb773e') ]]]
 
 So when we autowire `GameApplication`, Symfony will go grab the `XpEarnedObserver`
 service and *that* service will, of course, get `XpCalculator` autowired into *it*.
@@ -42,7 +51,7 @@ There are no errors so far and... oh. We lost. Bad luck. Let's try again! We won
 ## Setting up Autoconfiguration
 
 The downside to this solution is that every time we add a new observer, we'll need
-to go to `services.yaml` and wire it *manually*. *gasp* How *undignified*...
+to go to `services.yaml` and wire it *manually*. *Gasp*, how *undignified*...
 
 Could we *automatically* subscribe all services that implement
 `GameObserverInterface`? Why, yes! And what an *excellent* idea! We can do that in
@@ -50,13 +59,17 @@ two steps.
 
 First, open `src/Kernel.php`. This isn't a file we work with much, but we're
 about to do some deeper things with the container and so this is exactly where we
-want to be. Go to Code Generate or "command" + "O" and select "Override Methods".
-We're going to override one called `build()`.
+want to be. Go to Code Generate or `Command`+`O` and select "Override Methods".
+We're going to override one called `build()`:
+
+[[[ code('9dbbdee6d4') ]]]
 
 Perfect! The parent method is empty, so we don't need to call it at all. Instead,
 say `$container->registerForAutoconfiguration()`, pass it
 `GameObserverInterface::class`, and then say `->addTag()`. I'm going to invent a
-new tag here called `game.observer`.
+new tag here called `game.observer`:
+
+[[[ code('b21b3d58b0') ]]]
 
 This probably isn't something you see very often (or ever) in *your* code, but it's
 really common in third-party bundles. This says that any service that implements
@@ -72,36 +85,48 @@ But we *should*, at least, be able to see it. Spin over and run:
 ./bin/console debug:container xpearnedobserver
 ```
 
-It found our service! And check it out: `TAGS` `game.observer`.
+It found our service! And check it out: `Tags` - `game.observer`.
 
-Ok, now that our service has a tag, we're going to write a little more code
+Ok, now that our service has a *tag*, we're going to write a little more code
 that automatically calls the `subscribe` method on `GameApplication` for *every*
 service *with* that tag. This is *also* going to go in `Kernel`, but in a
  *different* method. In this case, we're going to implement something called a
  "compiler pass".
 
-Add a new interface called `CompilerPassInterface`. Then, below, go back to Code
-Generate, "Implement Methods", and select `process()`.
+Add a new interface called `CompilerPassInterface`. Then, below, go back to
+"Code Generate", "Implement Methods", and select `process()`:
+
+[[[ code('c2111a0bce') ]]]
 
 Compiler passes are a bit more advanced, but super cool! It's a piece of code that
 runs at the *very* end of the container and services being built... and you can do
 *whatever* you want inside.
 
-Check it out! Say `$definition = $container->findDefinition(GameApplication::class)`.
+Check it out! Say `$definition = $container->findDefinition(GameApplication::class)`:
+
+[[[ code('edee7fe331') ]]]
+
 No, this does *not* return the `GameApplication` object. It returns a `Definition`
 object that knows everything about *how* to instantiate a `GameApplication`, like
 its class, constructor arguments, and any calls it might have on it.
 
-Next, say `$taggedObservers = $container->findTaggedServiceIds('game.observer')`.
+Next, say `$taggedObservers = $container->findTaggedServiceIds('game.observer')`:
+
+[[[ code('d7559f373c') ]]]
+
 This will return an array of all the services that have the `game.observer` tag.
 Then we can loop over them with `foreach ($taggedObservers as $id => $tags)`. The
 `$id` is the service id... and `$tags` is an array because you can technically
 put the same tag on a service multiple times... but that's not something we care
-about.
+about:
+
+[[[ code('e78648b174') ]]]
 
 Now say `$definition->addMethodCall()`, which is the PHP version of `calls` in YAML.
 Pass this the `subscribe` method and, for the arguments, a `new Reference()` (the
-one from `DependencyInjection`), with `id`.
+one from `DependencyInjection`), with `id`:
+
+[[[ code('5129f22d15') ]]]
 
 This is a fancy way of saying that we want the `subscribe()` method to be called
 on `GameApplication`... and for it to pass the *service* that holds the
@@ -109,7 +134,9 @@ on `GameApplication`... and for it to pass the *service* that holds the
 
 The end result is the same as what we had before in `services.yaml`... just more
 dynamic and better for impressing your programmer friends. So, remove all of
-the YAML code we added.
+the YAML code we added:
+
+[[[ code('48a9a1bae1') ]]]
 
 If we try our game again...
 
