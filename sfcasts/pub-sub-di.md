@@ -23,7 +23,7 @@ say `Fight is starting against`, followed by `$event->ai->getNickname()`.
 
 > [NOTE] Fight is starting againstAI: Mage.
 
-The only thing I did is miss my space after "against" so it looks nicer. I'll fix
+The only thing I missed is the space after "against" so it looks nicer. I'll fix
 that really quick.
 
 ## Allowing Listeners to Control Behavior
