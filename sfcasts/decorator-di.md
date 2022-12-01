@@ -3,7 +3,9 @@
 We just implemented the decorator pattern, where we basically wrapped the original
 `XpCalculator` in a warm hug with our `OutputtingXpCalculator`. Then... we quietly
 slipped *that* into the system in place of the *original*... without anyone else -
-like `XpEarnedObserver` - knowing or caring that we did that.
+like `XpEarnedObserver` - knowing or caring that we did that:
+
+[[[ code('2ba9ee7ec1') ]]]
 
 But to set up the decoration, I'm instantiating the objects *manually*, which
 is not very realistic in a Symfony app. What we really want is for `XpEarnedObserver`
@@ -13,14 +15,18 @@ this manual instantiation. But we need the container to pass it our
 How can we accomplish that? How can we tell the container that whenever someone
 type-hints `XpCalculatorInterface`, it should pass our decorator service?
 
-To answer that, let's start by undoing our manual code. In both `GameCommand`...
+To answer that, let's start by undoing our manual code: In both `GameCommand`...
 and then `Kernel`... put back the fancy code that attaches the observer to
-`GameApplication`.
+`GameApplication`:
+
+[[[ code('e13dcf2306') ]]]
+
+[[[ code('8e486aaea9') ]]]
 
 If we try the command now:
 
 ```terminal-silent
-php bin/console app:game:play
+php ./bin/console app:game:play
 ```
 
 It *fails*:
@@ -38,7 +44,9 @@ little more work, Symfony doesn't know *which* `XpCalculatorInterface` service t
 pass us. How do we tell it? By creating a service *alias*.
 
 In `config/services.yaml`, say `App\Service\XpCalculatorInterface` set to
-`@App\Service\OutputtingXpCalculator`.
+`@App\Service\OutputtingXpCalculator`:
+
+[[[ code('a718edce5f') ]]]
 
 This creates a service whose id is `App\Service\XpCalculatorInterface`... but it's
 *really* just a "pointer", or "alias" to the `OutputtingXpCalculator` service.
@@ -50,7 +58,7 @@ the container for a service whose id matches that, so
 So, let's try it again.
 
 ```terminal-silent
-php bin/console app:game:play
+php ./bin/console app:game:play
 ```
 
 And... it *still* doesn't work. We're on a roll!
@@ -58,20 +66,25 @@ And... it *still* doesn't work. We're on a roll!
 > Circular reference detected for service `OutputtingXpCalculator`,
 > path: `OutputtingXpCalculator` -> `OutputtingXpCalculator`
 
-Oh! Symfony is autowiring `OutputtingXpCalculator` into
-`XpEarnedObserver`... but it's *also* autowiring `OutputtingXpCalculator` into
-*itself*. Whoops! We want `OutputtingXpCalculator` to be used *everywhere* in the
+Oh! Symfony is autowiring `OutputtingXpCalculator` into `XpEarnedObserver`...
+but it's *also* autowiring `OutputtingXpCalculator` into *itself*:
+
+[[[ code('93037abab4') ]]]
+
+Whoops! We want `OutputtingXpCalculator` to be used *everywhere* in the
 system that autowires `XpCalculatorInterface`... *except* for itself.
 
 To accomplish that, back in `services.yaml`, we can manually configure the service.
 Down here, add `App\Service\OutputtingXpCalculator` with `arguments`,
 `$innerCalculator` (that's the name of our argument) set to
-`@App\Service\XpCalculator`.
+`@App\Service\XpCalculator`:
+
+[[[ code('e62fd3dad8') ]]]
 
 This will override the argument for *just* this one case. And now...
 
 ```terminal-silent
-php bin/console app:game:play
+php ./bin/console app:game:play
 ```
 
 It work? I mean, of course it works! If we play a few rounds and fast forward...

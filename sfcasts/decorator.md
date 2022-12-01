@@ -22,10 +22,13 @@ Before we get any deeper and nerdier, let's see it in action.
 ## The Goal
 
 Here's the goal: I want to print something onto the screen whenever a player levels
-up. The logic for leveling up lives inside of `XpCalculator`. But instead of changing
-the code in *this* class, we're going to apply the decorator pattern, which will
-allow us to run code before or *after* this logic... without actually *changing*
-the code inside.
+up. The logic for leveling up lives inside of `XpCalculator`:
+
+[[[ code('32b5c07f39') ]]]
+
+But instead of changing the code in *this* class, we're going to apply the decorator
+pattern, which will allow us to run code before or *after* this logic... without
+actually *changing* the code inside.
 
 This is a particularly common pattern to leverage if the class you want to modify
 is a *vendor* service that... you *can't* actually change. And *especially* if
@@ -43,11 +46,20 @@ good job and made it implement an interface.
 But since this is *our* code, we can add one. In the `Service/` directory, create
 a new class... but change it to an interface. Let's call it `XpCalculatorInterface`.
 Then, I'll go steal the method signature for `addXp()`, paste that here, add a `use`
-statement and a semicolon. Easy enough!
+statement and a semicolon:
 
-Over in `XpCalculator`, implement `XpCalculatorInterface`. And finally, open up
-`XpEarnedObserver`. This is the *one* place in our code that *uses* `XpCalculator`.
-Change this to allow *any* `XpCalculatorInterface`.
+[[[ code('9660b97bcc') ]]]
+
+Easy enough!
+
+Over in `XpCalculator`, implement `XpCalculatorInterface`:
+
+[[[ code('cfa716c650') ]]]
+
+And finally, open up `XpEarnedObserver`. This is the *one* place in our code
+that *uses* `XpCalculator`. Change this to allow *any* `XpCalculatorInterface`:
+
+[[[ code('e82416f233') ]]]
 
 This shows us *why* a class must implement an interface to support decoration. Because
 the classes that use our `XpCalculator` can now type-hint an *interface* instead
@@ -58,21 +70,33 @@ for our own class, known as the *decorator*. Let's create that class now!
 
 In the `src/Service/` directory, add a new PHP class and call it, how about,
 `OutputtingXpCalculator`, since it's an `XpCalculator` that will *output* things
-to the screen. The most important thing about the decorator class is that it *must*
-call all of the *real* methods on the *real* service. Yup, we're literally going to
+to the screen:
+
+[[[ code('0a2bfcb396') ]]]
+
+The most important thing about the decorator class is that it *must* call
+all of the *real* methods on the *real* service. Yup, we're literally going to
 pass the *real* `XpCalculator` *into* this one so we can call methods on it.
 
 Create a `public function __construct()` and accept a
 `private readonly XpCalculatorInterface` called, how about, `$innerCalculator`.
 Our `OutputtingXpCalculator` *also* needs to implement `XpCalculatorInterface` so
-that it can be passed into things like our observer.
+that it can be passed into things like our observer:
 
-Go to Code-Generate and select "Implement Methods" to generate `addXp()`. I'll add
-the missing `use` statement and... perfect!
+[[[ code('cbf7c94c01') ]]]
+
+Go to "Code"->"Generate" and select "Implement methods" to generate `addXp()`. I'll add
+the missing `use` statement and:
+
+[[[ code('fa2e44182e') ]]]
+
+Perfect!
 
 As I mentioned, the most important thing the decorator must *always* do is call
 that inner service in all of the public interface methods. In other words, say
-`$this->addXp($winner, $enemyLevel)`... oh I mean `$this->innerCalculator->addXp()`.
+`$this->addXp($winner, $enemyLevel)`... oh I mean `$this->innerCalculator->addXp()`:
+
+[[[ code('bd34e0b9b1') ]]]
 
 ## A Chain of Decorators
 
@@ -89,9 +113,13 @@ the inner service. So *before*, say `$beforeLevel = $winner->getLevel()` to stor
 the initial level. Then, below, `$afterLevel = $winner->getLevel()`. Finally,
 `if ($afterLevel > $beforeLevel)`, we know that we just leveled up!
 
+[[[ code('ebc5587e85') ]]]
+
 And *that* calls for a celebration... like printing some stuff! I'll say
 `$output = new ConsoleOutput()`... which is just a cheap way to write to the console,
-and then I'll paste in a few lines to output a nice message.
+and then I'll paste in a few lines to output a nice message:
+
+[[[ code('9b959c184d') ]]]
 
 ## Swapping in the Decorated Class into your App
 
@@ -102,26 +130,34 @@ is *replace* *all* instances of `XpCalculator` in our system with our *new*
 Let's do this manually first, without Symfony's fancy container stuff. There's only
 one place in our code that uses `XpCalculator`: `XpEarnedObserver`. Open up
 `src/Kernel.php` and temporarily comment-out the "subscribe" magic that we added
-earlier. I'm doing this because, for the moment, I want to *manually* instantiate
+earlier:
+
+[[[ code('2e328452d3') ]]]
+
+I'm doing this because, for the moment, I want to *manually* instantiate
 `XpEarnedObserver` and *manually* subscribe it in `GameApplication`... *just*
 so we can see how decoration works.
 
 Over in `src/Command/GameCommand.php`, let's put back our manual observer pattern
 setup logic from earlier: `$xpCalculator = new XpCalculator()` and then
-`$this->game->subscribe(new XpEarnedObserver()` passing `$xpCalculator`.
+`$this->game->subscribe(new XpEarnedObserver()` passing `$xpCalculator`:
+
+[[[ code('9505904d91') ]]]
 
 We're not using the decorator yet... but this *should* be enough to keep our
 app working like before. When we try the command:
 
 ```terminal-silent
-php bin/console app:game:play
+php ./bin/console app:game:play
 ```
 
 We win! And we got some XP, which means `XpEarnedObserver` *is* doing its job.
 
 So how do we use the decorator? By sneakily replacing the *real* `XpCalculator` with
 the fake one. Say `$xpCalculator = new OutputtingXpCalculator()`, and pass it
-the original `$xpCalculator`.
+the original `$xpCalculator`:
+
+[[[ code('1159422900') ]]]
 
 That's *it*! Suddenly, even though it has no idea, `XpEarnedObserver` is being
 passed our decorator service! I told you it was sneaky!
