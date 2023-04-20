@@ -1,0 +1,338 @@
+WEBVTT
+
+00:00:01.036 --> 00:00:04.616 align:middle
+¡La primera versión de nuestra
+clase constructora está hecha!
+
+00:00:05.066 --> 00:00:11.346 align:middle
+Aunque, en GameApplication, el mage_archer
+tiene dos tipos de ataque diferentes.
+
+00:00:12.006 --> 00:00:14.966 align:middle
+Nuestro CharacterBuilder no
+admite eso ahora mismo...
+
+00:00:15.136 --> 00:00:16.956 align:middle
+pero lo añadiremos en un momento.
+
+00:00:17.646 --> 00:00:19.996 align:middle
+Ah, ¡una cosa más sobre
+la clase constructora!
+
+00:00:20.376 --> 00:00:23.756 align:middle
+En el método "construir",
+después de crear el objeto,
+
+00:00:24.096 --> 00:00:28.206 align:middle
+puedes elegir "reiniciar"
+el objeto constructor. Por
+
+00:00:28.876 --> 00:00:35.416 align:middle
+ejemplo, podríamos establecer el Character
+en una variable, y luego, antes de devolverlo,
+
+00:00:35.416 --> 00:00:40.466 align:middle
+restablecer el $maxHealth y todas las
+demás propiedades a su estado original.
+
+00:00:41.536 --> 00:00:43.306 align:middle
+¿Por qué haríamos esto?
+
+00:00:43.726 --> 00:00:48.876 align:middle
+Porque permitiría utilizar un
+único constructor una y otra vez
+
+00:00:48.966 --> 00:00:52.636 align:middle
+para crear muchos objetos,
+o personajes en este caso.
+
+00:00:53.416 --> 00:00:56.396 align:middle
+Sin embargo, no voy a hacer eso...
+
+00:00:56.946 --> 00:01:00.676 align:middle
+lo que significa que un solo
+CharacterBuilder estará
+
+00:01:00.676 --> 00:01:04.576 align:middle
+destinado a ser utilizado una sola
+vez para construir un solo personaje.
+
+00:01:05.336 --> 00:01:09.266 align:middle
+Puedes elegir cualquiera de las dos opciones
+en tu aplicación: no hay una forma correcta
+
+00:01:09.266 --> 00:01:11.116 align:middle
+o incorrecta para el patrón constructor.
+
+00:01:12.236 --> 00:01:14.406 align:middle
+Muy bien, ¡vamos a utilizarlo! Dentro de
+
+00:01:14.916 --> 00:01:18.806 align:middle
+GameApplication, primero, sólo
+para facilitar la vida, voy a
+
+00:01:19.206 --> 00:01:23.726 align:middle
+crear un private function en la parte
+inferior llamado createCharacterBuilder()
+
+00:01:24.846 --> 00:01:26.686 align:middle
+que devolverá CharacterBuilder.
+
+00:01:27.706 --> 00:01:30.346 align:middle
+Dentro, return new CharacterBuilder().
+
+00:01:31.316 --> 00:01:33.706 align:middle
+Eso va a estar bien porque...
+
+00:01:33.806 --> 00:01:36.856 align:middle
+aquí arriba, en createCharacter(),
+podemos utilizarlo.
+
+00:01:37.746 --> 00:01:39.876 align:middle
+Voy a borrar el material antiguo...
+
+00:01:40.016 --> 00:01:46.096 align:middle
+y ahora, utilizar la forma fluida de hacer los
+caracteres: $this->createCharacterBuilder(),
+
+00:01:47.006 --> 00:01:51.866 align:middle
+->setMaxHealth(90), ->setBaseDamage(12),
+
+00:01:53.426 --> 00:01:59.096 align:middle
+->setAttackType('sword') y
+->setArmorType('shield').
+
+00:02:00.126 --> 00:02:04.976 align:middle
+Ah, y, aunque no lo he hecho, estaría
+bien añadir constantes en el constructor
+
+00:02:05.046 --> 00:02:07.456 align:middle
+para estas cadenas, como sword y shield.
+
+00:02:08.216 --> 00:02:11.616 align:middle
+Por último, llama a
+->buildCharacter() para...
+
+00:02:11.726 --> 00:02:13.566 align:middle
+¡construir ese personaje!
+
+00:02:14.606 --> 00:02:15.766 align:middle
+¡Eso está muy bien!
+
+00:02:16.186 --> 00:02:21.446 align:middle
+Y sería aún más bonito si la creación de
+un personaje fuera aún más compleja, como si
+
+00:02:21.636 --> 00:02:23.646 align:middle
+implicara llamadas a la base de datos.
+
+00:02:24.386 --> 00:02:29.496 align:middle
+Para ahorrar algo de tiempo, voy a pegar los otros
+tres personajes, que tienen un aspecto similar.
+
+00:02:32.276 --> 00:02:37.946 align:middle
+Aquí abajo, para nuestro mage_archer, estoy
+utilizando actualmente el tipo de ataque fire_bolt.
+
+00:02:38.876 --> 00:02:46.056 align:middle
+Tenemos que volver a añadir una forma de tener tanto
+fire_bolt como bow, pero esto debería funcionar por ahora.
+
+00:02:47.116 --> 00:02:47.816 align:middle
+¡Vamos a probarlo!
+
+00:02:48.196 --> 00:02:51.946 align:middle
+En tu terminal, ejecuta: php
+bin/console app:game:play ¡Oye!
+
+00:02:52.716 --> 00:02:54.956 align:middle
+¡No ha explotado!
+
+00:02:55.246 --> 00:02:57.106 align:middle
+Eso siempre es una buena señal.
+
+00:02:57.766 --> 00:02:59.586 align:middle
+Y si lucho como un archer...
+
+00:03:01.206 --> 00:03:04.396 align:middle
+¡Gané! ¡Nuestra
+aplicación sigue funcionando!
+
+00:03:04.916 --> 00:03:10.106 align:middle
+¿Y qué hay de permitir los dos tipos
+de ataque de nuestro mago_arquero?
+
+00:03:10.666 --> 00:03:13.586 align:middle
+Bueno, esa es la belleza
+del patrón constructor.
+
+00:03:14.306 --> 00:03:19.476 align:middle
+Parte de nuestro trabajo, cuando creamos la clase
+constructora, es hacer la vida lo más fácil posible
+
+00:03:19.476 --> 00:03:22.496 align:middle
+a quien utiliza esta clase.
+
+00:03:23.116 --> 00:03:28.376 align:middle
+Por eso elegí utilizar string $armorType
+y $attackType en lugar de objetos.
+
+00:03:29.126 --> 00:03:33.056 align:middle
+Podemos resolver el manejo de dos
+AttackTypes diferentes como queramos.
+
+00:03:33.826 --> 00:03:38.326 align:middle
+Personalmente, creo que sería genial
+poder pasar múltiples argumentos.
+
+00:03:38.856 --> 00:03:41.136 align:middle
+Así que ¡hagámoslo realidad!
+
+00:03:41.906 --> 00:03:44.686 align:middle
+En CharacterBuilder, cambia
+el argumento a ...$attackTypes
+
+00:03:44.886 --> 00:03:49.486 align:middle
+con una "s", utilizando el elegante ... para
+
+00:03:49.486 --> 00:03:53.276 align:middle
+aceptar cualquier número de argumentos. Luego,
+
+00:03:53.856 --> 00:04:00.936 align:middle
+como esto va a contener una matriz, cambia la
+propiedad a private array $attackTypes... y
+
+00:04:02.026 --> 00:04:06.396 align:middle
+aquí abajo, $this->attackTypes
+= $attackTypes. Es fácil.
+
+00:04:07.056 --> 00:04:11.326 align:middle
+A continuación, tenemos que hacer algunos
+cambios abajo, en buildCharacter(), como
+
+00:04:11.726 --> 00:04:16.166 align:middle
+cambiar las cadenas de $attackTypes
+por objetos. Para ello, voy a
+
+00:04:17.436 --> 00:04:22.076 align:middle
+decir $attackTypes = y ... a ponerme un
+
+00:04:22.076 --> 00:04:23.156 align:middle
+poco elegante.
+
+00:04:23.606 --> 00:04:30.496 align:middle
+No hace falta que lo hagas, pero voy a utilizar
+array_map() y la nueva sintaxis corta fn - (string
+
+00:04:31.076 --> 00:04:37.446 align:middle
+$attackType) =>
+$this->createAttackType($attackType) . Para
+
+00:04:39.186 --> 00:04:41.636 align:middle
+el segundo argumento de array_map() -el
+
+00:04:41.996 --> 00:04:47.836 align:middle
+array que realmente queremos mapear-
+utiliza $this->attackTypes. Ahora,
+
+00:04:48.876 --> 00:04:56.136 align:middle
+en el método privado, en lugar de leer la
+propiedad, lee un argumento de $attackType. Vale,
+
+00:04:58.876 --> 00:05:02.396 align:middle
+podríamos haber hecho esto
+con un bucle foreach... y
+
+00:05:03.066 --> 00:05:06.566 align:middle
+si te gustan más los bucles
+foreach, hazlo. Sinceramente,
+
+00:05:07.136 --> 00:05:10.616 align:middle
+creo que he estado escribiendo demasiado
+JavaScript últimamente. En cualquier caso,
+
+00:05:11.446 --> 00:05:18.186 align:middle
+esto dice básicamente: quiero hacer un bucle
+sobre todas las cadenas de "tipo de ataque" y, para
+
+00:05:18.406 --> 00:05:22.356 align:middle
+cada una, llamar a esta
+función en la que cambiamos esa
+
+00:05:22.356 --> 00:05:26.746 align:middle
+cadena$attackType por un objeto
+AttackType. A continuación, coloca
+
+00:05:27.206 --> 00:05:33.016 align:middle
+todos esos objetos AttackType en
+una nueva variable $attackTypes. En
+
+00:05:33.906 --> 00:05:38.386 align:middle
+otras palabras, ahora se trata de una
+matriz de objetos AttackType. Para
+
+00:05:39.396 --> 00:05:50.016 align:middle
+terminar, di if (count($attackTypes) === 1),
+y luego $attackType = $attackTypes[0] para
+
+00:05:50.316 --> 00:05:53.086 align:middle
+coger el primer y único
+tipo de ataque. Si no, di
+
+00:05:53.906 --> 00:06:00.006 align:middle
+$attackType = new MultiAttackType() pasando
+por $attackTypes. Por último, al final,
+
+00:06:01.096 --> 00:06:05.276 align:middle
+utiliza la variable $attackType. ¡Uf!
+
+00:06:06.106 --> 00:06:10.516 align:middle
+Puedes ver que es un poco feo,
+¡pero no pasa nada! Estamos
+
+00:06:11.066 --> 00:06:15.236 align:middle
+ocultando la complejidad de la
+creación dentro de esta clase. Y
+
+00:06:15.596 --> 00:06:18.036 align:middle
+podemos probarla fácilmente de
+forma unitaria. Vamos a probarlo.
+
+00:06:19.036 --> 00:06:20.316 align:middle
+Ejecuta
+
+00:06:20.676 --> 00:06:21.816 align:middle
+nuestro comando......
+
+00:06:22.326 --> 00:06:24.816 align:middle
+seamos un mage_archer y... ¡impresionante!
+
+00:06:25.346 --> 00:06:27.326 align:middle
+¡No hay error! Así que...
+
+00:06:27.796 --> 00:06:29.936 align:middle
+Voy a suponer que todo funciona. Vale,
+
+00:06:30.986 --> 00:06:36.056 align:middle
+en GameApplication, estamos instanciando
+el CharacterBuilder manualmente. ¿Pero
+
+00:06:36.756 --> 00:06:41.956 align:middle
+qué pasa si el CharacterBuilder necesita acceder
+a algunos servicios para hacer su trabajo, como
+
+00:06:42.266 --> 00:06:45.936 align:middle
+el EntityManager para poder hacer consultas
+a la base de datos? A continuación, vamos a
+
+00:06:46.736 --> 00:06:51.836 align:middle
+hacer este ejemplo más útil viendo
+cómo manejamos la creación de
+
+00:06:51.836 --> 00:06:57.966 align:middle
+este objeto CharacterBuilder en una aplicación
+Symfony real aprovechando el contenedor de servicios.
+
+00:06:58.596 --> 00:07:01.366 align:middle
+También hablaremos de las
+ventajas del patrón constructor
