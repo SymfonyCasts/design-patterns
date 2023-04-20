@@ -87,6 +87,11 @@ class Character
         return $this->xp;
     }
 
+    public function getXp(): int
+    {
+        return $this->xp;
+    }
+
     /**
      * Restore player's health before next fight
      */
