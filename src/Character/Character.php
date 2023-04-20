@@ -13,6 +13,8 @@ class Character
     private int $currentStamina = self::MAX_STAMINA;
     private int $currentHealth;
     private string $nickname = '';
+    private int $level = 1;
+    private int $xp = 0;
 
     public function __construct(
         private int $maxHealth,
@@ -59,6 +61,18 @@ class Character
     public function setNickname(string $nickname): void
     {
         $this->nickname = $nickname;
+    }
+
+    public function getLevel(): int
+    {
+        return $this->level;
+    }
+
+    public function addXp(int $xpEarned): int
+    {
+        $this->xp += $xpEarned;
+
+        return $this->xp;
     }
 
     /**
