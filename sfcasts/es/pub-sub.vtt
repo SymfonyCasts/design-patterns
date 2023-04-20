@@ -1,0 +1,316 @@
+WEBVTT
+
+00:00:01.086 --> 00:00:05.986 align:middle
+El siguiente patrón del que quiero
+hablar quizá no sea un patrón propio En
+
+00:00:06.706 --> 00:00:11.006 align:middle
+realidad, es más bien una variación
+del patrón observador. Se llama
+
+00:00:11.306 --> 00:00:17.836 align:middle
+"pub/sub" o "publicar-suscribir". La
+diferencia clave entre observador y pub/sub
+
+00:00:17.836 --> 00:00:22.786 align:middle
+es simplemente quién se encarga de notificar
+a los observadores. Con el patrón observador
+
+00:00:23.296 --> 00:00:26.306 align:middle
+, es el sujeto, la cosa
+
+00:00:26.596 --> 00:00:30.296 align:middle
+(como GameApplication) la que
+hace el trabajo. Con pub/sub, hay
+
+00:00:31.216 --> 00:00:37.086 align:middle
+un tercer objeto -normalmente
+llamado "publicador"- cuyo único
+
+00:00:37.496 --> 00:00:40.866 align:middle
+trabajo es gestionar este
+tipo de cosas. Pero, en lugar
+
+00:00:41.566 --> 00:00:43.966 align:middle
+de llamarlo "editor", voy a
+
+00:00:44.186 --> 00:00:49.946 align:middle
+utilizar una palabra que probablemente te resulte
+más familiar: despachador de eventos. Con pub/sub,
+
+00:00:50.666 --> 00:00:56.806 align:middle
+los observadores (también llamados "oyentes") le
+dicen al despachador qué eventos quieren escuchar.
+
+00:00:56.866 --> 00:00:59.176 align:middle
+Entonces, el
+
+00:00:59.866 --> 00:01:06.256 align:middle
+sujeto (lo que está haciendo el trabajo) le dice al
+despachador que envíe el evento. El despachador se
+
+00:01:06.846 --> 00:01:11.246 align:middle
+encarga entonces de llamar a los
+métodos de los oyentes. Podrías
+
+00:01:12.106 --> 00:01:17.156 align:middle
+argumentar que pub/sub sigue mejor el patrón de
+responsabilidad única. El envío de los personajes
+
+00:01:17.706 --> 00:01:21.116 align:middle
+y también el registro y la
+llamada a los observadores
+
+00:01:21.116 --> 00:01:25.206 align:middle
+son dos responsabilidades distintas que hemos
+
+00:01:25.436 --> 00:01:28.446 align:middle
+metido en GameApplication. Así que éste es el
+
+00:01:29.126 --> 00:01:36.656 align:middle
+nuevo objetivo: añadir la posibilidad de ejecutar código antes
+de que comience una batalla utilizando pub/sub. El primer paso
+
+00:01:37.606 --> 00:01:40.336 align:middle
+es crear una clase de evento. Este
+
+00:01:40.756 --> 00:01:46.516 align:middle
+será el objeto que se pasará como argumento
+a todos los métodos de escucha. Su propósito
+
+00:01:46.946 --> 00:01:53.596 align:middle
+es prácticamente idéntico al de FightResult
+que pasamos a nuestros observadores: contiene
+
+00:01:53.966 --> 00:01:58.416 align:middle
+cualquier dato que pueda ser
+útil para un oyente. Con el
+
+00:01:59.136 --> 00:02:04.626 align:middle
+patrón pub/sub, es habitual crear una clase de evento
+sólo para el sistema de eventos. Así que dentro
+
+00:02:05.066 --> 00:02:09.006 align:middle
+de src/, voy a crear un nuevo
+directorio Event/. Luego una
+
+00:02:09.416 --> 00:02:11.286 align:middle
+nueva clase PHP. Puedes
+
+00:02:11.846 --> 00:02:17.086 align:middle
+llamarla como quieras, pero para este tutorial, vamos a
+llamarla FightStartingEvent: Esta clase no necesita parecerse
+
+00:02:18.476 --> 00:02:21.846 align:middle
+ni extender nada... y
+
+00:02:22.196 --> 00:02:24.136 align:middle
+hablaremos más de ella en
+un minuto. El segundo paso
+
+00:02:25.006 --> 00:02:29.796 align:middle
+es despachar este evento dentro
+de GameApplication. En lugar de
+
+00:02:30.566 --> 00:02:35.386 align:middle
+escribir nuestro propio despachador de eventos,
+vamos a utilizar el de Symfony. Permíteme
+
+00:02:36.146 --> 00:02:38.956 align:middle
+dividir el constructor en
+varias líneas... y luego
+
+00:02:39.306 --> 00:02:43.456 align:middle
+añadir un nuevo private EventDispatcherInterface
+$eventDispatcher: Abajo en
+
+00:02:44.546 --> 00:02:46.886 align:middle
+play(), justo en la parte superior, decir
+$this->eventDispatcher->dispatch()
+
+00:02:47.096 --> 00:02:53.736 align:middle
+pasando new FightStartingEvent(): ¡Eso es!
+
+00:02:54.446 --> 00:02:55.536 align:middle
+Eso es suficiente para
+
+00:02:56.026 --> 00:02:59.936 align:middle
+que el despachador notifique a todo
+el código que está escuchando
+
+00:03:00.186 --> 00:03:03.066 align:middle
+el FightStartingEvent. Por supuesto...
+
+00:03:03.716 --> 00:03:04.186 align:middle
+por el momento
+
+00:03:04.416 --> 00:03:07.066 align:middle
+, ¡no hay nada a la escucha!
+Así que, finalmente , vamos a
+
+00:03:07.696 --> 00:03:11.406 align:middle
+registrar un oyente de este
+evento. Abre GameCommand:
+
+00:03:12.186 --> 00:03:16.316 align:middle
+el lugar donde estamos inicializando
+nuestra aplicación. Veremos
+
+00:03:17.076 --> 00:03:21.346 align:middle
+cómo hacer todo esto correctamente con el
+contenedor de Symfony en un minuto, pero
+
+00:03:21.506 --> 00:03:23.596 align:middle
+quiero que sea sencillo para empezar. En el
+
+00:03:24.546 --> 00:03:29.676 align:middle
+constructor, añade private readonly
+EventDispatcherInterface $eventDispatcher: Lo sé,
+
+00:03:30.396 --> 00:03:36.376 align:middle
+estoy siendo un poco inconsistente entre
+cuando uso readonly y no. Técnicamente,
+
+00:03:37.186 --> 00:03:42.476 align:middle
+podría usar readonly en todos los
+argumentos del constructor... pero
+
+00:03:42.616 --> 00:03:45.926 align:middle
+no es algo que me importe demasiado. Sin
+
+00:03:46.226 --> 00:03:47.456 align:middle
+embargo, queda muy bien. Aquí abajo,
+
+00:03:48.406 --> 00:03:53.856 align:middle
+en cualquier lugar antes de que nuestra aplicación se inicie
+realmente, digamos $this->eventDispatcher->. Fíjate en que
+
+00:03:54.016 --> 00:03:58.686 align:middle
+el único método que tiene
+es dispatch(). He cometido
+
+00:03:59.246 --> 00:04:00.516 align:middle
+un... pequeño error.
+
+00:04:00.516 --> 00:04:01.686 align:middle
+Volvamos
+
+00:04:02.106 --> 00:04:03.186 align:middle
+atrás. En GameApplication,
+
+00:04:04.036 --> 00:04:08.216 align:middle
+cuando autocableé
+EventDispatcherInterface, elegí
+
+00:04:08.516 --> 00:04:12.996 align:middle
+el de Psr\EventDispatcher\EventDispatcherInterface,
+que contiene
+
+00:04:13.166 --> 00:04:16.136 align:middle
+el método dispatch() que
+necesitamos. Así que está
+
+00:04:16.726 --> 00:04:18.366 align:middle
+muy bien. Dentro de
+
+00:04:19.016 --> 00:04:23.226 align:middle
+GameCommand, autocableamos
+esa misma interfaz. Pero si
+
+00:04:23.856 --> 00:04:28.376 align:middle
+quieres tener la posibilidad de adjuntar
+oyentes en tiempo de ejecución, tienes
+
+00:04:28.736 --> 00:04:31.176 align:middle
+que autocablear EventDispatcherInterface
+desde Symfony\Component\EventDispatcher
+
+00:04:31.306 --> 00:04:36.606 align:middle
+en lugar de Psr: La
+
+00:04:37.106 --> 00:04:40.616 align:middle
+de Symfony extiende la de Psr: En realidad,
+
+00:04:41.306 --> 00:04:44.856 align:middle
+independientemente de la
+interfaz que utilices, Symfony
+
+00:04:45.056 --> 00:04:48.906 align:middle
+siempre nos pasará el mismo objeto. Ese objeto
+
+00:04:49.176 --> 00:04:52.886 align:middle
+tiene un método en él
+llamado addListener(). Así que
+
+00:04:53.306 --> 00:04:59.126 align:middle
+aunque hubiera utilizado la interfaz Psr,
+este método habría existido... sólo que
+
+00:04:59.306 --> 00:05:02.336 align:middle
+se habría visto de forma extraña
+dentro de mi editor. De todos modos, el
+
+00:05:03.056 --> 00:05:07.196 align:middle
+primer argumento de esto es
+el nombre del evento, que
+
+00:05:07.506 --> 00:05:11.096 align:middle
+va a coincidir con el nombre de la
+clase que estamos despachando. Así que
+
+00:05:12.356 --> 00:05:15.696 align:middle
+podemos decir
+FightStartingEvent::class. Y luego,
+
+00:05:16.306 --> 00:05:22.076 align:middle
+para simplificar, voy a ser perezoso y
+pasar un inline function(). También voy a
+
+00:05:23.496 --> 00:05:25.526 align:middle
+use ($io).. . para que dentro
+
+00:05:25.816 --> 00:05:32.696 align:middle
+pueda decir $io->note('Fight is
+starting...'): Y... ¡listo! Estamos
+
+00:05:32.896 --> 00:05:37.106 align:middle
+enviando el evento dentro
+de GameApplication... y como
+
+00:05:37.546 --> 00:05:42.336 align:middle
+hemos registrado el oyente aquí,
+¡debería ser llamado! ¡Vamos a probarlo
+
+00:05:43.186 --> 00:05:43.816 align:middle
+! En tu
+
+00:05:44.396 --> 00:05:45.626 align:middle
+terminal, di: php ./bin/console
+app:game:play Vamos a
+
+00:05:45.976 --> 00:05:50.956 align:middle
+elegir nuestro personaje y... lo tenemos
+
+00:05:51.376 --> 00:05:54.086 align:middle
+- [NOTE] Fight is starting.... Si
+
+00:05:54.866 --> 00:05:56.226 align:middle
+volvemos a luchar... obtendremos
+
+00:05:56.496 --> 00:05:58.706 align:middle
+el mismo mensaje. ¡Genial! A continuación,
+
+00:05:59.086 --> 00:06:04.646 align:middle
+hagamos esto más potente
+pasando información a nuestro
+
+00:06:04.696 --> 00:06:08.056 align:middle
+oyente, como quién está a
+punto de combatir. Además,
+
+00:06:08.536 --> 00:06:13.716 align:middle
+veremos cómo se utiliza el sistema de oyentes de
+eventos en una aplicación Symfony real, aprovechando
+
+00:06:14.166 --> 00:06:17.406 align:middle
+el contenedor para conectarlo todo
