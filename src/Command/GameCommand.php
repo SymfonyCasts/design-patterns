@@ -5,9 +5,6 @@ namespace App\Command;
 use App\Character\Character;
 use App\FightResult;
 use App\GameApplication;
-use App\Observer\XpEarnedObserver;
-use App\Service\OutputtingXpCalculator;
-use App\Service\XpCalculator;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -26,10 +23,6 @@ class GameCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $xpCalculator = new XpCalculator();
-        $xpCalculator = new OutputtingXpCalculator($xpCalculator);
-        $this->game->subscribe(new XpEarnedObserver($xpCalculator));
-
         $io = new SymfonyStyle($input, $output);
 
         $io->text('Welcome to the game where warriors fight against each other for honor and glory... and 🍕!');
