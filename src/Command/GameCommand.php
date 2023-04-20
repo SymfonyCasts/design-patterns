@@ -27,8 +27,8 @@ class GameCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $this->eventDispatcher->addListener(FightStartingEvent::class, function() use ($io) {
-            $io->note('Fight is starting...');
+        $this->eventDispatcher->addListener(FightStartingEvent::class, function(FightStartingEvent $event) use ($io) {
+            $io->note('Fight is starting against ' . $event->ai->getNickname());
         });
 
         $io->text('Welcome to the game where warriors fight against each other for honor and glory... and 🍕!');
