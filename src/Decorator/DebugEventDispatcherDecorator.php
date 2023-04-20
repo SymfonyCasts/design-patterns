@@ -2,9 +2,11 @@
 
 namespace App\Decorator;
 
+use Symfony\Component\DependencyInjection\Attribute\AsDecorator;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
+#[AsDecorator('event_dispatcher')]
 class DebugEventDispatcherDecorator implements EventDispatcherInterface
 {
     public function __construct(
