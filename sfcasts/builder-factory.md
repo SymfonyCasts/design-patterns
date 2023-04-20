@@ -1,101 +1,174 @@
 # Builder in Symfony & with a Factory
 
-Coming soon...
+What if, in order to instantiate the `Character` objects, `CharacterBuilder` needed
+to, for example, make a *query* to the database? Well, when we need to make a query,
+we normally give our class a constructor and then autowire the entity manager
+service. But `CharacterBuilder` *isn't* a service. You could *technically* use it
+like a service, but a service is a class where you typically only need a *single*
+instance of it in your app. In `GameApplication` however, we're creating one
+`CharacterBuilder` *per* character. If we *did* try to autowire `CharacterBuilder`
+into `GameApplication`, that *would* work. Symfony *would* autowire the EntityManager
+into `CharacterBuilder` and then it *would* autowire that `CharacterBuilder` object
+here. The *problem* is that we would then only have *one* `CharacterBuilder`...
+when we actually need *four* to create our four `Character` objects.
 
-What if in order to instant the Character Objects character builder needed to, for
-example, make a query to the database? Well, when we need to make a query to the
-database, what we would normally do is give our class a instructor and then auto wire
-the service that we need. But Character Builder isn't a service. I mean, you could
-use it like a service, but a service is typically a class where you only ever need
-one instance of that class. But in game application, we're creating one character
-builder per character. If we did try to auto wire character builder into a game
-application that would work, Symfony would auto wire the entity manager into
-Character Builder and then it would pass us the character builder object with the
-entity manager inside. The problem is it would mean that we only had one character
-builder and we ne and we actually need four character builders in order to create our
-four character objects. This is why commonly builder objects are partnered with a
-builder factory. So let me actually undo all of those changes that I just made to
-game application and also character builder. All right, over here in the builder
-directory,
+*This* is why builder objects are commonly partnered with a builder *factory*. Let
+me undo all of the changes I just made to `GameApplication`... and `CharacterBuilder`.
 
-We're going to create a new class called Character Builder Factory. By the way, there
-is a pattern called the factory pattern, which we're not talking specifically about
-in this tutorial, but a factory is just a class whose job is to create another class.
-It like the builder pattern is a creation pattern. So instead of here, I'm going to
-create a new method called How About Create Builder, and it will return a character
-builder and literally inside we'll just return new character builder. Now, this
-character builder is a service. Even if we need five character builders in our
-application, we only need one character builder factory. We can just call this method
-on it five times. That means that over in game application, we can create a
-construction in Otta wire character builder, factory character builder factory. And
-let me put private in front of that so that it is a property also. And then down
-inside of our Create character builder, instead of creating this by hand, we'll rely
-on the factory return. This-> character builder, factory->create builder. The nice
-thing about this factory, and this is really a benefit of the factory pattern in
-general, is that we have centralized the instantiation of this object.
+## Creating a Factory
 
-How does that help us in this situation? Well, remember the problem I was imagining
-is what if our character builder needed a service like the entity manager with our
-current setup, their new setup. We can make that happen. I don't actually have
-doctrine installed in this project. So instead of the entity manager, let's auto wire
-logger interface logger, and I'll add private in front of that to turn that into a
-property and then down and build character. Just to test that this is working, let's
-use that, this->logger->info, creating a character. And I'll pass a second argument,
-which is some context we could say like Max Health set to this era, Max health base
-damage. And if you want to, you could add more stats below that, but that's enough
-for us. So now that character builder requires a logger, we can very easily handle
-that in Character Builder factory. This is a service. So auto wiring, a logger
-interface will work here
+Over in the `Builder/` directory, create a new class called `CharacterBuilderFactory`:
 
-And then we can just pass that manually into logger. So we're seeing a little bit of
-the benefit of a factory pattern since we already centralized the creation of the
-character builder. Anywhere that we use this factory like game application doesn't
-need to change at all. So even though we added a new constructor argument to a
-character builder, our game application doesn't need to change. It was offloading all
-of that work to the character builder factory. All right, see if this is work, then
-we can run bin console, app game, play with little-vv. So we see log messages while
-we play this
+[[[ code('3e60167997') ]]]
 
-And
+By the way, there *is* a pattern called the *factory pattern*, which we won't
+*specifically* cover in this tutorial. But a "factory" is just a class whose job
+is to create *another* class. It, like the builder pattern, is a *creational pattern*.
+Inside of the factory class, create a new method called, how about...
+`createBuilder()`, which will return a `CharacterBuilder`. And inside of *that*,
+just `return new CharacterBuilder()`:
 
-Got it. Look it info, creating a character. We can't see the other stats right here
-on this screen, but they would be shown in a log file. Awesome. So that is the
-builder pattern. What problems does it solve? Simple. You have an object that's
-difficult to instantiate, so you add a builder class to make life easier. It also
-helps with these single responsibility principle. It's one of the strategies that
-helps abstract creation logic of a class away from the class that will work with that
-object. So previously in game application, we both had the complexity of creating the
-objects and then using them. Now we still have code here to use the builder, but most
-of the complexity is off in that builder class. Oh, and frequently when you study
-this
+[[[ code('b5f993c014') ]]]
 
-Pattern's done together,
+This `CharacterBuilderFactory` *is* a service. Even if we need *five*
+`CharacterBuilder` objects in our app, we only need *one* `CharacterBuilderFactory`.
+We'll just call this method on it *five* times.
 
-He will tell you that the builder, so like Character builder should implement a new
-interface like implements character builder interface, which would have methods I
-like set max health, set based damage, et cetera. This is optional. When would you
-need it? Well, like all interfaces, it's useful if you want to be able to swap how
-your characters are built at run time. For example, imagine we created a second
-builder that implemented character builder interface called Double Hit Points
-character built double max Health Character Builder, which creates the, which creates
-the character object, but in a slightly different way that maybe doubles the Max
-Health.
+That means, over in `GameApplication`, we can create a `public function __construct()`
+and autowire `CharacterBuilderFactory $characterBuilderFactory`. I'll also add
+`private` in front to make it a property:
 
-Nobody,
+[[[ code('143d0cd6f8') ]]]
 
-If both of those builders implemented this Character builder interface, then inside
-of our Character builder factory, which would now return a character builder
-interface, we could actually read some config here and figure out which character
-builder we want to use. So it really has a lot to do with the builder pattern itself,
-that interface and more to do with just making your code, um, more flexible. So let
-me undo that fake code inside of Character Builder Factory and since I've character
-builder, I'll remove that Make believe interface. Oh, and where do we see the builder
-pattern in the wild? This one is pretty easy to spot. Since Method Chaining is such a
-common feature of Query Builders. Of Builders, the first one that comes to mind is
-Doctrines Query Builder, which is no surprise based on its name. It allows us to
-configure a query with a bunch of nice methods before finally calling Get Query to
-actually create the query object. It also leverages that factory pattern because the,
-you call Create Query Builder where the base EntityRepository is responsible for
-instantiating the Query builder. Uh, another example is Symfony's Form Builder. In
-that case, we don't call the build form method, but Symfony eventually does once
-we're done configuring it. All right, next up, let's talk the observer pattern.
+Then, down inside `createCharacterBuilder()`, instead of creating this by
+hand, rely on the factory: `return $this->characterBuilderFactory->createBuilder()`:
+
+[[[ code('030b3e5ed4') ]]]
+
+The nice thing about this factory (and this is really the *purpose* of the factory
+pattern in general) is that we have *centralized* the instantiation of this object.
+
+## Getting Services into the Builder
+
+How does that help our situation? Remember, the problem I imagined was this:
+What if our character builder needed a service like the `EntityManager`?
+
+With our new setup, we can make that happen. I don't actually have Doctrine installed
+in this project, so instead of the `EntityManager`, let's require
+`LoggerInterface $logger`... and I'll again add `private` in front to turn that into
+a property:
+
+[[[ code('20943113c3') ]]]
+
+Then, down in `buildCharacter()`, just to test that this is working, use it:
+`$this->logger->info('Creating a character')`. I'll also pass a second argument
+with some extra info like `'maxHealth' => $this->maxHealth` and
+`'baseDamage' => $this->baseDamage`:
+
+[[[ code('96b0798cd8') ]]]
+
+`CharacterBuilder` now requires a `$logger`... but `CharacterBuilder` is *not* a
+service that we'll fetch directly from the container. We'll get it via
+`CharacterBuilderFactory`, which *is* a service. So autowiring `LoggerInterface`
+will work here:
+
+[[[ code('ca2d80546d') ]]]
+
+Then, pass that *manually* into the builder as `$this->logger`:
+
+[[[ code('bea49ea816') ]]]
+
+We're seeing some of the benefits of the factory pattern here. Since we've already
+centralized the instantiation of `CharacterBuilder`, anywhere that *needs* a
+`CharacterBuilder`, like `GameApplication`, doesn't need to change at all... even
+though we just added a constructor argument! `GameApplication` was already
+offloading the instantiation work to `CharacterBuilderFactory`.
+
+To see if this is working, run:
+
+```terminal
+./bin/console app:game:play -vv
+```
+
+The `-vv` will let us see log messages while we play. And... got it! Look! Our
+`[info] Creating a character` message popped up. We can't see the other stats
+on this screen, but they *are* in the log file. *Awesome*.
+
+## What does The Builder Pattern Solve?
+
+So *that's* the builder pattern! What problems can it solve? Simple! You have an
+object that's difficult to instantiate, so you add a builder class to make life
+easier. It also helps with the Single Responsibility Principle. It's one of the
+strategies that helps abstract creation logic of a class *away* from the class that
+will *use* that object. Previously, in `GameApplication`, we had the complexity
+of both *creating* the `Character` objects *and* using them. We still have code
+here to use the builder, but most of the complexity now lives in the builder class.
+
+## Does my Builder Need an Interface?
+
+Frequently, when you study this pattern, it will tell you that the builder
+(`CharacterBuilder`, for example) should implement a new interface, like
+`CharacterBuilderInterface`, which would have methods on it like `setMaxHealth()`,
+`setBaseDamage()`, etc. This is *optional*. When would you *need* it? Well, like
+all interfaces, it's useful if you need the flexibility to swap *how* your characters
+are created for some other implementation.
+
+For example, imagine we created a *second* builder that implemented
+`CharacterBuilderInterface` called `DoubleMaxHealthCharacterBuilder`. This creates
+`Character` objects, but in a *slightly* different way... like maybe it *doubles*
+the `$maxHealth`. If both of those builders implemented
+`CharacterBuilderInterface`, then inside of our `CharacterBuilderFactory`, which
+would now *now* return `CharacterBuilderInterface`, we could read some configuration
+to figure out which `CharacterBuilder` class we want to use.
+
+So creating that interface really has less to do with the builder pattern itself...
+and more to do with making your code more flexible. Let me undo that fake code inside
+of `CharacterBuilderFactory`. And... inside of `CharacterBuilder`, I'll remove that
+make-believe interface.
+
+## Where Do We See the Builder Pattern?
+
+And where do we see the builder pattern in the wild? This one is pretty easy to spot
+because method chaining is such a common feature of builders. The first example
+that comes to mind is Doctrine's `QueryBuilder`:
+
+```php
+class CharacterRepository extends ServiceEntityRepository
+{
+    public function findHealthyCharacters(int $healthMin): array
+    {
+        return $this->createQueryBuilder('character')
+            ->orderBy('character.name', 'DESC')
+            ->andWhere('character.maxHealth > :healthMin')
+            ->setParameter('healthMin', $healthMin)
+            ->getQuery()
+            ->getResult();
+    }
+}
+```
+
+It allows us to configure a query with a bunch of nice methods before finally
+calling `getQuery()` to actually create the `Query` object. It also leverages
+the factory pattern: to create the builder, you call `createQueryBuilder()`.
+That method, which lives on the base `EntityRepository` is the "factory"
+responsible for instantiating the `QueryBuilder`.
+
+Another example is Symfony's `FormBuilder`:
+
+```php
+public function buildForm(FormBuilderInterface $builder, $options)
+{
+    $animals = ['🐑', '🦖', '🦄', '🐖'];
+    $builder
+        ->add('name', TextType::class)
+        ->add('animal', ChoiceType::class, [
+            'placeholder' => 'Choose an animal',
+            'choices' => array_combine($animals, $animals),
+        ]);
+}
+```
+
+In that example, *we* don't call the `buildForm()` method, but *Symfony* eventually
+*does* call this once we're done configuring it.
+
+Ok team, let's talk about the *observer pattern* next.
