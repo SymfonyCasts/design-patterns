@@ -63,6 +63,18 @@ class Character
         $this->nickname = $nickname;
     }
 
+    public function levelUp(): void
+    {
+        // +%15 bonus to stats
+        $bonus = 1.15;
+
+        $this->level++;
+        $this->maxHealth = floor($this->maxHealth * $bonus);
+        $this->baseDamage = floor($this->baseDamage * $bonus);
+
+        // todo: level up attack and armor type
+    }
+
     public function getLevel(): int
     {
         return $this->level;
