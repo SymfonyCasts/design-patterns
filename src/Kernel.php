@@ -24,7 +24,7 @@ class Kernel extends BaseKernel implements CompilerPassInterface
         $definition = $container->findDefinition(GameApplication::class);
         $taggedObservers = $container->findTaggedServiceIds('game.observer');
         foreach ($taggedObservers as $id => $tags) {
-            $definition->addMethodCall('subscribe', [new Reference($id)]);
+//            $definition->addMethodCall('subscribe', [new Reference($id)]);
         }
     }
 }
