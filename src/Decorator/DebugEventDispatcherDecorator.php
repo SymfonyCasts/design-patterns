@@ -14,6 +14,10 @@ class DebugEventDispatcherDecorator implements EventDispatcherInterface
 
     public function dispatch(object $event, string $eventName = null): object
     {
+        dump('--------------------');
+        dump('Dispatching event: ' . $event::class);
+        dump('--------------------');
+
         return $this->eventDispatcher->dispatch($event, $eventName);
     }
 
