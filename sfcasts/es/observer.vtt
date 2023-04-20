@@ -1,0 +1,341 @@
+WEBVTT
+
+00:00:01.116 --> 00:00:04.956 align:middle
+Ha llegado el momento del patrón
+número tres: el patrón del observador.
+
+00:00:05.576 --> 00:00:11.466 align:middle
+He aquí la definición técnica: El patrón
+observador define una dependencia de uno a muchos
+
+00:00:11.466 --> 00:00:16.116 align:middle
+entre objetos, de modo que cuando
+un objeto cambia de estado,
+
+00:00:16.676 --> 00:00:21.276 align:middle
+todos sus dependientes son notificados
+y actualizados automáticamente.
+
+00:00:22.176 --> 00:00:28.546 align:middle
+Vale, no está mal, pero probemos mi versión: El
+patrón observador permite que un grupo de objetos
+
+00:00:28.546 --> 00:00:32.366 align:middle
+sea notificado por un objeto
+central cuando ocurre algo.
+
+00:00:32.916 --> 00:00:37.266 align:middle
+Esta es la clásica situación en la
+que escribes un código que necesita
+
+00:00:37.266 --> 00:00:40.306 align:middle
+ser llamado cada vez que ocurre algo.
+
+00:00:41.066 --> 00:00:44.226 align:middle
+Y en realidad hay dos
+estrategias para resolver esto
+
+00:00:44.666 --> 00:00:48.086 align:middle
+el patrón observador y el patrón pub-sub.
+
+00:00:48.506 --> 00:00:49.906 align:middle
+Hablaremos de ambos.
+
+00:00:50.636 --> 00:00:53.386 align:middle
+Pero primero, el patrón observador.
+
+00:00:53.776 --> 00:00:58.346 align:middle
+Hay dos tipos de clases diferentes
+para crear este patrón.
+
+00:00:58.776 --> 00:01:01.576 align:middle
+La primera se llama "sujeto". Es
+
+00:01:02.076 --> 00:01:05.446 align:middle
+el objeto central que hará algún trabajo
+
+00:01:05.666 --> 00:01:10.116 align:middle
+y notificará a otros objetos
+antes o después de ese trabajo.
+
+00:01:10.746 --> 00:01:15.596 align:middle
+Esos otros objetos son el segundo
+tipo, y se llaman "observadores".
+
+00:01:16.216 --> 00:01:17.336 align:middle
+Esto es bastante sencillo.
+
+00:01:17.676 --> 00:01:21.556 align:middle
+Cada observador le dice al
+sujeto que quiere ser notificado.
+
+00:01:22.476 --> 00:01:27.646 align:middle
+Después, el sujeto hace un bucle sobre
+todos los observadores y los "notifica"...
+
+00:01:27.956 --> 00:01:30.316 align:middle
+lo que significa que llama
+a un método sobre ellos. De
+
+00:01:31.466 --> 00:01:34.716 align:middle
+vuelta a nuestra aplicación, vamos a
+hacer nuestro juego más interesante
+
+00:01:34.716 --> 00:01:37.716 align:middle
+introduciendo niveles a los personajes.
+
+00:01:38.386 --> 00:01:44.036 align:middle
+Cada vez que ganes un combate, tu personaje ganará
+algo de XP o "puntos de experiencia". Cuando hayas
+
+00:01:44.666 --> 00:01:50.526 align:middle
+ganado suficientes puntos, el personaje "subirá de
+nivel", lo que significa que sus estadísticas básicas,
+
+00:01:50.576 --> 00:01:54.006 align:middle
+como $maxhealth y $baseDamage, aumentarán.
+
+00:01:54.926 --> 00:01:59.856 align:middle
+Para escribir esta nueva funcionalidad,
+podríamos poner el código justo aquí dentro
+
+00:01:59.856 --> 00:02:02.776 align:middle
+de GameApplication después
+de que termine el combate.
+
+00:02:03.126 --> 00:02:09.186 align:middle
+Así que... quizás aquí abajo, en
+finishFightResult(), haríamos el cálculo de XP
+
+00:02:09.226 --> 00:02:11.376 align:middle
+y veríamos si el personaje
+puede subir de nivel:
+
+00:02:12.096 --> 00:02:17.696 align:middle
+Pero, para organizar mejor nuestro código,
+quiero poner esta nueva lógica en otro lugar
+
+00:02:17.866 --> 00:02:21.466 align:middle
+y utilizar el patrón del
+observador para conectar las cosas.
+
+00:02:22.136 --> 00:02:26.886 align:middle
+GameApplication será el sujeto,
+lo que significa que se encargará
+
+00:02:26.886 --> 00:02:30.786 align:middle
+de notificar a los observadores
+cuando termine un combate.
+
+00:02:31.376 --> 00:02:37.426 align:middle
+Otra razón, más allá de la organización del código, por
+la que alguien podría elegir el patrón del observador es
+
+00:02:37.426 --> 00:02:44.896 align:middle
+si GameApplication viviera en una biblioteca de un
+proveedor externo y esa biblioteca del proveedor quisiera
+
+00:02:44.896 --> 00:02:52.696 align:middle
+darnos -al usuario de la biblioteca- alguna forma de
+ejecutar el código después de que termine una batalla...
+
+00:02:52.896 --> 00:02:58.056 align:middle
+ya que no podríamos permitirnos el lujo
+de hackear el código en GameApplication.
+
+00:02:59.096 --> 00:03:05.136 align:middle
+Bien, el primer paso de este patrón es crear una
+interfaz que implementen todos los observadores.
+
+00:03:05.986 --> 00:03:09.586 align:middle
+Para organizarnos, crearé
+un directorio Observer/.
+
+00:03:11.076 --> 00:03:16.116 align:middle
+Dentro, añade una nueva clase PHP, asegúrate
+de que se selecciona "Interfaz", y llámala,
+
+00:03:16.366 --> 00:03:18.946 align:middle
+qué tal, GameObserverInterface...
+
+00:03:19.156 --> 00:03:23.626 align:middle
+ya que estas clases van a "observar"
+algo relacionado con cada juego.
+
+00:03:24.266 --> 00:03:27.366 align:middle
+FightObserverInterface también
+habría sido un buen nombre:
+
+00:03:28.216 --> 00:03:30.586 align:middle
+Dentro sólo necesitamos un método public.
+
+00:03:31.126 --> 00:03:34.806 align:middle
+Podemos llamarlo como queramos:
+¿qué tal onFightFinished():
+
+00:03:36.176 --> 00:03:38.786 align:middle
+¿Por qué necesitamos esta interfaz?
+
+00:03:39.346 --> 00:03:45.556 align:middle
+Porque, dentro de un minuto, vamos a escribir un código
+que haga un bucle sobre todos los observadores dentro
+
+00:03:45.556 --> 00:03:49.246 align:middle
+de GameApplication y llame
+a un método sobre ellos.
+
+00:03:49.606 --> 00:03:56.926 align:middle
+Así que... necesitamos una forma de garantizar que cada
+observador tenga un método, como onFightFinished().
+
+00:03:57.436 --> 00:04:02.286 align:middle
+Y podemos pasar a onFightFinished() los argumentos
+que queramos. Vamos a pasarle un argumento
+
+00:04:02.956 --> 00:04:09.556 align:middle
+FightResult porque, si quiero ejecutar algún
+código después de que termine un combate,
+
+00:04:09.706 --> 00:04:13.996 align:middle
+probablemente será útil conocer
+el resultado de ese combate.
+
+00:04:14.716 --> 00:04:16.816 align:middle
+También añadiré un tipo de retorno void:
+
+00:04:18.306 --> 00:04:26.846 align:middle
+Bien, segundo paso: Necesitamos una forma de que cada
+observador se suscriba para ser notificado en GameApplication.
+
+00:04:28.066 --> 00:04:31.806 align:middle
+Para ello, crea un public function
+llamado, qué tal, subscribe().
+
+00:04:32.796 --> 00:04:34.146 align:middle
+Puedes llamarlo como quieras. Esto va a
+
+00:04:34.606 --> 00:04:37.756 align:middle
+aceptar cualquier GameObserverInterface,
+
+00:04:37.916 --> 00:04:41.416 align:middle
+lo llamaré $observer y devolverá void.
+
+00:04:42.316 --> 00:04:44.206 align:middle
+Enseguida completaré la lógica:
+
+00:04:45.366 --> 00:04:51.816 align:middle
+La segunda parte, que es opcional, es añadir
+una forma de darse de baja de los cambios.
+
+00:04:52.316 --> 00:04:54.056 align:middle
+Copia todo lo que acabamos de hacer...
+
+00:04:54.436 --> 00:04:57.286 align:middle
+pega... y cambia esto por unsubscribe():
+
+00:04:58.156 --> 00:05:05.886 align:middle
+¡Perfecto! En la parte superior de la clase,
+crea una nueva propiedad array que va a
+
+00:05:05.886 --> 00:05:06.816 align:middle
+contener todos los observadores.
+
+00:05:06.816 --> 00:05:11.626 align:middle
+Digamos private array $observers =
+[] y luego, para ayudar a mi editor,
+
+00:05:11.856 --> 00:05:18.256 align:middle
+añadiré algo de documentación:
+@var GameObserverInterface[]:
+
+00:05:19.196 --> 00:05:21.946 align:middle
+De vuelta a subscribe(),
+rellena esto. Añadiré
+
+00:05:22.636 --> 00:05:29.416 align:middle
+una comprobación de unicidad diciendo if
+(!in_array($observer, $this->observers, true)),
+
+00:05:30.816 --> 00:05:36.006 align:middle
+luego $this->observers[] = $observer:
+
+00:05:37.256 --> 00:05:39.576 align:middle
+Haz algo similar en unsubscribe(). Di
+
+00:05:40.036 --> 00:05:49.086 align:middle
+$key = array_search($observer,
+$this->observers) y luego if ($key !== false)
+
+00:05:49.506 --> 00:05:55.306 align:middle
+-lo que significa que sí hemos encontrado ese
+observador- unset($this->observers[$key]):
+
+00:05:56.976 --> 00:06:00.616 align:middle
+Por último, estamos listos para
+notificar a estos observadores.
+
+00:06:01.456 --> 00:06:04.966 align:middle
+Justo después de que termine el
+combate, se llama a finishFightResult().
+
+00:06:06.046 --> 00:06:10.886 align:middle
+Así que, aquí mismo, diré
+$this->notify($fightResult):
+
+00:06:12.116 --> 00:06:13.746 align:middle
+No necesitamos hacer esto...
+
+00:06:13.976 --> 00:06:18.616 align:middle
+pero voy a aislar la lógica
+de notificar a los observadores
+
+00:06:18.876 --> 00:06:21.886 align:middle
+a un nuevo private function
+aquí abajo llamado notify().
+
+00:06:21.886 --> 00:06:27.126 align:middle
+Aceptará el argumento FightResult
+$fightResult y devolverá void.
+
+00:06:27.816 --> 00:06:31.596 align:middle
+Luego foreach sobre
+$this->observers as $observer.
+
+00:06:31.986 --> 00:06:37.366 align:middle
+Y como sabemos que todas esas son
+instancias de GameObserverInterface,
+
+00:06:37.636 --> 00:06:43.116 align:middle
+podemos llamar a $observer->onFightFinished()
+y pasarle $fightResult:
+
+00:06:43.886 --> 00:06:48.706 align:middle
+Y... ¡el tema - GameApplication
+- está hecho! Por
+
+00:06:49.566 --> 00:06:55.956 align:middle
+cierto, a veces el código que notifica a los
+observadores -así que notify() en nuestro caso-
+
+00:06:56.046 --> 00:07:02.376 align:middle
+vive en un método public y está destinado
+a ser llamado por alguien ajeno a esta clase.
+
+00:07:02.906 --> 00:07:05.886 align:middle
+Eso es sólo una variación del patrón.
+
+00:07:06.596 --> 00:07:12.446 align:middle
+Como con muchos de los pequeños detalles de estos
+patrones, puedes hacer lo que te parezca mejor.
+
+00:07:12.896 --> 00:07:15.396 align:middle
+Yo te muestro la forma en
+que me gusta hacer las cosas.
+
+00:07:16.026 --> 00:07:19.326 align:middle
+A continuación: implementemos
+una clase observadora,
+
+00:07:19.546 --> 00:07:23.106 align:middle
+escribamos la lógica de subida de
+nivel y enganchémosla a nuestro sistema
