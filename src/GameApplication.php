@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Builder\CharacterBuilder;
 use App\ArmorType\IceBlockType;
 use App\ArmorType\LeatherArmorType;
 use App\ArmorType\ShieldType;
@@ -73,5 +74,10 @@ class GameApplication
     private function didPlayerDie(Character $player): bool
     {
         return $player->getCurrentHealth() <= 0;
+    }
+
+    private function createCharacterBuilder(): CharacterBuilder
+    {
+        return new CharacterBuilder();
     }
 }
