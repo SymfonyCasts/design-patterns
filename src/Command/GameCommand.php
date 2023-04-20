@@ -6,6 +6,7 @@ use App\Character\Character;
 use App\FightResult;
 use App\GameApplication;
 use App\Observer\XpEarnedObserver;
+use App\Service\OutputtingXpCalculator;
 use App\Service\XpCalculator;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -26,6 +27,7 @@ class GameCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $xpCalculator = new XpCalculator();
+        $xpCalculator = new OutputtingXpCalculator($xpCalculator);
         $this->game->subscribe(new XpEarnedObserver($xpCalculator));
 
         $io = new SymfonyStyle($input, $output);
