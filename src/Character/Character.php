@@ -38,8 +38,9 @@ class Character
 
     public function receiveAttack(int $damage): int
     {
-        $armorReduction = (int) ($damage * $this->armor);
-        $damageTaken = $damage - $armorReduction;
+        $armorReduction = $this->armorType->getArmorReduction($damage);
+
+        $damageTaken = max($damage - $armorReduction, 0);
         $this->currentHealth -= $damageTaken;
 
         return $damageTaken;
