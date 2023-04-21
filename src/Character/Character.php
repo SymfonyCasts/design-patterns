@@ -17,12 +17,15 @@ class Character
     private int $xp = 0;
 
     public function __construct(
-        private int $maxHealth,
+        public int $maxHealth,
         private int $baseDamage,
         private AttackType $attackType,
-        private ArmorType $armorType
+        private ArmorType $armorType,
+        private Item $item,
     ) {
         $this->currentHealth = $this->maxHealth;
+
+        $item->use($this);
     }
 
     public function attack(): int

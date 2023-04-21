@@ -54,12 +54,15 @@ class GameApplication
 
     public function createCharacter(string $character): Character
     {
+        // create $item
+
         return match (strtolower($character)) {
             'fighter' => $this->createCharacterBuilder()
                 ->setMaxHealth(90)
                 ->setBaseDamage(12)
                 ->setAttackType('sword')
                 ->setArmorType('shield')
+                // set $item
                 ->buildCharacter(),
 
             'archer' => $this->createCharacterBuilder()

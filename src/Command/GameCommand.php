@@ -29,8 +29,9 @@ class GameCommand extends Command
 
         $characters = $this->game->getCharactersList();
         $characterChoice = $io->choice('Select your character', $characters);
+        // ask to select an item
 
-        $playerCharacter = $this->game->createCharacter($characterChoice);
+        $playerCharacter = $this->game->createCharacter($characterChoice, $itemChoice = null);
         $playerCharacter->setNickname('Player ' . $characterChoice);
 
         $io->writeln('It\'s time for a fight!');
