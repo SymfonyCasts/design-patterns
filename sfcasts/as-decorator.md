@@ -16,7 +16,7 @@ service so that whenever an event is dispatched, we dump a debugging message.
 The ID of the service that we want to decorate is `event_dispatcher`
 
 ```terminal-silent
-php ./bin/console debug:contianer event_dispatcher
+php ./bin/console debug:container event_dispatcher
 ```
 
 And, fortunately, this class *does* implement an interface. Over on GitHub...
