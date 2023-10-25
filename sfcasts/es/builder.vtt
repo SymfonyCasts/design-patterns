@@ -1,0 +1,360 @@
+WEBVTT
+
+00:00:01.016 --> 00:00:05.086 align:middle
+Es hora del "patrón de diseño"
+número dos: el "patrón constructor".
+
+00:00:05.846 --> 00:00:11.136 align:middle
+Este es uno de esos patrones de creación que
+te ayudan a instanciar y configurar objetos.
+
+00:00:11.416 --> 00:00:15.226 align:middle
+Y es un poco más fácil de entender
+que el "patrón de estrategia".
+
+00:00:15.946 --> 00:00:22.486 align:middle
+La definición oficial del "patrón constructor" es la
+siguiente Un patrón de diseño de creación que te permite
+
+00:00:22.716 --> 00:00:27.136 align:middle
+construir y configurar
+objetos complejos paso a paso.
+
+00:00:27.776 --> 00:00:29.796 align:middle
+Eso... realmente tiene sentido. La
+
+00:00:30.406 --> 00:00:36.526 align:middle
+segunda parte de la definición oficial dice:
+el patrón te permite producir diferentes tipos
+
+00:00:36.526 --> 00:00:40.926 align:middle
+y representaciones de un objeto utilizando
+el mismo código de construcción.
+
+00:00:41.706 --> 00:00:47.836 align:middle
+En otras palabras, creas una clase constructora
+que ayuda a construir otros objetos...
+
+00:00:48.376 --> 00:00:54.226 align:middle
+y esos objetos pueden ser de clases diferentes
+o de la misma clase con datos diferentes.
+
+00:00:55.006 --> 00:00:59.816 align:middle
+Un ejemplo sencillo podría ser una pizzería
+que necesita crear un montón de pizzas,
+
+00:01:00.156 --> 00:01:07.796 align:middle
+cada una con una corteza diferente, ingredientes, etc. Para
+facilitar la vida, el propietario de la pizzería, que es
+
+00:01:08.206 --> 00:01:15.416 align:middle
+un desarrollador de Symfony de noche, decide crear
+una clase PizzaBuilder con métodos sencillos
+
+00:01:15.416 --> 00:01:19.156 align:middle
+como addIngredient(), setDough() y addCheese().
+
+00:01:19.706 --> 00:01:24.006 align:middle
+Luego, crea un método buildPizza(),
+que toma toda esa información
+
+00:01:24.296 --> 00:01:28.926 align:middle
+y hace el trabajo pesado de crear
+ese objeto Pizza y devolverlo.
+
+00:01:29.736 --> 00:01:33.616 align:middle
+Ese método buildPizza() puede ser
+tan complicado como sea necesario.
+
+00:01:34.076 --> 00:01:39.236 align:middle
+Cualquier persona que utilice esta
+clase no sabe ni le importa nada de eso.
+
+00:01:39.876 --> 00:01:43.526 align:middle
+El método también podría crear diferentes
+clases para diferentes situaciones,
+
+00:01:43.846 --> 00:01:49.366 align:middle
+si eso es lo que nuestro valiente propietario
+de una pizzería-barra-Symfony-dev necesita
+
+00:01:49.366 --> 00:01:49.926 align:middle
+para su aplicación.
+
+00:01:50.816 --> 00:01:53.626 align:middle
+Bien, vamos a crear un
+constructor en nuestro proyecto.
+
+00:01:54.216 --> 00:01:57.756 align:middle
+Dirígete a GameApplication
+y baja a createCharacter().
+
+00:01:58.616 --> 00:02:02.586 align:middle
+El problema es que estamos construyendo
+cuatro objetos diferentes de Character
+
+00:02:02.846 --> 00:02:05.756 align:middle
+y pasando bastantes datos
+para configurar cada uno.
+
+00:02:06.456 --> 00:02:11.086 align:middle
+Y, ¿qué pasa si necesitamos crear estos objetos
+Character en otros lugares de nuestro código?
+
+00:02:11.736 --> 00:02:14.196 align:middle
+Ahora mismo no son súper
+fáciles de construir.
+
+00:02:14.916 --> 00:02:20.326 align:middle
+Podríamos hacer alguna subclase de Character que
+pudiera configurar estos datos automáticamente,
+
+00:02:20.776 --> 00:02:22.996 align:middle
+como llamando al constructor padre.
+
+00:02:23.716 --> 00:02:28.816 align:middle
+Pero, como hemos hablado con el patrón
+de estrategia, eso podría ponerse muy feo
+
+00:02:29.076 --> 00:02:33.686 align:middle
+cuando empecemos a tener combinaciones
+extrañas de cosas como un mage-archer
+
+00:02:33.686 --> 00:02:36.296 align:middle
+con una clase de escudo IceBlockType.
+
+00:02:37.146 --> 00:02:40.816 align:middle
+¿Y si crear un objeto Character
+fuera aún más difícil?
+
+00:02:41.336 --> 00:02:45.886 align:middle
+¿Por ejemplo, si requiriera hacer consultas
+a la base de datos u otras operaciones?
+
+00:02:46.506 --> 00:02:51.786 align:middle
+Nuestro objetivo es hacer que la instanciación
+de los objetos Character sea más fácil y clara.
+
+00:02:52.446 --> 00:02:56.216 align:middle
+Y podemos conseguirlo creando
+una clase constructora.
+
+00:02:57.166 --> 00:03:02.756 align:middle
+Añade un directorio src/Builder/
+para organizarlo y, dentro de él,
+
+00:03:03.296 --> 00:03:05.826 align:middle
+una nueva clase PHP llamada CharacterBuilder.
+
+00:03:06.516 --> 00:03:12.256 align:middle
+Estoy creando esta clase, pero no estoy creando la
+interfaz correspondiente. Las clases constructoras
+
+00:03:13.206 --> 00:03:16.126 align:middle
+suelen implementar una interfaz
+
+00:03:16.126 --> 00:03:20.896 align:middle
+como CharacterBuilderInterface,
+pero no es necesario.
+
+00:03:21.586 --> 00:03:27.226 align:middle
+Más adelante, hablaremos de por qué puedes
+decidir añadir una interfaz en algunas situaciones.
+
+00:03:28.086 --> 00:03:32.366 align:middle
+Bien, dentro, podemos crear
+los métodos que queramos
+
+00:03:32.616 --> 00:03:36.226 align:middle
+para permitir que el mundo
+exterior elabore personajes.
+
+00:03:36.826 --> 00:03:43.236 align:middle
+Por ejemplo, public function setMaxHealth(),
+que aceptará un argumento int $maxHealth.
+
+00:03:44.026 --> 00:03:46.756 align:middle
+Voy a dejar este método
+vacío por el momento...
+
+00:03:47.096 --> 00:03:53.026 align:middle
+pero al final se devolverá a sí
+mismo: devolverá CharacterBuilder.
+
+00:03:53.776 --> 00:03:58.186 align:middle
+Esto es muy común en el patrón constructor
+porque permite el encadenamiento de métodos,
+
+00:03:58.616 --> 00:04:01.086 align:middle
+también conocido como "interfaz fluida".
+
+00:04:01.606 --> 00:04:04.696 align:middle
+Pero no es un requisito del patrón.
+
+00:04:05.506 --> 00:04:11.416 align:middle
+Muy bien, vamos a completar rápidamente
+algunos métodos más, como setBaseDamage()...
+
+00:04:14.606 --> 00:04:17.906 align:middle
+y los dos últimos son
+los de armadura y ataque.
+
+00:04:18.576 --> 00:04:20.486 align:middle
+Así que digamos setAttackType().
+
+00:04:21.346 --> 00:04:24.076 align:middle
+Recuerda que los tipos de ataque son objetos.
+
+00:04:24.506 --> 00:04:28.566 align:middle
+Pero en lugar de permitir un argumento
+de interfaz AttackType, voy a
+
+00:04:29.116 --> 00:04:33.206 align:middle
+aceptar un argumento
+string llamado $attackType.
+
+00:04:33.846 --> 00:04:38.726 align:middle
+¿Por qué? No tengo por qué
+hacerlo, pero intento facilitar al
+
+00:04:38.726 --> 00:04:40.906 align:middle
+máximo la creación de personajes.
+
+00:04:41.516 --> 00:04:47.356 align:middle
+Así que, en lugar de hacer que otra persona
+instancie los tipos de ataque, voy a permitirles
+
+00:04:47.356 --> 00:04:52.656 align:middle
+que pasen una simple cadena -como
+la palabra bow - y, en unos minutos,
+
+00:04:52.916 --> 00:04:57.556 align:middle
+nos encargaremos de la complejidad
+de instanciar el objeto por ellos.
+
+00:04:58.336 --> 00:05:03.576 align:middle
+Bien, copia eso, y haz lo
+mismo para setArmorType().
+
+00:05:05.606 --> 00:05:07.066 align:middle
+Y... ¡ya está!
+
+00:05:07.676 --> 00:05:11.116 align:middle
+Esas son las únicas cuatro cosas
+que puedes controlar en un personaje.
+
+00:05:11.946 --> 00:05:17.486 align:middle
+El último método que necesita nuestro constructor
+es el que realmente construirá el Character.
+
+00:05:18.336 --> 00:05:21.986 align:middle
+Puedes llamarlo como quieras,
+¿qué tal buildCharacter().
+
+00:05:22.626 --> 00:05:26.996 align:middle
+Y, por supuesto, va a
+devolver un objeto Character.
+
+00:05:27.786 --> 00:05:32.826 align:middle
+Para almacenar las estadísticas del personaje,
+vamos a crear cuatro propiedades, que voy a pegar:
+
+00:05:33.276 --> 00:05:36.286 align:middle
+private int $maxHealth,
+private int $baseDamage,
+
+00:05:36.656 --> 00:05:40.106 align:middle
+y luego private string $attackType
+y private string $armorType.
+
+00:05:40.816 --> 00:05:45.546 align:middle
+Luego, en cada método, asigna
+esa propiedad y return $this.
+
+00:05:46.176 --> 00:05:48.386 align:middle
+Lo haremos para $baseDamage...
+
+00:05:50.676 --> 00:05:51.276 align:middle
+$attackType...
+
+00:05:54.176 --> 00:05:55.416 align:middle
+y $armorType.
+
+00:05:58.196 --> 00:05:58.786 align:middle
+¡Qué bonito!
+
+00:05:59.546 --> 00:06:02.056 align:middle
+El método buildCharacter()
+es bastante sencillo:
+
+00:06:02.506 --> 00:06:07.126 align:middle
+hacemos el trabajo feo necesario
+para crear el Character.
+
+00:06:07.876 --> 00:06:13.976 align:middle
+Así que diré return new Character() pasando
+$this->maxHealth y $this->baseDamage.
+
+00:06:14.706 --> 00:06:17.606 align:middle
+Los dos últimos argumentos
+requieren objetos...
+
+00:06:17.896 --> 00:06:20.436 align:middle
+por lo que son un poco más complejos.
+
+00:06:21.126 --> 00:06:22.586 align:middle
+Pero ¡no pasa nada!
+
+00:06:23.186 --> 00:06:26.126 align:middle
+No me importa que mi constructor
+se complique un poco.
+
+00:06:26.876 --> 00:06:30.926 align:middle
+Iré al final de esta clase y
+pegaré dos nuevos métodos private.
+
+00:06:31.636 --> 00:06:35.316 align:middle
+Estos se encargan de crear los
+objetos AttackType y ArmorType.
+
+00:06:35.836 --> 00:06:39.846 align:middle
+Excepto que... Necesito un montón de
+declaraciones use para esto, que he olvidado.
+
+00:06:40.276 --> 00:06:44.056 align:middle
+Ups. Así que voy a volver a
+escribir el final de estas clases
+
+00:06:44.056 --> 00:06:47.106 align:middle
+y a pulsar "tab" para
+añadir esas sentencias use.
+
+00:06:54.076 --> 00:06:54.686 align:middle
+Ya está
+
+00:06:55.546 --> 00:07:00.816 align:middle
+Bien, ahora podemos utilizar los dos nuevos métodos
+de private para asignar las cadenas a los objetos.
+
+00:07:01.246 --> 00:07:06.156 align:middle
+Este es el trabajo pesado -y el
+verdadero valor- de CharacterBuilder.
+
+00:07:06.786 --> 00:07:11.566 align:middle
+Digamos $this->createAttackType()
+y $this->createArmorType().
+
+00:07:12.516 --> 00:07:15.216 align:middle
+Y... ¡nuestro constructor está hecho!
+
+00:07:16.076 --> 00:07:19.026 align:middle
+A continuación: vamos a
+utilizarlo en GameApplication.
+
+00:07:19.676 --> 00:07:26.666 align:middle
+Luego, haremos que nuestro constructor sea aún más
+flexible (pero no más difícil de usar) teniendo
+
+00:07:26.666 --> 00:07:29.846 align:middle
+en cuenta los caracteres que
+utilizan varios tipos de ataque
