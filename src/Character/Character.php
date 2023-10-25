@@ -2,6 +2,7 @@
 
 namespace App\Character;
 
+use App\ArmorType\ArmorType;
 use App\AttackType\AttackType;
 use App\Dice;
 
@@ -16,8 +17,8 @@ class Character
     public function __construct(
         private int $maxHealth,
         private int $baseDamage,
-        private float $armor,
-        private AttackType $attackType
+        private AttackType $attackType,
+        private ArmorType $armorType
     ) {
         $this->currentHealth = $this->maxHealth;
     }
