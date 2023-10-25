@@ -22,9 +22,6 @@ class Character
         $this->currentHealth = $this->maxHealth;
     }
 
-    /**
-     * Damage: 1d6 (1 dice of 6)
-     */
     public function attack(): int
     {
         $this->currentStamina -= (25 + Dice::roll(20));
@@ -35,7 +32,7 @@ class Character
             return 0;
         }
 
-        return $this->baseDamage + Dice::roll(6);
+        return $this->attackType->performAttack($this->baseDamage);
     }
 
     public function receiveAttack(int $damage): int
