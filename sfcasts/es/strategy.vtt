@@ -1,0 +1,494 @@
+WEBVTT
+
+00:00:01.016 --> 00:00:04.496 align:middle
+El primer patrón del que hablaremos
+es el "patrón de estrategia".
+
+00:00:05.176 --> 00:00:10.166 align:middle
+Se trata de un patrón de comportamiento que
+ayuda a organizar el código en clases separadas
+
+00:00:10.346 --> 00:00:12.476 align:middle
+que pueden interactuar entre sí.
+
+00:00:13.476 --> 00:00:20.396 align:middle
+Empecemos con la definición técnica: El patrón
+de estrategia define una familia de algoritmos,
+
+00:00:20.566 --> 00:00:24.296 align:middle
+encapsula cada uno de ellos
+y los hace intercambiables.
+
+00:00:24.866 --> 00:00:29.226 align:middle
+Permite que el algoritmo varíe independientemente
+de los clientes que lo utilizan.
+
+00:00:29.856 --> 00:00:32.976 align:middle
+Si eso tiene sentido para ti, ¡felicidades!
+
+00:00:33.116 --> 00:00:35.596 align:middle
+¡Te toca enseñar el resto del tutorial!
+
+00:00:36.406 --> 00:00:37.716 align:middle
+Vamos a intentarlo de nuevo.
+
+00:00:38.056 --> 00:00:43.626 align:middle
+Ésta es mi definición: El patrón de estrategia
+es una forma de permitir que parte de una clase se
+
+00:00:43.626 --> 00:00:46.986 align:middle
+reescriba desde el exterior.
+
+00:00:47.916 --> 00:00:51.736 align:middle
+Hablemos de un ejemplo imaginario
+antes de empezar a codificar.
+
+00:00:51.736 --> 00:00:56.196 align:middle
+Supongamos que tenemos un PaymentService
+que hace un montón de cosas...
+
+00:00:56.486 --> 00:00:59.266 align:middle
+incluyendo el cobro a la gente a
+través de la tarjeta de crédito.
+
+00:00:59.806 --> 00:01:04.406 align:middle
+Pero ahora, descubrimos que
+necesitamos utilizar esta misma clase
+
+00:01:04.406 --> 00:01:07.056 align:middle
+para permitir que la gente
+pague a través de PayPal...
+
+00:01:07.246 --> 00:01:09.656 align:middle
+o a través de un tesoro pirata,
+que suena más divertido.
+
+00:01:10.306 --> 00:01:12.216 align:middle
+En cualquier caso, ¿cómo podemos hacerlo?
+
+00:01:12.886 --> 00:01:14.526 align:middle
+¡El patrón de estrategia!
+
+00:01:15.206 --> 00:01:19.856 align:middle
+Permitiríamos pasar un nuevo
+objeto PaymentStrategyInterface
+
+00:01:19.976 --> 00:01:23.586 align:middle
+a PaymentService y luego lo llamaríamos.
+
+00:01:24.626 --> 00:01:28.456 align:middle
+A continuación, crearíamos dos clases
+que implementen la nueva interfaz
+
+00:01:28.846 --> 00:01:32.666 align:middle
+CreditCardPaymentStrategy y
+PiratesBootyPaymentStrategy.
+
+00:01:33.486 --> 00:01:34.446 align:middle
+¡Y ya está!
+
+00:01:34.516 --> 00:01:38.296 align:middle
+Ahora tenemos el control
+de la clase que pasamos.
+
+00:01:39.196 --> 00:01:46.526 align:middle
+¡Sí! Acabamos de hacer que parte del código
+dentro de PaymentService sea controlable desde fuera.
+
+00:01:47.206 --> 00:01:51.036 align:middle
+Teniendo esto en cuenta, vamos
+a codificar este patrón.
+
+00:01:52.176 --> 00:01:57.016 align:middle
+Ahora mismo, tenemos tres caracteres
+que se crean dentro de GameApplication.
+
+00:01:57.336 --> 00:01:59.806 align:middle
+Pero el fighter es el que domina.
+
+00:02:00.506 --> 00:02:05.026 align:middle
+Para equilibrar el juego, quiero añadir habilidades
+de ataque especiales para cada personaje.
+
+00:02:05.026 --> 00:02:10.306 align:middle
+Por ejemplo, el mage podrá lanzar hechizos.
+
+00:02:11.346 --> 00:02:14.366 align:middle
+Actualmente, la funcionalidad
+de ataque es bastante aburrida:
+
+00:02:15.076 --> 00:02:20.066 align:middle
+tomamos el baseDamage del personaje y luego
+utilizamos esta genial función de Dice::roll()
+
+00:02:20.436 --> 00:02:23.576 align:middle
+para lanzar un dado de seis caras
+para conseguir algo de aleatoriedad.
+
+00:02:24.046 --> 00:02:29.826 align:middle
+Pero cuando un mage lance un hechizo, el
+daño que cause será mucho más variable:
+
+00:02:30.286 --> 00:02:33.436 align:middle
+a veces un hechizo funciona muy bien, pero...
+
+00:02:33.436 --> 00:02:38.366 align:middle
+otras veces hace como pequeños fuegos
+artificiales que hacen casi cero daño.
+
+00:02:39.286 --> 00:02:44.936 align:middle
+Básicamente, para el mago, necesitamos un código
+completamente diferente para calcular el daño.
+
+00:02:46.006 --> 00:02:48.036 align:middle
+Entonces, ¿cómo podemos hacerlo?
+
+00:02:48.216 --> 00:02:53.636 align:middle
+¿Cómo podemos permitir que un personaje, el
+mago, tenga una lógica de daño diferente?
+
+00:02:54.686 --> 00:02:58.936 align:middle
+La primera idea que se me
+ocurre es pasar una bandera
+
+00:02:58.936 --> 00:03:02.896 align:middle
+al constructor del personaje,
+como $canCastSpells.
+
+00:03:03.806 --> 00:03:09.136 align:middle
+Luego, en el método attack(), añadir una declaración
+if para que tengamos ambos tipos de ataques.
+
+00:03:10.056 --> 00:03:15.066 align:middle
+Genial... ¿pero qué pasa si un
+archer necesita otro tipo de ataque?
+
+00:03:15.646 --> 00:03:22.716 align:middle
+Entonces tendríamos que pasar otra bandera y
+acabaríamos con tres variaciones dentro de attack().
+
+00:03:23.076 --> 00:03:29.186 align:middle
+Yikes. Bien, entonces otra solución podría
+ser que subclasificáramos Character.
+
+00:03:29.846 --> 00:03:33.316 align:middle
+Creamos un MageCharacter
+que extienda a Character,
+
+00:03:33.646 --> 00:03:36.736 align:middle
+y luego anulamos el método
+attack() por completo.
+
+00:03:37.216 --> 00:03:38.466 align:middle
+Pero, ¡maldita sea!
+
+00:03:39.006 --> 00:03:44.426 align:middle
+No queremos anular todo attack(),
+sólo queremos sustituir una parte.
+
+00:03:45.376 --> 00:03:50.416 align:middle
+Podríamos ponernos elegantes moviendo la parte que
+queremos reutilizar a una función protegida para
+
+00:03:50.556 --> 00:03:53.336 align:middle
+poder llamarla desde nuestra subclase...
+
+00:03:53.866 --> 00:03:56.086 align:middle
+pero esto se pone un poco feo.
+
+00:03:56.776 --> 00:04:01.026 align:middle
+Lo ideal es que resolvamos los problemas
+sin herencia siempre que sea posible.
+
+00:04:01.546 --> 00:04:02.626 align:middle
+Así que vamos a retroceder.
+
+00:04:03.386 --> 00:04:08.856 align:middle
+Lo que realmente queremos hacer es permitir que
+este código sea diferente carácter por carácter.
+
+00:04:09.156 --> 00:04:12.926 align:middle
+Y eso es exactamente lo que
+permite el patrón de estrategia.
+
+00:04:13.706 --> 00:04:14.416 align:middle
+¡Hagamos esto!
+
+00:04:15.056 --> 00:04:18.886 align:middle
+La lógica que necesitamos la flexibilidad
+de cambiar es esta parte de aquí,
+
+00:04:19.216 --> 00:04:22.576 align:middle
+donde determinamos cuánto
+daño hizo un ataque.
+
+00:04:23.776 --> 00:04:29.606 align:middle
+Bien, el paso 1 del patrón es crear
+una interfaz que describa este trabajo.
+
+00:04:30.386 --> 00:04:35.126 align:middle
+Voy a añadir un nuevo directorio
+AttackType/ para organizar las cosas.
+
+00:04:35.126 --> 00:04:41.946 align:middle
+Dentro, crea una nueva clase PHP, cambia el
+patrón a "Interfaz", y llámala AttackType.
+
+00:04:43.076 --> 00:04:49.326 align:middle
+¡Genial! Dentro, añade un public function
+llamado, qué tal, performAttack().
+
+00:04:50.346 --> 00:04:54.956 align:middle
+Esto aceptará el $baseDamage del
+personaje -porque eso puede ser útil-
+
+00:04:55.406 --> 00:04:58.386 align:middle
+y luego devolverá el daño
+final que debe aplicarse.
+
+00:04:59.226 --> 00:05:05.256 align:middle
+¡Genial! El segundo paso es crear al
+menos una implementación de esta interfaz.
+
+00:05:06.346 --> 00:05:09.106 align:middle
+Imaginemos que nuestro mage
+tiene un ataque de fuego genial.
+
+00:05:10.146 --> 00:05:14.166 align:middle
+Dentro del mismo directorio, crea
+una clase llamada FireBoltType...
+
+00:05:14.166 --> 00:05:18.276 align:middle
+y haz que implemente AttackType.
+
+00:05:19.706 --> 00:05:25.066 align:middle
+Luego, ve a "Código -> Generar" -o "comando" +
+"N" en un Mac- y selecciona "Implementar métodos"
+
+00:05:25.066 --> 00:05:27.186 align:middle
+como atajo para añadir el
+método que necesitamos.
+
+00:05:27.226 --> 00:05:33.946 align:middle
+Para el ataque mágico,
+devuelve Dice::roll(10) 3 veces.
+
+00:05:34.306 --> 00:05:39.126 align:middle
+Así, el daño causado es el resultado
+de lanzar 3 dados de 10 caras.
+
+00:05:39.966 --> 00:05:43.056 align:middle
+Y... ¡nuestro primer tipo
+de ataque está hecho!
+
+00:05:43.886 --> 00:05:46.516 align:middle
+Ya que estamos aquí, vamos a crear otros dos.
+
+00:05:47.636 --> 00:05:49.196 align:middle
+Voy a añadir un BowType...
+
+00:05:49.596 --> 00:05:50.826 align:middle
+y pegaré algo de código.
+
+00:05:51.396 --> 00:05:53.866 align:middle
+Puedes copiarlo del bloque
+de código de esta página.
+
+00:05:54.636 --> 00:05:57.816 align:middle
+Este ataque tiene la posibilidad
+de hacer daño crítico.
+
+00:05:59.306 --> 00:06:02.306 align:middle
+Por último, añade un TwoHandedSwordType...
+
+00:06:03.076 --> 00:06:05.026 align:middle
+y pega también ese código.
+
+00:06:06.016 --> 00:06:10.836 align:middle
+Este es bastante sencillo: es el
+$baseDamage más algunas tiradas al azar.
+
+00:06:11.906 --> 00:06:17.716 align:middle
+Estamos listos para el tercer y último paso de
+este patrón: permitir que una interfaz AttackType
+
+00:06:17.716 --> 00:06:21.156 align:middle
+pase a Character para que podamos
+utilizarla a continuación.
+
+00:06:21.876 --> 00:06:28.496 align:middle
+Así que, literalmente, vamos a añadir un nuevo
+argumento: private -por lo que también es una propiedad-,
+
+00:06:28.866 --> 00:06:33.576 align:middle
+con el tipo de interfaz AttackType (para que
+podamos permitir que se pase cualquier AttackType
+
+00:06:33.576 --> 00:06:36.256 align:middle
+) y llamarlo $attackType.
+
+00:06:37.436 --> 00:06:39.436 align:middle
+A continuación, elimina este comentario...
+
+00:06:40.096 --> 00:06:43.906 align:middle
+porque ahora, en lugar de
+hacer la lógica manualmente,
+
+00:06:44.306 --> 00:06:50.256 align:middle
+diremos return
+$this->attackType->performAttack($this->baseDamage) . ¡
+
+00:06:50.256 --> 00:06:51.636 align:middle
+Y ya hemos
+
+00:06:52.736 --> 00:06:54.276 align:middle
+terminado! Nuestra
+
+00:06:54.276 --> 00:06:57.946 align:middle
+claseCharacter aprovecha ahora
+el patrón de estrategia.
+
+00:06:58.416 --> 00:07:03.306 align:middle
+Permite que alguien ajeno a esta
+clase le pase un objeto AttackType,
+
+00:07:03.576 --> 00:07:07.766 align:middle
+permitiéndole así controlar sólo una
+parte de su código. Para aprovechar
+
+00:07:08.876 --> 00:07:12.656 align:middle
+la nueva flexibilidad, abre
+GameApplication, y dentro
+
+00:07:13.426 --> 00:07:17.496 align:middle
+de createCharacter(), pasa un
+AttackType a cada uno de ellos, como
+
+00:07:18.106 --> 00:07:23.506 align:middle
+new TwoHandedSwordType() para el
+fighter, new BowType() para el archer, y
+
+00:07:24.366 --> 00:07:26.686 align:middle
+new FireBoltType() para el mage. ¡Genial!
+
+00:07:27.416 --> 00:07:32.346 align:middle
+Para asegurarnos de que no hemos
+roto nada, ve a probar el juego. Y...
+
+00:07:33.486 --> 00:07:35.166 align:middle
+¡woohoo! ¡
+
+00:07:35.426 --> 00:07:37.106 align:middle
+Sigue funcionando! Lo
+
+00:07:37.876 --> 00:07:42.906 align:middle
+bueno del "patrón de estrategia" es que,
+en lugar de intentar pasar opciones a
+
+00:07:42.906 --> 00:07:49.726 align:middle
+Character como $canCastSpells = true para
+configurar el ataque, tenemos el control total. Para
+
+00:07:50.526 --> 00:07:55.076 align:middle
+demostrarlo, añadamos un nuevo
+personaje, un mago arquero: un
+
+00:07:55.406 --> 00:08:00.686 align:middle
+personaje legendario que tiene un
+arco y lanza hechizos. ¡ Doble
+
+00:08:01.136 --> 00:08:01.926 align:middle
+amenaza! Para
+
+00:08:02.886 --> 00:08:09.306 align:middle
+apoyar esta idea de tener dos ataques, crea un
+nuevo AttackType llamado MultiAttackType. Haz que
+
+00:08:10.936 --> 00:08:16.736 align:middle
+implemente la interfaz AttackType y ve a
+"Implementar métodos" para añadir el método. En
+
+00:08:18.086 --> 00:08:24.466 align:middle
+este caso, voy a crear un constructor en el que
+podemos pasar un array de $attackTypes. Para
+
+00:08:25.836 --> 00:08:30.326 align:middle
+ayudar a mi editor, añadiré algo de
+PHPDoc por encima para señalar que
+
+00:08:30.326 --> 00:08:36.066 align:middle
+se trata de un array específicamente
+de objetos AttackType. Esta
+
+00:08:36.126 --> 00:08:40.936 align:middle
+clase funcionará eligiendo aleatoriamente entre
+uno de sus $attackTypes disponibles. Así que,
+
+00:08:41.446 --> 00:08:47.286 align:middle
+aquí abajo, diré $type =
+$this->attackTypes[] - ¡Ups!
+
+00:08:47.346 --> 00:08:53.906 align:middle
+Quería llamar a esto attackTypes con una "s" -
+entonces array_rand($this->attackTypes). Devuelve
+
+00:08:55.336 --> 00:08:59.086 align:middle
+$type->performAttack($baseDamage). Ya está
+
+00:09:00.396 --> 00:09:06.946 align:middle
+Este es un ataque muy personalizado, pero con
+el "patrón de estrategia", no hay problema.
+
+00:09:07.836 --> 00:09:12.256 align:middle
+En GameApplication, añade el
+nuevo carácter mage_archer... y
+
+00:09:12.836 --> 00:09:14.486 align:middle
+copiaré el código anterior.
+
+00:09:16.046 --> 00:09:16.926 align:middle
+Que esto sea... 75,
+
+00:09:16.926 --> 00:09:21.536 align:middle
+9, 0.15. Entonces,
+
+00:09:21.536 --> 00:09:23.386 align:middle
+para el AttackType, digamos
+
+00:09:23.386 --> 00:09:30.346 align:middle
+new MultiAttackType([]) pasando por new BowType()
+y new FireBoltType(). ¡Qué bien! A continuación,
+
+00:09:31.366 --> 00:09:36.806 align:middle
+también tenemos que actualizar
+getCharacterList() para que aparez ca
+
+00:09:36.806 --> 00:09:40.316 align:middle
+en nuestra lista de selección
+de personajes. Bien, vamos a
+
+00:09:40.316 --> 00:09:47.726 align:middle
+comprobar el nuevo personaje legendario:
+Selecciona mage_archer y... ¡oh!
+
+00:09:48.566 --> 00:09:52.426 align:middle
+Una impresionante victoria contra
+un archer normal. ¿Cómo de
+
+00:09:52.676 --> 00:09:54.106 align:middle
+genial es eso? A continuación, vamos a
+
+00:09:54.916 --> 00:09:58.176 align:middle
+utilizar el "patrón de
+estrategia" una vez más para
+
+00:09:58.176 --> 00:10:01.246 align:middle
+que nuestra clase Character sea
+aún más flexible. A continuación,
+
+00:10:01.616 --> 00:10:05.496 align:middle
+hablaremos de dónde puedes ver el
+"patrón de estrategia" en la naturaleza y
+
+00:10:05.896 --> 00:10:09.776 align:middle
+qué ventajas concretas nos aporta
