@@ -1,0 +1,399 @@
+WEBVTT
+
+00:00:01.086 --> 00:00:06.786 align:middle
+¿Y si, para instanciar los objetos
+Character, CharacterBuilder necesitara,
+
+00:00:06.976 --> 00:00:10.166 align:middle
+por ejemplo, hacer una
+consulta a la base de datos?
+
+00:00:10.796 --> 00:00:15.306 align:middle
+Bueno, cuando necesitamos hacer una consulta,
+normalmente damos a nuestra clase un constructor
+
+00:00:15.456 --> 00:00:18.626 align:middle
+y luego autocontratamos el
+servicio del gestor de entidades.
+
+00:00:19.406 --> 00:00:22.976 align:middle
+Pero CharacterBuilder no es un servicio.
+
+00:00:23.336 --> 00:00:27.496 align:middle
+Técnicamente podrías utilizarlo como un
+servicio, pero un servicio es una clase
+
+00:00:27.496 --> 00:00:32.516 align:middle
+de la que normalmente sólo necesitas
+una única instancia en tu aplicación.
+
+00:00:33.686 --> 00:00:39.486 align:middle
+Sin embargo, en GameApplication estamos
+creando un CharacterBuilder por personaje.
+
+00:00:40.116 --> 00:00:47.106 align:middle
+Si intentáramos autoconducir CharacterBuilder
+a GameApplication, eso funcionaría.
+
+00:00:47.586 --> 00:00:54.236 align:middle
+Symfony autocablearía el EntityManager
+en CharacterBuilder y luego autocablearía
+
+00:00:54.236 --> 00:00:56.676 align:middle
+ese objeto CharacterBuilder aquí.
+
+00:00:57.476 --> 00:01:02.566 align:middle
+El problema es que entonces sólo
+tendríamos un CharacterBuilder...
+
+00:01:02.956 --> 00:01:08.386 align:middle
+cuando en realidad necesitamos cuatro para
+crear nuestros cuatro objetos Character.
+
+00:01:08.906 --> 00:01:14.146 align:middle
+Por eso los objetos constructores suelen ir
+asociados a una fábrica de constructores.
+
+00:01:15.136 --> 00:01:18.806 align:middle
+Déjame deshacer todos los cambios que
+acabo de hacer en GameApplication...
+
+00:01:19.096 --> 00:01:20.356 align:middle
+y en CharacterBuilder.
+
+00:01:22.296 --> 00:01:27.156 align:middle
+En el directorio Builder/, crea una nueva
+clase llamada CharacterBuilderFactory: Por
+
+00:01:27.696 --> 00:01:31.676 align:middle
+cierto, existe un patrón
+llamado patrón de fábrica,
+
+00:01:31.946 --> 00:01:35.496 align:middle
+que no trataremos
+específicamente en este tutorial.
+
+00:01:36.066 --> 00:01:41.656 align:middle
+Pero una "fábrica" no es más que una
+clase cuyo trabajo es crear otra clase.
+
+00:01:42.386 --> 00:01:46.706 align:middle
+Al igual que el patrón constructor,
+es un patrón de creación.
+
+00:01:47.726 --> 00:01:51.256 align:middle
+Dentro de la clase fábrica, crea un
+nuevo método llamado, qué tal...
+
+00:01:51.406 --> 00:01:55.476 align:middle
+createBuilder()que devolverá
+un CharacterBuilder.
+
+00:01:56.166 --> 00:01:59.766 align:middle
+Y dentro de éste, simplemente
+return new CharacterBuilder():
+
+00:02:00.686 --> 00:02:04.176 align:middle
+Este CharacterBuilderFactory es un servicio.
+
+00:02:04.666 --> 00:02:08.406 align:middle
+Aunque necesitemos cinco objetos
+CharacterBuilder en nuestra aplicación,
+
+00:02:08.756 --> 00:02:11.436 align:middle
+sólo necesitamos un CharacterBuilderFactory.
+
+00:02:11.876 --> 00:02:15.206 align:middle
+Simplemente llamaremos a
+este método cinco veces.
+
+00:02:15.706 --> 00:02:21.526 align:middle
+Eso significa que, en GameApplication,
+podemos crear un public function __construct()
+
+00:02:21.936 --> 00:02:26.056 align:middle
+y autoconectar CharacterBuilderFactory
+$characterBuilderFactory.
+
+00:02:26.746 --> 00:02:29.786 align:middle
+También añadiré private delante
+para que sea una propiedad:
+
+00:02:30.636 --> 00:02:35.416 align:middle
+Entonces, dentro de createCharacterBuilder(),
+en lugar de crear esto a mano,
+
+00:02:35.806 --> 00:02:37.886 align:middle
+confía en la fábrica:
+
+00:02:38.576 --> 00:02:42.636 align:middle
+return
+$this->characterBuilderFactory->createBuilder(): Lo
+
+00:02:43.446 --> 00:02:49.076 align:middle
+bueno de esta fábrica (y éste es realmente
+el propósito del patrón de fábrica en
+
+00:02:49.076 --> 00:02:54.726 align:middle
+general) es que hemos centralizado la
+instanciación de este objeto. ¿Cómo
+
+00:02:55.526 --> 00:02:57.936 align:middle
+ayuda eso a nuestra situación? Recuerda que
+
+00:02:58.446 --> 00:03:01.826 align:middle
+el problema que imaginé era
+el siguiente ¿Qué pasaría
+
+00:03:02.396 --> 00:03:06.756 align:middle
+si nuestro constructor de personajes necesitara
+un servicio como el de EntityManager? Con
+
+00:03:07.226 --> 00:03:10.286 align:middle
+nuestra nueva configuración,
+podemos hacer que eso ocurra.
+
+00:03:10.906 --> 00:03:16.106 align:middle
+En realidad no tengo Doctrine instalado en este
+proyecto, así que en lugar de EntityManager, vamos a
+
+00:03:16.306 --> 00:03:19.386 align:middle
+requerir LoggerInterface $logger... y
+
+00:03:19.736 --> 00:03:23.456 align:middle
+volveré a añadir private delante para
+convertirlo en una propiedad: Entonces, abajo
+
+00:03:24.026 --> 00:03:28.956 align:middle
+, en buildCharacter(), sólo para probar que esto
+funciona, úsalo: $this->logger->info('Creating
+
+00:03:29.516 --> 00:03:33.456 align:middle
+a character').
+
+00:03:33.686 --> 00:03:39.766 align:middle
+También pasaré un segundo argumento con alguna información
+extra como 'maxHealth' => $this->maxHealth y
+
+00:03:40.656 --> 00:03:43.836 align:middle
+'baseDamage' =>
+$this->baseDamage: CharacterBuilder
+
+00:03:45.466 --> 00:03:47.966 align:middle
+ahora requiere un $logger... pero
+
+00:03:48.576 --> 00:03:54.026 align:middle
+CharacterBuilder no es un servicio que
+vayamos a obtener directamente del contenedor.
+
+00:03:54.646 --> 00:03:59.116 align:middle
+Lo obtendremos a través de CharacterBuilderFactory,
+que es un servicio. Así que el
+
+00:03:59.696 --> 00:04:03.186 align:middle
+autocableado de LoggerInterface
+funcionará aquí: Entonces,
+
+00:04:05.036 --> 00:04:09.396 align:middle
+pásalo manualmente al
+constructor como $this->logger:
+
+00:04:10.786 --> 00:04:13.686 align:middle
+Aquí vemos algunas de las ventajas
+del patrón de fábrica. Como
+
+00:04:14.436 --> 00:04:18.446 align:middle
+ya hemos centralizado la instanciación
+de CharacterBuilder, cualquier cosa
+
+00:04:18.846 --> 00:04:21.126 align:middle
+que necesite un CharacterBuilder, como
+
+00:04:21.366 --> 00:04:25.556 align:middle
+GameApplication, no necesita
+cambiar en absoluto...
+
+00:04:26.046 --> 00:04:29.166 align:middle
+¡aunque acabemos de añadir un argumento
+del constructor! GameApplication
+
+00:04:29.596 --> 00:04:35.636 align:middle
+ya estaba descargando el trabajo de
+instanciación a CharacterBuilderFactory. Para
+
+00:04:36.636 --> 00:04:38.946 align:middle
+ver si esto funciona, ejecuta:
+./bin/console app:game:play
+
+00:04:38.946 --> 00:04:48.146 align:middle
+-vv El -vv nos permitirá ver los mensajes
+de registro mientras jugamos. Y...
+
+00:04:48.826 --> 00:04:50.346 align:middle
+¡lo conseguimos! ¡Mira! Aparece nuestro
+
+00:04:50.696 --> 00:04:55.596 align:middle
+mensaje[info] Creating a character. No podemos
+
+00:04:56.046 --> 00:05:00.616 align:middle
+ver las demás estadísticas en esta pantalla, pero
+están en el archivo de registro. Genial. ¡ Así que ése
+
+00:05:00.826 --> 00:05:04.936 align:middle
+es el patrón constructor! ¿Qué problemas
+
+00:05:05.516 --> 00:05:07.126 align:middle
+puede resolver? Muy sencillo
+
+00:05:07.716 --> 00:05:11.826 align:middle
+Tienes un objeto que es
+difícil de instanciar, así que
+
+00:05:12.236 --> 00:05:15.756 align:middle
+añades una clase constructora
+para facilitarte la vida. También
+
+00:05:16.526 --> 00:05:19.516 align:middle
+ayuda con el Principio de
+Responsabilidad Única. Es una
+
+00:05:20.076 --> 00:05:25.646 align:middle
+de las estrategias que ayuda a abstraer
+la lógica de creación de una clase de la
+
+00:05:25.696 --> 00:05:28.596 align:middle
+clase que utilizará ese
+objeto. Anteriormente, en
+
+00:05:29.326 --> 00:05:33.216 align:middle
+GameApplication, teníamos
+la complejidad tanto de
+
+00:05:33.216 --> 00:05:37.916 align:middle
+crear los objetos Character como de
+utilizarlos. Aquí seguimos teniendo
+
+00:05:38.556 --> 00:05:40.726 align:middle
+código para utilizar el
+constructor, pero la mayor parte de
+
+00:05:40.966 --> 00:05:44.756 align:middle
+la complejidad vive ahora en la
+clase constructora. A menudo, cuando
+
+00:05:45.816 --> 00:05:51.146 align:middle
+estudias este patrón, te dirá que el
+constructor (CharacterBuilder, por ejemplo)
+
+00:05:51.146 --> 00:05:56.836 align:middle
+debería implementar una nueva interfaz,
+como CharacterBuilderInterface, que
+
+00:05:57.266 --> 00:06:00.486 align:middle
+tendría métodos en ella como
+setMaxHealth(), setBaseDamage(), etc.
+
+00:06:01.056 --> 00:06:06.066 align:middle
+Esto es opcional. ¿Cuándo
+
+00:06:06.786 --> 00:06:08.786 align:middle
+lo necesitarías? Bueno, como
+
+00:06:09.486 --> 00:06:14.246 align:middle
+todas las interfaces, es útil si
+necesitas la flexibilidad de cambiar la
+
+00:06:14.406 --> 00:06:19.906 align:middle
+forma de crear tus personajes por alguna
+otra implementación. Por ejemplo,
+
+00:06:21.026 --> 00:06:24.936 align:middle
+imagina que creamos un segundo
+constructor que implementa
+
+00:06:25.256 --> 00:06:30.776 align:middle
+CharacterBuilderInterface llamado
+DoubleMaxHealthCharacterBuilder. Éste crea
+
+00:06:31.246 --> 00:06:35.806 align:middle
+objetosCharacter, pero de una forma
+ligeramente diferente... como si
+
+00:06:36.276 --> 00:06:38.616 align:middle
+duplicara el $maxHealth. Si
+ambos constructores implementaran
+
+00:06:39.526 --> 00:06:43.306 align:middle
+CharacterBuilderInterface, entonces dentro
+
+00:06:43.546 --> 00:06:46.596 align:middle
+de nuestro CharacterBuilderFactory, que
+
+00:06:47.006 --> 00:06:49.996 align:middle
+ahora devolvería
+CharacterBuilderInterface, podríamos
+
+00:06:50.596 --> 00:06:56.766 align:middle
+leer alguna configuración para averiguar qué clase de
+CharacterBuilder queremos utilizar. Así que la creación de
+
+00:06:57.806 --> 00:07:03.156 align:middle
+esa interfaz realmente tiene menos que ver con
+el patrón constructor en sí mismo... y más
+
+00:07:03.716 --> 00:07:07.166 align:middle
+con hacer que tu código
+sea más flexible. Déjame
+
+00:07:08.166 --> 00:07:11.796 align:middle
+deshacer ese código falso dentro de
+CharacterBuilderFactory. Y ... dentro
+
+00:07:12.986 --> 00:07:17.766 align:middle
+de CharacterBuilder, eliminaré
+esa interfaz falsa. ¿Y dónde
+
+00:07:19.006 --> 00:07:22.246 align:middle
+vemos el patrón constructor
+en la naturaleza? Este
+
+00:07:23.126 --> 00:07:29.006 align:middle
+es bastante fácil de detectar porque el encadenamiento de métodos
+es una característica muy común de los constructores. El primer
+
+00:07:29.736 --> 00:07:33.826 align:middle
+ejemplo que me viene a la mente es
+QueryBuilder de Doctrine: nos permite
+
+00:07:34.616 --> 00:07:37.536 align:middle
+configurar una consulta
+con un montón de buenos
+
+00:07:37.536 --> 00:07:43.986 align:middle
+métodos antes de llamar finalmente a getQuery()
+para crear realmente el objeto Query. También
+
+00:07:44.766 --> 00:07:50.916 align:middle
+aprovecha el patrón de fábrica: para crear el
+constructor, llamas a createQueryBuilder(). Ese método,
+
+00:07:51.406 --> 00:07:57.856 align:middle
+que vive en la base EntityRepository, es
+la "fábrica" responsable de instanciar
+
+00:07:57.856 --> 00:07:59.966 align:middle
+el QueryBuilder. Otro ejemplo
+
+00:08:01.106 --> 00:08:03.366 align:middle
+es el FormBuilder de Symfony: en ese ejemplo
+
+00:08:03.966 --> 00:08:08.006 align:middle
+, no llamamos al método
+buildForm(), pero Symfony
+
+00:08:08.326 --> 00:08:13.106 align:middle
+acaba llamándolo una vez que hemos
+terminado de configurarlo. Bien equipo,
+
+00:08:14.006 --> 00:08:17.726 align:middle
+hablemos ahora del patrón observador
