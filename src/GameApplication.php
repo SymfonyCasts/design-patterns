@@ -63,7 +63,7 @@ class GameApplication
             'mage_archer' => $this->createCharacterBuilder()
                 ->setMaxHealth(75)
                 ->setBaseDamage(9)
-                ->setAttackType('fire_bolt') // TODO re-add bow!
+                ->setAttackType('fire_bolt', 'bow')
                 ->setArmorType('shield')
                 ->buildCharacter(),
 
