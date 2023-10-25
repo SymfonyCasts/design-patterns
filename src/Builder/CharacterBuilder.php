@@ -2,6 +2,14 @@
 
 namespace App\Builder;
 
+use App\ArmorType\ArmorType;
+use App\ArmorType\IceBlockType;
+use App\ArmorType\LeatherArmorType;
+use App\ArmorType\ShieldType;
+use App\AttackType\AttackType;
+use App\AttackType\BowType;
+use App\AttackType\FireBoltType;
+use App\AttackType\TwoHandedSwordType;
 use App\Character\Character;
 
 class CharacterBuilder
@@ -13,26 +21,59 @@ class CharacterBuilder
 
     public function setMaxHealth(int $maxHealth): self
     {
-        // todo: implement me
+        $this->maxHealth = $maxHealth;
+
+        return $this;
     }
 
     public function setBaseDamage(int $baseDamage): self
     {
-        // todo: implement me
+        $this->baseDamage = $baseDamage;
+
+        return $this;
     }
 
     public function setAttackType(string $attackType): self
     {
-        // todo: implement me
+        $this->attackType = $attackType;
+
+        return $this;
     }
 
     public function setArmorType(string $armorType): self
     {
-        // todo: implement me
+        $this->armorType = $armorType;
+
+        return $this;
     }
 
     public function buildCharacter(): Character
     {
-        // todo: implement me
+        return new Character(
+            $this->maxHealth,
+            $this->baseDamage,
+            $this->createAttackType(),
+            $this->createArmorType(),
+        );
+    }
+
+    private function createAttackType(): AttackType
+    {
+        return match ($this->attackType) {
+            'bow' => new BowType(),
+            'fire_bolt' => new FireBoltType(),
+            'sword' => new TwoHandedSwordType(),
+            default => throw new \RuntimeException('Invalid attack type given')
+        };
+    }
+
+    private function createArmorType(): ArmorType
+    {
+        return match ($this->armorType) {
+            'ice_block' => new IceBlockType(),
+            'shield' => new ShieldType(),
+            'leather_armor' => new LeatherArmorType(),
+            default => throw new \RuntimeException('Invalid armor type given')
+        };
     }
 }
