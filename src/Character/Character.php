@@ -71,8 +71,6 @@ class Character
         $this->level++;
         $this->maxHealth = floor($this->maxHealth * $bonus);
         $this->baseDamage = floor($this->baseDamage * $bonus);
-
-        // todo: level up attack and armor type
     }
 
     public function getLevel(): int
@@ -90,6 +88,16 @@ class Character
     public function getXp(): int
     {
         return $this->xp;
+    }
+
+    public function getMaxHealth(): int
+    {
+        return $this->maxHealth;
+    }
+
+    public function setMaxHealth(int $maxHealth): void
+    {
+        $this->maxHealth = $maxHealth;
     }
 
     /**

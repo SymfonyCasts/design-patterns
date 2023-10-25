@@ -3,11 +3,9 @@
 namespace App;
 
 use App\Builder\CharacterBuilder;
-use App\Builder\CharacterBuilderFactory;
 use App\Character\Character;
 use App\Event\FightStartingEvent;
 use App\Observer\GameObserverInterface;
-use Symfony\Contracts\EventDispatcher\Event;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class GameApplication
@@ -16,7 +14,6 @@ class GameApplication
     private array $observers = [];
 
     public function __construct(
-        private CharacterBuilderFactory $characterBuilderFactory,
         private EventDispatcherInterface $eventDispatcher,
     )
     {
@@ -130,7 +127,7 @@ class GameApplication
 
     private function createCharacterBuilder(): CharacterBuilder
     {
-        return $this->characterBuilderFactory->createBuilder();
+        return new CharacterBuilder();
     }
 
     private function notify(FightResult $fightResult): void
