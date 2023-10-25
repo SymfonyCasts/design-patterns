@@ -9,6 +9,9 @@ use App\Observer\GameObserverInterface;
 
 class GameApplication
 {
+    /** @var GameObserverInterface[] */
+    private array $observers = [];
+
     public function __construct(private CharacterBuilderFactory $characterBuilderFactory)
     {
     }
@@ -89,12 +92,18 @@ class GameApplication
 
     public function subscribe(GameObserverInterface $observer): void
     {
-        // TODO: Implement subscribe() method.
+        if (!in_array($observer, $this->observers, true)) {
+            $this->observers[] = $observer;
+        }
     }
 
     public function unsubscribe(GameObserverInterface $observer): void
     {
-        // TODO: Implement unsubscribe() method.
+        $key = array_search($observer, $this->observers, true);
+
+        if ($key !== false) {
+            unset($this->observers[$key]);
+        }
     }
 
     private function finishFightResult(FightResult $fightResult, Character $winner, Character $loser): FightResult
