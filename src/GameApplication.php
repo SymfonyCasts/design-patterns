@@ -111,6 +111,8 @@ class GameApplication
         $fightResult->setWinner($winner);
         $fightResult->setLoser($loser);
 
+        $this->notify($fightResult);
+
         return $fightResult;
     }
 
@@ -122,5 +124,12 @@ class GameApplication
     private function createCharacterBuilder(): CharacterBuilder
     {
         return $this->characterBuilderFactory->createBuilder();
+    }
+
+    private function notify(FightResult $fightResult): void
+    {
+        foreach ($this->observers as $observer) {
+            $observer->onFightFinished($fightResult);
+        }
     }
 }
