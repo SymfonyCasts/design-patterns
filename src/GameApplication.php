@@ -5,6 +5,7 @@ namespace App;
 use App\Builder\CharacterBuilder;
 use App\Builder\CharacterBuilderFactory;
 use App\Character\Character;
+use App\Observer\GameObserverInterface;
 
 class GameApplication
 {
@@ -84,6 +85,16 @@ class GameApplication
             'archer',
             'mage_archer'
         ];
+    }
+
+    public function subscribe(GameObserverInterface $observer): void
+    {
+        // TODO: Implement subscribe() method.
+    }
+
+    public function unsubscribe(GameObserverInterface $observer): void
+    {
+        // TODO: Implement unsubscribe() method.
     }
 
     private function finishFightResult(FightResult $fightResult, Character $winner, Character $loser): FightResult
