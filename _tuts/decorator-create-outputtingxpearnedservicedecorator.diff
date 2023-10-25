@@ -1,9 +1,9 @@
 diff --git a/src/Service/OutputtingXpCalculator.php b/src/Service/OutputtingXpCalculator.php
 new file mode 100644
-index 0000000..1c8bd3a
+index 0000000..924ba6a
 --- /dev/null
 +++ b/src/Service/OutputtingXpCalculator.php
-@@ -0,0 +1,11 @@
+@@ -0,0 +1,12 @@
 +<?php
 +
 +namespace App\Service;
@@ -12,6 +12,7 @@ index 0000000..1c8bd3a
 +{
 +    public function __construct(
 +        private readonly XpCalculatorInterface $innerCalculator
-+    ) {
++    )
++    {
 +    }
 +}
