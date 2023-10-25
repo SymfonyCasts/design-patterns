@@ -1,14 +1,14 @@
 diff --git a/src/Service/OutputtingXpCalculator.php b/src/Service/OutputtingXpCalculator.php
-index 2f7789b..3a93915 100644
+index fedb85c..58da840 100644
 --- a/src/Service/OutputtingXpCalculator.php
 +++ b/src/Service/OutputtingXpCalculator.php
-@@ -5,7 +5,9 @@ namespace App\Service;
+@@ -4,7 +4,9 @@ namespace App\Service;
+ 
  use App\Character\Character;
  use Symfony\Component\Console\Output\ConsoleOutput;
- use Symfony\Component\Console\Output\OutputInterface;
 +use Symfony\Component\DependencyInjection\Attribute\AsDecorator;
  
 +#[AsDecorator(XpCalculatorInterface::class)]
  class OutputtingXpCalculator implements XpCalculatorInterface
  {
-     private OutputInterface $output;
+     public function __construct(
