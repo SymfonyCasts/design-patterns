@@ -1,18 +1,19 @@
 diff --git a/src/Service/OutputtingXpCalculator.php b/src/Service/OutputtingXpCalculator.php
-index 6c23707..11e5a9a 100644
+index 924ba6a..1f40b29 100644
 --- a/src/Service/OutputtingXpCalculator.php
 +++ b/src/Service/OutputtingXpCalculator.php
-@@ -2,6 +2,7 @@
+@@ -2,6 +2,8 @@
  
  namespace App\Service;
  
 +use App\Character\Character;
- use Symfony\Component\Console\Output\ConsoleOutput;
- use Symfony\Component\Console\Output\OutputInterface;
- 
-@@ -15,4 +16,9 @@ class OutputtingXpCalculator implements XpCalculatorInterface
++
+ class OutputtingXpCalculator implements XpCalculatorInterface
+ {
+     public function __construct(
+@@ -9,4 +11,9 @@ class OutputtingXpCalculator implements XpCalculatorInterface
+     )
      {
-         $this->output = new ConsoleOutput();
      }
 +
 +    public function addXp(Character $winner, int $enemyLevel): void
