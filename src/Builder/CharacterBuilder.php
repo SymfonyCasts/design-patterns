@@ -6,6 +6,11 @@ use App\Character\Character;
 
 class CharacterBuilder
 {
+    private int $maxHealth;
+    private int $baseDamage;
+    private string $attackType;
+    private string $armorType;
+
     public function setMaxHealth(int $maxHealth): self
     {
         // todo: implement me
