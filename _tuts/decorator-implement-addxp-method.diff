@@ -1,8 +1,16 @@
 diff --git a/src/Service/OutputtingXpCalculator.php b/src/Service/OutputtingXpCalculator.php
-index 11e5a9a..2f7789b 100644
+index 1f40b29..fedb85c 100644
 --- a/src/Service/OutputtingXpCalculator.php
 +++ b/src/Service/OutputtingXpCalculator.php
-@@ -19,6 +19,16 @@ class OutputtingXpCalculator implements XpCalculatorInterface
+@@ -3,6 +3,7 @@
+ namespace App\Service;
+ 
+ use App\Character\Character;
++use Symfony\Component\Console\Output\ConsoleOutput;
+ 
+ class OutputtingXpCalculator implements XpCalculatorInterface
+ {
+@@ -14,6 +15,17 @@ class OutputtingXpCalculator implements XpCalculatorInterface
  
      public function addXp(Character $winner, int $enemyLevel): void
      {
@@ -12,10 +20,11 @@ index 11e5a9a..2f7789b 100644
 +
 +        $afterLevel = $winner->getLevel();
 +        if ($afterLevel > $beforeLevel) {
-+            $this->output->writeln('--------------------------------');
-+            $this->output->writeln('<bg=green;fg=white>Congratulations! You\'ve leveled up!</>');
-+            $this->output->writeln(sprintf('You are now level "%d"', $winner->getLevel()));
-+            $this->output->writeln('--------------------------------');
++            $output = new ConsoleOutput();
++            $output->writeln('--------------------------------');
++            $output->writeln('<bg=green;fg=white>Congratulations! You\'ve leveled up!</>');
++            $output->writeln(sprintf('You are now level "%d"', $winner->getLevel()));
++            $output->writeln('--------------------------------');
 +        }
      }
  }
