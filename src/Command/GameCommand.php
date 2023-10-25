@@ -3,6 +3,7 @@
 namespace App\Command;
 
 use App\Character\Character;
+use App\Event\FightStartingEvent;
 use App\FightResult;
 use App\GameApplication;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -10,12 +11,14 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 #[AsCommand('app:game:play')]
 class GameCommand extends Command
 {
     public function __construct(
-        private readonly GameApplication $game
+        private readonly GameApplication $game,
+        private readonly EventDispatcherInterface $eventDispatcher,
     )
     {
         parent::__construct();
@@ -24,6 +27,9 @@ class GameCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
+        $this->eventDispatcher->addListener(FightStartingEvent::class, function() use ($io) {
+            $io->note('Fight is starting...');
+        });
 
         $io->text('Welcome to the game where warriors fight against each other for honor and glory... and 🍕!');
 
