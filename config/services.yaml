@@ -23,8 +23,4 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
-    App\Service\XpCalculatorInterface: '@App\Service\OutputtingXpCalculator'
-
-    App\Service\OutputtingXpCalculator:
-        arguments:
-            $innerCalculator: '@App\Service\XpCalculator'
+    App\Service\XpCalculatorInterface: '@App\Service\XpCalculator'
