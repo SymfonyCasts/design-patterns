@@ -19,22 +19,22 @@ class DebugEventDispatcherDecorator implements EventDispatcherInterface
         return $this->eventDispatcher->dispatch($event, $eventName);
     }
 
-    public function addListener(string $eventName, $listener, int $priority = 0)
+    public function addListener(string $eventName, $listener, int $priority = 0): void
     {
         $this->eventDispatcher->addListener($eventName, $listener, $priority);
     }
 
-    public function addSubscriber(EventSubscriberInterface $subscriber)
+    public function addSubscriber(EventSubscriberInterface $subscriber): void
     {
         $this->eventDispatcher->addSubscriber($subscriber);
     }
 
-    public function removeListener(string $eventName, $listener)
+    public function removeListener(string $eventName, $listener): void
     {
         $this->eventDispatcher->removeListener($eventName, $listener);
     }
 
-    public function removeSubscriber(EventSubscriberInterface $subscriber)
+    public function removeSubscriber(EventSubscriberInterface $subscriber): void
     {
         $this->eventDispatcher->removeSubscriber($subscriber);
     }

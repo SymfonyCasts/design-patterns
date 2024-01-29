@@ -13,13 +13,13 @@ class Kernel extends BaseKernel implements CompilerPassInterface
 {
     use MicroKernelTrait;
 
-    protected function build(ContainerBuilder $container)
+    protected function build(ContainerBuilder $container): void
     {
         $container->registerForAutoconfiguration(GameObserverInterface::class)
             ->addTag('game.observer');
     }
 
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         $definition = $container->findDefinition(GameApplication::class);
         $taggedObservers = $container->findTaggedServiceIds('game.observer');
