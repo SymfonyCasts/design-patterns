@@ -7,10 +7,10 @@ use App\Dice;
 class IceBlockType implements ArmorType
 {
     /**
-     * Absorbs 2d8
+     * Absorbs 2d4
      */
     public function getArmorReduction(int $damage): int
     {
-        return Dice::roll(8) + Dice::roll(8);
+        return Dice::roll(4) + Dice::roll(4);
     }
 }

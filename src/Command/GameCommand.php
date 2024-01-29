@@ -25,33 +25,49 @@ class GameCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        $io->text('Welcome to the game where warriors fight against each other for honor and glory... and 🍕!');
+        // Convenient for printing messages from anywhere we need
+        GameApplication::$io = $io;
+
+        $io->section('Welcome to the game where warriors fight against each other for honor and glory... and 🍕!');
 
         $characters = $this->game->getCharactersList();
-        $characterChoice = $io->choice('Select your character', $characters);
+        $playerChoice = $io->choice('Select your character', $characters);
 
-        $playerCharacter = $this->game->createCharacter($characterChoice);
-        $playerCharacter->setNickname('Player ' . $characterChoice);
+        $playerCharacter = $this->game->createCharacter($playerChoice);
+        $playerCharacter->setNickname($this->humanize($playerChoice));
 
-        $io->writeln('It\'s time for a fight!');
-
-        $this->play($io, $playerCharacter);
+        $this->play($playerCharacter);
 
         return Command::SUCCESS;
     }
 
-    private function play(SymfonyStyle $io, Character $player): void
+    private function play(Character $player): void
     {
+        GameApplication::$io->writeln(sprintf('Alright %s! It\'s time to fight!',
+            $player->getNickname()
+        ));
+
         do {
+            // let's make it *feel* like a proper battle!
+            $weapons = ['🛡', '⚔️', '🏹'];
+            GameApplication::$io->writeln(['']);
+            GameApplication::$io->write('(Searching for a worthy opponent) ');
+            for ($i = 0; $i < 4; $i++) {
+                GameApplication::$io->write($weapons[array_rand($weapons)]);
+                usleep(250000);
+            }
+            GameApplication::$io->writeln(['', '']);
+
             $aiCharacter = $this->selectAiCharacter();
 
-            $io->writeln(sprintf('Opponent found <comment>%s</comment>', $aiCharacter->getNickname()));
+            GameApplication::$io->writeln(sprintf('Opponent Found: <comment>%s</comment>', $aiCharacter->getNickname()));
+            usleep(300000);
 
             $fightResult = $this->game->play($player, $aiCharacter);
 
-            $this->printResult($fightResult, $player, $io);
+            $this->printResult($fightResult, $player);
 
-            $answer = $io->choice('Want to keep playing?', [
+            $answer = GameApplication::$io->choice('Want to keep playing?', [
                 1 => 'Fight!',
                 2 => 'Exit Game',
             ]);
@@ -63,37 +79,34 @@ class GameCommand extends Command
         $characters = $this->game->getCharactersList();
         $aiCharacterString = $characters[array_rand($characters)];
 
-        $aiCharacter = $this->game->createCharacter($aiCharacterString);
-        $aiCharacter->setNickname('AI: ' . ucfirst($aiCharacterString));
+        $aiCharacter = $this->game->createCharacter($aiCharacterString, true);
+        $aiCharacter->setNickname($this->humanize($aiCharacterString));
 
         return $aiCharacter;
     }
 
-    private function printResult(FightResult $fightResult, Character $player, SymfonyStyle $io)
+    private function printResult(FightResult $fightResult, Character $player): void
     {
-        // let's make it *feel* like a proper battle!
-        $weapons = ['🛡', '⚔️', '🏹'];
-        $io->writeln(['']);
-        $io->write('(queue epic battle sounds) ');
-        for ($i = 0; $i < $fightResult->getRounds(); $i++) {
-            $io->write($weapons[array_rand($weapons)]);
-            usleep(300000);
-        }
-        $io->writeln('');
+        GameApplication::$io->writeln('');
 
-        $io->writeln('------------------------------');
+        GameApplication::$io->writeln('------------------------------');
         if ($fightResult->getWinner() === $player) {
-            $io->writeln('Result: <bg=green;fg=white>You WON!</>');
+            GameApplication::$io->writeln('Result: <bg=green;fg=white>You WON!</>');
         } else {
-            $io->writeln('Result: <bg=red;fg=white>You lost...</>');
+            GameApplication::$io->writeln('Result: <bg=red;fg=white>You lost...</>');
         }
 
-        $io->writeln('Total Rounds: ' . $fightResult->getRounds());
-        $io->writeln('Damage dealt: ' . $fightResult->getDamageDealt());
-        $io->writeln('Damage received: ' . $fightResult->getDamageReceived());
-        $io->writeln('XP: ' . $player->getXp());
-        $io->writeln('Final Level: ' . $player->getLevel());
-        $io->writeln('Exhausted Turns: ' . $fightResult->getExhaustedTurns());
-        $io->writeln('------------------------------');
+        GameApplication::$io->writeln('Total Rounds: ' . $fightResult->getRounds());
+        GameApplication::$io->writeln('Damage dealt: ' . $fightResult->getDamageDealt());
+        GameApplication::$io->writeln('Damage received: ' . $fightResult->getDamageReceived());
+        GameApplication::$io->writeln('XP: ' . $player->getXp());
+        GameApplication::$io->writeln('Level: ' . $player->getLevel());
+        GameApplication::$io->writeln('Exhausted Turns: ' . $fightResult->getExhaustedTurns());
+        GameApplication::$io->writeln('------------------------------');
+    }
+
+    private function humanize(mixed $characterChoice): string
+    {
+        return ucfirst(str_replace('_', ' ', $characterChoice));
     }
 }

@@ -20,7 +20,8 @@ class Character
         private int $maxHealth,
         private int $baseDamage,
         private AttackType $attackType,
-        private ArmorType $armorType
+        private ArmorType $armorType,
+        private bool $isAi = false,
     ) {
         $this->currentHealth = $this->maxHealth;
     }
@@ -95,9 +96,24 @@ class Character
         return $this->maxHealth;
     }
 
-    public function setMaxHealth(int $maxHealth): void
+    public function setHealth(mixed $health):void
     {
-        $this->maxHealth = $maxHealth;
+        $this->currentHealth = $health;
+    }
+
+    public function getStamina(): int
+    {
+        return $this->currentStamina;
+    }
+
+    public function setStamina(int $stamina): void
+    {
+        $this->currentStamina = $stamina;
+    }
+
+    public function isAi(): bool
+    {
+        return $this->isAi;
     }
 
     /**
