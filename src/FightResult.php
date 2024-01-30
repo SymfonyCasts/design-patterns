@@ -18,6 +18,11 @@ class FightResult
         $this->damageDealt += $damageDealt;
     }
 
+    public function removeDamageDealt(int $damageDealt): void
+    {
+        $this->damageDealt -= $damageDealt;
+    }
+
     public function getDamageReceived(): int
     {
         return $this->damageReceived;
@@ -26,6 +31,11 @@ class FightResult
     public function addDamageReceived(int $damageReceived): void
     {
         $this->damageReceived += $damageReceived;
+    }
+
+    public function removeDamageReceived(int $damageReceived): void
+    {
+        $this->damageReceived -= $damageReceived;
     }
 
     public function addExhaustedTurn(): void
