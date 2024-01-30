@@ -42,4 +42,9 @@ class MessagePrinter
     {
         $this->io->block($messages, $type, $style, $prefix, $padding, $escape);
     }
+
+    public function confirm(string $question, bool $default = true): bool
+    {
+        return $this->io->confirm($question, $default);
+    }
 }
