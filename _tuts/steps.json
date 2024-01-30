@@ -1,0 +1,30 @@
+{
+    "steps": [
+        {
+            "id": "start",
+            "name": "start",
+            "description": null
+        },
+        {
+            "id": "create-action-command-interface",
+            "name": "create action command interface",
+            "description": null
+        },
+        {
+            "id": "attack-create-class",
+            "name": "Attack: create class",
+            "description": null
+        },
+        {
+            "id": "attack-add-constructor",
+            "name": "Attack: add constructor",
+            "description": null
+        },
+        {
+            "id": "attack-paste-player-turn-logic",
+            "name": "Attack: paste player turn logic",
+            "description": null
+        }
+    ],
+    "sha": "ce96199d7c9579ac68408b3889d800c430217f6a"
+}
