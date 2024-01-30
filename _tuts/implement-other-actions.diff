@@ -1,0 +1,62 @@
+diff --git a/src/ActionCommand/HealCommand.php b/src/ActionCommand/HealCommand.php
+new file mode 100644
+index 0000000..6920a13
+--- /dev/null
++++ b/src/ActionCommand/HealCommand.php
+@@ -0,0 +1,29 @@
++<?php
++
++namespace App\ActionCommand;
++
++use App\Character\Character;
++use App\Dice;
++use App\GameApplication;
++
++class HealCommand implements ActionCommandInterface
++{
++    public function __construct(private readonly Character $player)
++    {
++    }
++
++    public function execute(): void
++    {
++        $healAmount = Dice::roll(20) + $this->player->getLevel() * 3;
++        $newAmount = $this->player->getCurrentHealth() + $healAmount;
++        $newAmount = min($newAmount, $this->player->getMaxHealth());
++
++        $this->player->setHealth($newAmount);
++        $this->player->setStamina(Character::MAX_STAMINA);
++
++        GameApplication::$printer->writeln(sprintf(
++            'You healed %d damage',
++            $healAmount
++        ));
++    }
++}
+\ No newline at end of file
+diff --git a/src/ActionCommand/SurrenderCommand.php b/src/ActionCommand/SurrenderCommand.php
+new file mode 100644
+index 0000000..0a12b11
+--- /dev/null
++++ b/src/ActionCommand/SurrenderCommand.php
+@@ -0,0 +1,20 @@
++<?php
++
++namespace App\ActionCommand;
++
++use App\Character\Character;
++use App\GameApplication;
++
++class SurrenderCommand implements ActionCommandInterface
++{
++    public function __construct(private readonly Character $player)
++    {
++    }
++
++    public function execute(): void
++    {
++        $this->player->setHealth(0);
++
++        GameApplication::$printer->block('You\'ve surrendered! Better luck next time!');
++    }
++}

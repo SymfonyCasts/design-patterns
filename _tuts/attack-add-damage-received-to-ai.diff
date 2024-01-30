@@ -1,0 +1,12 @@
+diff --git a/src/ActionCommand/AttackCommand.php b/src/ActionCommand/AttackCommand.php
+index 4b89c8f..8692bb9 100644
+--- a/src/ActionCommand/AttackCommand.php
++++ b/src/ActionCommand/AttackCommand.php
+@@ -27,6 +27,7 @@ class AttackCommand implements ActionCommandInterface
+ 
+         $damageDealt = $this->opponent->receiveAttack($damage);
+         $this->fightResultSet->of($this->player)->addDamageDealt($damageDealt);
++        $this->fightResultSet->of($this->opponent)->addDamageReceived($damageDealt);
+ 
+         GameApplication::$printer->printFor($this->player)->attackMessage($damageDealt);
+         GameApplication::$printer->writeln('');

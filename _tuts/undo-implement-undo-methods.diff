@@ -1,0 +1,95 @@
+diff --git a/src/ActionCommand/AttackCommand.php b/src/ActionCommand/AttackCommand.php
+index 8692bb9..9651837 100644
+--- a/src/ActionCommand/AttackCommand.php
++++ b/src/ActionCommand/AttackCommand.php
+@@ -8,6 +8,9 @@ use App\FightResultSet;
+ 
+ class AttackCommand implements ActionCommandInterface
+ {
++    private int $damageDealt;
++    private int $stamina;
++
+     public function __construct(
+         private readonly Character $player,
+         private readonly Character $opponent,
+@@ -17,6 +20,9 @@ class AttackCommand implements ActionCommandInterface
+ 
+     public function execute(): void
+     {
++        // The stamina needs to be "remembered" before performing the attack
++        $this->stamina = $this->player->getStamina();
++
+         $damage = $this->player->attack();
+         if ($damage === 0) {
+             GameApplication::$printer->printFor($this->player)->exhaustedMessage();
+@@ -26,6 +32,7 @@ class AttackCommand implements ActionCommandInterface
+         }
+ 
+         $damageDealt = $this->opponent->receiveAttack($damage);
++        $this->damageDealt = $damageDealt;
+         $this->fightResultSet->of($this->player)->addDamageDealt($damageDealt);
+         $this->fightResultSet->of($this->opponent)->addDamageReceived($damageDealt);
+ 
+@@ -33,4 +40,13 @@ class AttackCommand implements ActionCommandInterface
+         GameApplication::$printer->writeln('');
+         usleep(300000);
+     }
++
++    public function undo(): void
++    {
++        $this->opponent->setHealth($this->opponent->getCurrentHealth() + $this->damageDealt);
++        $this->player->setStamina($this->stamina);
++
++        $this->fightResultSet->of($this->player)->removeDamageDealt($this->damageDealt);
++        $this->fightResultSet->of($this->opponent)->removeDamageReceived($this->damageDealt);
++    }
+ }
+diff --git a/src/ActionCommand/HealCommand.php b/src/ActionCommand/HealCommand.php
+index 6920a13..3ce8ec3 100644
+--- a/src/ActionCommand/HealCommand.php
++++ b/src/ActionCommand/HealCommand.php
+@@ -8,12 +8,18 @@ use App\GameApplication;
+ 
+ class HealCommand implements ActionCommandInterface
+ {
++    private int $currentHealth;
++    private int $stamina;
++
+     public function __construct(private readonly Character $player)
+     {
+     }
+ 
+     public function execute(): void
+     {
++        $this->stamina = $this->player->getStamina();
++        $this->currentHealth = $this->player->getCurrentHealth();
++
+         $healAmount = Dice::roll(20) + $this->player->getLevel() * 3;
+         $newAmount = $this->player->getCurrentHealth() + $healAmount;
+         $newAmount = min($newAmount, $this->player->getMaxHealth());
+@@ -26,4 +32,10 @@ class HealCommand implements ActionCommandInterface
+             $healAmount
+         ));
+     }
++
++    public function undo(): void
++    {
++        $this->player->setHealth($this->currentHealth);
++        $this->player->setStamina($this->stamina);
++    }
+ }
+\ No newline at end of file
+diff --git a/src/ActionCommand/SurrenderCommand.php b/src/ActionCommand/SurrenderCommand.php
+index 0a12b11..e5243d6 100644
+--- a/src/ActionCommand/SurrenderCommand.php
++++ b/src/ActionCommand/SurrenderCommand.php
+@@ -17,4 +17,9 @@ class SurrenderCommand implements ActionCommandInterface
+ 
+         GameApplication::$printer->block('You\'ve surrendered! Better luck next time!');
+     }
++
++    public function undo(): void
++    {
++        // Nothing to undo
++    }
+ }

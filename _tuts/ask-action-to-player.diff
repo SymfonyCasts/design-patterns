@@ -1,0 +1,35 @@
+diff --git a/src/GameApplication.php b/src/GameApplication.php
+index cf99d7c..913ecca 100644
+--- a/src/GameApplication.php
++++ b/src/GameApplication.php
+@@ -3,6 +3,8 @@
+ namespace App;
+ 
+ use App\ActionCommand\AttackCommand;
++use App\ActionCommand\HealCommand;
++use App\ActionCommand\SurrenderCommand;
+ use App\Builder\CharacterBuilder;
+ use App\Character\Character;
+ use App\Observer\GameObserverInterface;
+@@ -24,8 +26,19 @@ class GameApplication
+             $fightResultSet->addRound();
+ 
+             // Player's turn
+-            $attackCommand = new AttackCommand($player, $ai, $fightResultSet);
+-            $attackCommand->execute();
++            $actionChoice = GameApplication::$printer->choice('Your turn', [
++                'Attack',
++                'Heal',
++                'Surrender',
++            ]);
++
++            $playerAction = match ($actionChoice) {
++                'Attack' => new AttackCommand($player, $ai, $fightResultSet),
++                'Heal' => new HealCommand($player),
++                'Surrender' => new SurrenderCommand($player),
++            };
++
++            $playerAction->execute();
+ 
+             if ($this->didPlayerDie($ai)) {
+                 return $this->finishFightResult($fightResultSet, $player, $ai);

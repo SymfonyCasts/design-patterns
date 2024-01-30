@@ -29,7 +29,37 @@
             "id": "attack-refactor-logic",
             "name": "Attack: refactor logic",
             "description": null
+        },
+        {
+            "id": "attack-add-damage-received-to-ai",
+            "name": "Attack: add damage received to ai",
+            "description": null
+        },
+        {
+            "id": "attack-use-command",
+            "name": "Attack: use command",
+            "description": null
+        },
+        {
+            "id": "implement-other-actions",
+            "name": "implement other actions",
+            "description": null
+        },
+        {
+            "id": "ask-action-to-player",
+            "name": "ask action to player",
+            "description": null
+        },
+        {
+            "id": "undo-add-method-to-interface",
+            "name": "Undo: add method to interface",
+            "description": null
+        },
+        {
+            "id": "undo-implement-undo-methods",
+            "name": "Undo: implement undo methods",
+            "description": null
         }
     ],
-    "sha": "28bbeead78e124855e681f0fb12bb7e904fddf8c"
+    "sha": "521a99cf19ce88a749a32ad878de7cf4db2f6808"
 }
