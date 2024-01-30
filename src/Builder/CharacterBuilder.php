@@ -19,7 +19,6 @@ class CharacterBuilder
     private int $baseDamage;
     private array $attackTypes;
     private string $armorType;
-    private bool $isAi;
 
     public function setMaxHealth(int $maxHealth): self
     {
@@ -49,13 +48,6 @@ class CharacterBuilder
         return $this;
     }
 
-    public function setIsAi(bool $isAi): self
-    {
-        $this->isAi = $isAi;
-
-        return $this;
-    }
-
     public function buildCharacter(): Character
     {
         $attackTypes = array_map(fn(string $attackType) => $this->createAttackType($attackType), $this->attackTypes);
@@ -70,7 +62,6 @@ class CharacterBuilder
             $this->baseDamage,
             $attackType,
             $this->createArmorType(),
-            $this->isAi,
         );
     }
 

@@ -5,11 +5,11 @@ namespace App;
 use App\Builder\CharacterBuilder;
 use App\Character\Character;
 use App\Observer\GameObserverInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
+use App\Printer\MessagePrinter;
 
 class GameApplication
 {
-    public static SymfonyStyle $io;
+    public static MessagePrinter $printer;
 
     /** @var GameObserverInterface[] */
     private array $observers = [];
@@ -22,41 +22,43 @@ class GameApplication
         while (true) {
             $fightResult->addRound();
 
+            // Player's turn
             $damage = $player->attack();
             if ($damage === 0) {
-                GameApplication::$io->writeln('You\'re exhausted for a turn');
+                self::$printer->writeln('You\'re exhausted for a turn');
                 $fightResult->addExhaustedTurn();
             }
 
             $damageDealt = $ai->receiveAttack($damage);
             $fightResult->addDamageDealt($damageDealt);
 
-            GameApplication::$io->writeln(sprintf(
+            self::$printer->writeln(sprintf(
                 'Your attack does %d damage',
                 $damageDealt
             ));
-            GameApplication::$io->writeln('');
+            self::$printer->writeln('');
             usleep(300000);
 
             if ($this->didPlayerDie($ai)) {
                 return $this->finishFightResult($fightResult, $player, $ai);
             }
 
+            // AI's turn
             $aiDamage = $ai->attack();
 
             if ($damage === 0) {
-                GameApplication::$io->writeln('AI got exhausted');
+                self::$printer->writeln('AI got exhausted');
                 $fightResult->addExhaustedTurn();
             }
 
             $damageReceived = $player->receiveAttack($aiDamage);
             $fightResult->addDamageReceived($damageReceived);
 
-            GameApplication::$io->writeln(sprintf(
+            self::$printer->writeln(sprintf(
                 'AI attack does %d damage',
                 $aiDamage
             ));
-            GameApplication::$io->writeln('');
+            self::$printer->writeln('');
 
             if ($this->didPlayerDie($player)) {
                 return $this->finishFightResult($fightResult, $ai, $player);
@@ -79,7 +81,7 @@ class GameApplication
 
     private function printCurrentHealth(Character $player, Character $ai): void
     {
-        GameApplication::$io->block(sprintf(
+        self::$printer->block(sprintf(
             'Current Health: %d/%d %sAI Health: %d/%d',
             $player->getCurrentHealth(),
             $player->getMaxHealth(),
@@ -94,7 +96,7 @@ class GameApplication
         return $player->getCurrentHealth() <= 0;
     }
 
-    public function createCharacter(string $character, bool $isAi = false): Character
+    public function createCharacter(string $character): Character
     {
         return match (strtolower($character)) {
             'fighter' => $this->createCharacterBuilder()
@@ -102,7 +104,6 @@ class GameApplication
                 ->setBaseDamage(12)
                 ->setAttackType('sword')
                 ->setArmorType('shield')
-                ->setIsAi($isAi)
                 ->buildCharacter(),
 
             'archer' => $this->createCharacterBuilder()
@@ -110,7 +111,6 @@ class GameApplication
                 ->setBaseDamage(10)
                 ->setAttackType('bow')
                 ->setArmorType('leather_armor')
-                ->setIsAi($isAi)
                 ->buildCharacter(),
 
             'mage' => $this->createCharacterBuilder()
@@ -118,7 +118,6 @@ class GameApplication
                 ->setBaseDamage(8)
                 ->setAttackType('fire_bolt')
                 ->setArmorType('ice_block')
-                ->setIsAi($isAi)
                 ->buildCharacter(),
 
             'mage_archer' => $this->createCharacterBuilder()
@@ -126,7 +125,6 @@ class GameApplication
                 ->setBaseDamage(9)
                 ->setAttackType('fire_bolt', 'bow')
                 ->setArmorType('shield')
-                ->setIsAi($isAi)
                 ->buildCharacter(),
 
             default => throw new \RuntimeException('Undefined Character')

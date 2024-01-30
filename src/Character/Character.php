@@ -15,15 +15,17 @@ class Character
     private string $nickname = '';
     private int $level = 1;
     private int $xp = 0;
+    private string $id;
 
     public function __construct(
         private int $maxHealth,
         private int $baseDamage,
         private AttackType $attackType,
-        private ArmorType $armorType,
-        private bool $isAi = false,
-    ) {
+        private ArmorType $armorType
+    )
+    {
         $this->currentHealth = $this->maxHealth;
+        $this->id = uniqid();
     }
 
     public function attack(): int
@@ -96,7 +98,7 @@ class Character
         return $this->maxHealth;
     }
 
-    public function setHealth(mixed $health):void
+    public function setHealth(mixed $health): void
     {
         $this->currentHealth = $health;
     }
@@ -111,9 +113,9 @@ class Character
         $this->currentStamina = $stamina;
     }
 
-    public function isAi(): bool
+    public function getId(): string
     {
-        return $this->isAi;
+        return $this->id;
     }
 
     /**
