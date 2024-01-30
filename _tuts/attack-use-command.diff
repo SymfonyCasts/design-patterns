@@ -1,5 +1,5 @@
 diff --git a/src/GameApplication.php b/src/GameApplication.php
-index 76aa53f..cf99d7c 100644
+index bdb1a2f..974f999 100644
 --- a/src/GameApplication.php
 +++ b/src/GameApplication.php
 @@ -2,6 +2,7 @@
@@ -33,7 +33,7 @@ index 76aa53f..cf99d7c 100644
 +            $attackCommand->execute();
  
              if ($this->didPlayerDie($ai)) {
-                 return $this->finishFightResult($fightResultSet, $player, $ai);
+                 return $this->endBattle($fightResultSet, $player, $ai);
              }
  
              // AI's turn
@@ -56,4 +56,4 @@ index 76aa53f..cf99d7c 100644
 +            $aiAttackCommand->execute();
  
              if ($this->didPlayerDie($player)) {
-                 return $this->finishFightResult($fightResultSet, $ai, $player);
+                 return $this->endBattle($fightResultSet, $ai, $player);
