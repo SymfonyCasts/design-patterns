@@ -24,7 +24,12 @@
             "id": "attack-paste-player-turn-logic",
             "name": "Attack: paste player turn logic",
             "description": null
+        },
+        {
+            "id": "attack-refactor-logic",
+            "name": "Attack: refactor logic",
+            "description": null
         }
     ],
-    "sha": "ce96199d7c9579ac68408b3889d800c430217f6a"
+    "sha": "28bbeead78e124855e681f0fb12bb7e904fddf8c"
 }
