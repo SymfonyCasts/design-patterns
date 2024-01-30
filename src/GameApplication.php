@@ -39,7 +39,7 @@ class GameApplication
             self::$printer->writeln('');
             usleep(300000);
 
-            if ($this->battleFinished($player, $ai)) {
+            if ($this->didPlayerDie($ai)) {
                 return $this->endBattle($fightResultSet, $player, $ai);
             }
 
@@ -60,8 +60,8 @@ class GameApplication
             ));
             self::$printer->writeln('');
 
-            if ($this->battleFinished($player, $ai)) {
-                return $this->endBattle($fightResultSet, $player, $ai);
+            if ($this->didPlayerDie($player)) {
+                return $this->endBattle($fightResultSet, $ai, $player);
             }
 
             $this->printCurrentHealth($player, $ai);
@@ -69,24 +69,14 @@ class GameApplication
         }
     }
 
-    private function endBattle(FightResultSet $fightResultSet, Character $player, Character $ai): FightResultSet
+    private function endBattle(FightResultSet $fightResultSet, Character $winner, Character $loser): FightResultSet
     {
-        if ($this->didPlayerDie($ai)) {
-            $fightResultSet->setWinner($player);
-            $fightResultSet->setLoser($ai);
-        } else {
-            $fightResultSet->setWinner($ai);
-            $fightResultSet->setLoser($player);
-        }
+        $fightResultSet->setWinner($winner);
+        $fightResultSet->setLoser($loser);
 
         $this->notify($fightResultSet);
 
         return $fightResultSet;
-    }
-
-    private function battleFinished(Character $player, Character $ai): bool
-    {
-        return $this->didPlayerDie($player) || $this->didPlayerDie($ai);
     }
 
     private function didPlayerDie(Character $player): bool
