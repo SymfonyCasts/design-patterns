@@ -1,0 +1,16 @@
+diff --git a/src/ActionCommand/AttackCommand.php b/src/ActionCommand/AttackCommand.php
+new file mode 100644
+index 0000000..4778fc3
+--- /dev/null
++++ b/src/ActionCommand/AttackCommand.php
+@@ -0,0 +1,10 @@
++<?php
++
++namespace App\ActionCommand;
++
++class AttackCommand implements ActionCommandInterface
++{
++    public function execute(): void
++    {
++    }
++}

@@ -1,0 +1,33 @@
+diff --git a/src/ActionCommand/AttackCommand.php b/src/ActionCommand/AttackCommand.php
+index 73b62da..29d26db 100644
+--- a/src/ActionCommand/AttackCommand.php
++++ b/src/ActionCommand/AttackCommand.php
+@@ -3,6 +3,7 @@
+ namespace App\ActionCommand;
+ 
+ use App\Character\Character;
++use App\GameApplication;
+ use App\FightResultSet;
+ 
+ class AttackCommand implements ActionCommandInterface
+@@ -16,5 +17,20 @@ class AttackCommand implements ActionCommandInterface
+ 
+     public function execute(): void
+     {
++        $damage = $player->attack();
++        if ($damage === 0) {
++            self::$printer->writeln('You\'re exhausted for a turn');
++            $fightResultSet->of($player)->addExhaustedTurn();
++        }
++
++        $damageDealt = $ai->receiveAttack($damage);
++        $fightResultSet->of($player)->addDamageDealt($damageDealt);
++
++        self::$printer->writeln(sprintf(
++            'Your attack does %d damage',
++            $damageDealt
++        ));
++        self::$printer->writeln('');
++        usleep(300000);
+     }
+ }

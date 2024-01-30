@@ -2,46 +2,120 @@
 
 namespace App;
 
+use App\Builder\CharacterBuilder;
 use App\Character\Character;
+use App\Observer\GameObserverInterface;
+use App\Printer\MessagePrinter;
 
 class GameApplication
 {
-    public function play(Character $player, Character $ai): FightResult
+    public static MessagePrinter $printer;
+
+    /** @var GameObserverInterface[] */
+    private array $observers = [];
+
+    public function play(Character $player, Character $ai): FightResultSet
     {
         $player->rest();
 
-        $fightResult = new FightResult();
+        $fightResultSet = new FightResultSet($player->getId(), $ai->getId());
         while (true) {
-            $fightResult->addRound();
+            $fightResultSet->addRound();
 
+            // Player's turn
             $damage = $player->attack();
             if ($damage === 0) {
-                $fightResult->addExhaustedTurn();
+                self::$printer->writeln('You\'re exhausted for a turn');
+                $fightResultSet->of($player)->addExhaustedTurn();
             }
 
             $damageDealt = $ai->receiveAttack($damage);
-            $fightResult->addDamageDealt($damageDealt);
+            $fightResultSet->of($player)->addDamageDealt($damageDealt);
+
+            self::$printer->writeln(sprintf(
+                'Your attack does %d damage',
+                $damageDealt
+            ));
+            self::$printer->writeln('');
+            usleep(300000);
 
             if ($this->didPlayerDie($ai)) {
-                return $this->finishFightResult($fightResult, $player, $ai);
+                return $this->endBattle($fightResultSet, $player, $ai);
             }
 
-            $damageReceived = $player->receiveAttack($ai->attack());
-            $fightResult->addDamageReceived($damageReceived);
+            // AI's turn
+            $aiDamage = $ai->attack();
+
+            if ($damage === 0) {
+                self::$printer->writeln('AI got exhausted');
+                $fightResultSet->of($ai)->addExhaustedTurn();
+            }
+
+            $damageReceived = $player->receiveAttack($aiDamage);
+            $fightResultSet->of($ai)->addDamageReceived($damageReceived);
+
+            self::$printer->writeln(sprintf(
+                'AI attack does %d damage',
+                $aiDamage
+            ));
+            self::$printer->writeln('');
 
             if ($this->didPlayerDie($player)) {
-                return $this->finishFightResult($fightResult, $ai, $player);
+                return $this->endBattle($fightResultSet, $ai, $player);
             }
+
+            $this->printCurrentHealth($player, $ai);
+            usleep(300000);
         }
+    }
+
+    private function endBattle(FightResultSet $fightResultSet, Character $winner, Character $loser): FightResultSet
+    {
+        $fightResultSet->setWinner($winner);
+        $fightResultSet->setLoser($loser);
+
+        $this->notify($fightResultSet);
+
+        return $fightResultSet;
+    }
+
+    private function didPlayerDie(Character $player): bool
+    {
+        return $player->getCurrentHealth() <= 0;
     }
 
     public function createCharacter(string $character): Character
     {
         return match (strtolower($character)) {
-            'fighter' => new Character(90, 12, 0.25),
-            'archer' => new Character(80, 10, 0.15),
-            'mage' => new Character(70, 8, 0.10),
-            default => throw new \RuntimeException('Undefined Character'),
+            'fighter' => $this->createCharacterBuilder()
+                ->setMaxHealth(60)
+                ->setBaseDamage(12)
+                ->setAttackType('sword')
+                ->setArmorType('shield')
+                ->buildCharacter(),
+
+            'archer' => $this->createCharacterBuilder()
+                ->setMaxHealth(50)
+                ->setBaseDamage(10)
+                ->setAttackType('bow')
+                ->setArmorType('leather_armor')
+                ->buildCharacter(),
+
+            'mage' => $this->createCharacterBuilder()
+                ->setMaxHealth(40)
+                ->setBaseDamage(8)
+                ->setAttackType('fire_bolt')
+                ->setArmorType('ice_block')
+                ->buildCharacter(),
+
+            'mage_archer' => $this->createCharacterBuilder()
+                ->setMaxHealth(50)
+                ->setBaseDamage(9)
+                ->setAttackType('fire_bolt', 'bow')
+                ->setArmorType('shield')
+                ->buildCharacter(),
+
+            default => throw new \RuntimeException('Undefined Character')
         };
     }
 
@@ -51,19 +125,47 @@ class GameApplication
             'fighter',
             'mage',
             'archer',
+            'mage_archer',
         ];
     }
 
-    private function finishFightResult(FightResult $fightResult, Character $winner, Character $loser): FightResult
+    private function printCurrentHealth(Character $player, Character $ai): void
     {
-        $fightResult->setWinner($winner);
-        $fightResult->setLoser($loser);
-
-        return $fightResult;
+        self::$printer->block(sprintf(
+            'Current Health: %d/%d %sAI Health: %d/%d',
+            $player->getCurrentHealth(),
+            $player->getMaxHealth(),
+            PHP_EOL,
+            $ai->getCurrentHealth(),
+            $ai->getMaxHealth(),
+        ));
     }
 
-    private function didPlayerDie(Character $player): bool
+    private function createCharacterBuilder(): CharacterBuilder
     {
-        return $player->getCurrentHealth() <= 0;
+        return new CharacterBuilder();
+    }
+
+    public function subscribe(GameObserverInterface $observer): void
+    {
+        if (!in_array($observer, $this->observers, true)) {
+            $this->observers[] = $observer;
+        }
+    }
+
+    public function unsubscribe(GameObserverInterface $observer): void
+    {
+        $key = array_search($observer, $this->observers, true);
+
+        if ($key !== false) {
+            unset($this->observers[$key]);
+        }
+    }
+
+    private function notify(FightResultSet $fightResultSet): void
+    {
+        foreach ($this->observers as $observer) {
+            $observer->onFightFinished($fightResultSet);
+        }
     }
 }

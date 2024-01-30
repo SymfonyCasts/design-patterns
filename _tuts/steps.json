@@ -6,295 +6,65 @@
             "description": null
         },
         {
-            "id": "strategy-attack-type-interface",
-            "name": "Strategy: Attack Type Interface",
+            "id": "create-action-command-interface",
+            "name": "create action command interface",
             "description": null
         },
         {
-            "id": "strategy-attack-type-impl",
-            "name": "Strategy: attack type impl",
+            "id": "attack-create-class",
+            "name": "Attack: create class",
             "description": null
         },
         {
-            "id": "strategy-update-attacktype-property",
-            "name": "Strategy: Update AttackType property",
+            "id": "attack-add-constructor",
+            "name": "Attack: add constructor",
             "description": null
         },
         {
-            "id": "strategy-update-attack-method",
-            "name": "Strategy: Update attack method",
+            "id": "attack-paste-player-turn-logic",
+            "name": "Attack: paste player turn logic",
             "description": null
         },
         {
-            "id": "strategy-add-multiattacktype",
-            "name": "Strategy: Add MultiAttackType",
+            "id": "attack-refactor-logic",
+            "name": "Attack: refactor logic",
             "description": null
         },
         {
-            "id": "strategy-add-magefighter-to-game",
-            "name": "Strategy: Add MageFighter to Game",
+            "id": "attack-add-damage-received-to-ai",
+            "name": "Attack: add damage received to ai",
             "description": null
         },
         {
-            "id": "strategy-armortype-interface",
-            "name": "Strategy: ArmorType Interface",
+            "id": "attack-use-command",
+            "name": "Attack: use command",
             "description": null
         },
         {
-            "id": "strategy-armortype-derivatives",
-            "name": "Strategy: ArmorType derivatives",
+            "id": "implement-other-actions",
+            "name": "implement other actions",
             "description": null
         },
         {
-            "id": "strategy-add-armortype-argument",
-            "name": "Strategy: Add ArmorType Argument",
+            "id": "ask-action-to-player",
+            "name": "ask action to player",
             "description": null
         },
         {
-            "id": "strategy-initialize-armortype",
-            "name": "Strategy: initialize ArmorType",
+            "id": "undo-add-method-to-interface",
+            "name": "Undo: add method to interface",
             "description": null
         },
         {
-            "id": "strategy-update-receiveattack-method",
-            "name": "Strategy: update receiveAttack method",
+            "id": "undo-implement-undo-methods",
+            "name": "Undo: implement undo methods",
             "description": null
         },
         {
-            "id": "builder-create-characterbuilder-class",
-            "name": "Builder: Create CharacterBuilder class",
-            "description": null
-        },
-        {
-            "id": "builder-characterbuilder-add-setters",
-            "name": "Builder: CharacterBuilder: add setters",
-            "description": null
-        },
-        {
-            "id": "builder-characterbuilder-add-properties",
-            "name": "Builder: CharacterBuilder add properties",
-            "description": null
-        },
-        {
-            "id": "builder-characterbuilder-implement-setters",
-            "name": "Builder: CharacterBuilder implement setters",
-            "description": null
-        },
-        {
-            "id": "builder-gameapp-add-create-character-builder-method",
-            "name": "Builder: GameApp add create character builder method",
-            "description": null
-        },
-        {
-            "id": "builder-gameapp-update-createcharacter-method",
-            "name": "Builder: GameApp update createCharacter method",
-            "description": null
-        },
-        {
-            "id": "builder-add-more-flexibility-to-builder",
-            "name": "Builder: Add more flexibility to builder",
-            "description": null
-        },
-        {
-            "id": "builderdi-create-factory-service-and-use",
-            "name": "BuilderDi: Create factory service & use",
-            "description": null
-        },
-        {
-            "id": "builderdi-inject-logger-as-example",
-            "name": "BuilderDi: inject logger as example",
-            "description": null
-        },
-        {
-            "id": "observer-create-observer-interface",
-            "name": "Observer: create observer interface",
-            "description": null
-        },
-        {
-            "id": "observer-gameapplication-implement-interface",
-            "name": "Observer: GameApplication implement interface",
-            "description": null
-        },
-        {
-            "id": "observer-gameapplication-implement-methods",
-            "name": "Observer: GameApplication implement methods",
-            "description": null
-        },
-        {
-            "id": "observer-notify-all-observers",
-            "name": "Observer: Notify all observers",
-            "description": null
-        },
-        {
-            "id": "observer-character-add-level-fields",
-            "name": "Observer: character add level fields",
-            "description": null
-        },
-        {
-            "id": "observer-character-add-level-up-method",
-            "name": "Observer: Character add level up method",
-            "description": null
-        },
-        {
-            "id": "observer-create-xpearnedobserver",
-            "name": "Observer: create XpEarnedObserver",
-            "description": null
-        },
-        {
-            "id": "observer-copy-xpcalculator",
-            "name": "Observer: copy XpCalculator",
-            "description": null
-        },
-        {
-            "id": "observer-xpearnedobserver-implementation",
-            "name": "Observer: XpEarnedObserver implementation",
-            "description": null
-        },
-        {
-            "id": "observer-subscribe-observer",
-            "name": "Observer: subscribe observer",
-            "description": null
-        },
-        {
-            "id": "observer-print-out-final-level",
-            "name": "Observer: print out final level",
-            "description": null
-        },
-        {
-            "id": "observerdi-configuring-with-a-call",
-            "name": "ObserverDI: Configuring with a call",
-            "description": null
-        },
-        {
-            "id": "observerdi-add-autoconfiguration",
-            "name": "ObserverDI: Add autoconfiguration",
-            "description": null
-        },
-        {
-            "id": "observerdi-implement-compiler-pass-to-set-calls",
-            "name": "ObserverDI: Implement compiler pass to set calls",
-            "description": null
-        },
-        {
-            "id": "pubsub-add-fightstartingevent",
-            "name": "PubSub: Add FightStartingEvent",
-            "description": null
-        },
-        {
-            "id": "pubsub-dispatch-from-gameapp",
-            "name": "PubSub: Dispatch from GameApp",
-            "description": null
-        },
-        {
-            "id": "pubsub-attach-listener-in-gamecommand",
-            "name": "PubSub: Attach listener in GameCommand",
-            "description": null
-        },
-        {
-            "id": "pubsub-add-args-to-event",
-            "name": "PubSub: Add args to event",
-            "description": null
-        },
-        {
-            "id": "pubsub-create-event-subscriber",
-            "name": "PubSub: create event subscriber",
-            "description": null
-        },
-        {
-            "id": "pubsub-remove-duplicate-manual-registration",
-            "name": "PubSub: Remove duplicate manual registration",
-            "description": null
-        },
-        {
-            "id": "decorator-create-xpearnedserviceinterface",
-            "name": "Decorator: create XpEarnedServiceInterface",
-            "description": null
-        },
-        {
-            "id": "decorator-implement-interface-on-service",
-            "name": "Decorator: implement interface on service",
-            "description": null
-        },
-        {
-            "id": "decorator-change-usage-to-use-interface",
-            "name": "Decorator: change usage to use interface",
-            "description": null
-        },
-        {
-            "id": "decorator-create-outputtingxpearnedservicedecorator",
-            "name": "Decorator: create OutputtingXpEarnedServiceDecorator",
-            "description": null
-        },
-        {
-            "id": "delete-me-1",
-            "name": "delete me 1",
-            "description": null
-        },
-        {
-            "id": "decorator-decorate-addxp-method",
-            "name": "Decorator: decorate addXp method",
-            "description": null
-        },
-        {
-            "id": "decorator-implement-addxp-method",
-            "name": "Decorator: implement addXp method",
-            "description": null
-        },
-        {
-            "id": "decorator-back-up-and-show-in-raw-php",
-            "name": "Decorator: back up and show in raw php",
-            "description": null
-        },
-        {
-            "id": "decorator-show-decoration-in-php",
-            "name": "Decorator: show decoration in php",
-            "description": null
-        },
-        {
-            "id": "decorator-remove-manual-php-code",
-            "name": "Decorator: remove manual php code",
-            "description": null
-        },
-        {
-            "id": "decorator-add-interface-alias-to-decorator-service",
-            "name": "Decorator: Add interface alias to decorator service",
-            "description": null
-        },
-        {
-            "id": "decorator-fixing-argument-passed-into-decorator",
-            "name": "Decorator: fixing argument passed into decorator",
-            "description": null
-        },
-        {
-            "id": "decorator-create-event-dispatcher-decorator",
-            "name": "Decorator: create event dispatcher decorator",
-            "description": null
-        },
-        {
-            "id": "decorator-eaeventdispatcher-delegate-all-methods",
-            "name": "Decorator: EaeventDispatcher delegate all methods",
-            "description": null
-        },
-        {
-            "id": "decorator-decorate-dispatch-method",
-            "name": "Decorator: decorate dispatch method",
-            "description": null
-        },
-        {
-            "id": "decorator-configure-debugeventdispatcherdecorator",
-            "name": "Decorator: Configure DebugEventDispatcherDecorator",
-            "description": null
-        },
-        {
-            "id": "decoratordi-set-interface-back-to-normal-service",
-            "name": "DecoratorDi: Set interface back to normal service",
-            "description": null
-        },
-        {
-            "id": "decoratordi-use-asdecorator",
-            "name": "DecoratorDi: Use AsDecorator()",
+            "id": "undo-ask-revert-last-turn",
+            "name": "Undo: ask revert last turn",
             "description": null
         }
     ],
-    "sha": "8bb927aa7544d0307d957bc93184221eefd730fa"
+    "sha": "932d1c4ae9fd98b7d2b1f539937e2e1339ba3062"
 }

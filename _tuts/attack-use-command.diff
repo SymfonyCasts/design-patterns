@@ -1,0 +1,59 @@
+diff --git a/src/GameApplication.php b/src/GameApplication.php
+index bdb1a2f..974f999 100644
+--- a/src/GameApplication.php
++++ b/src/GameApplication.php
+@@ -2,6 +2,7 @@
+ 
+ namespace App;
+ 
++use App\ActionCommand\AttackCommand;
+ use App\Builder\CharacterBuilder;
+ use App\Character\Character;
+ use App\Observer\GameObserverInterface;
+@@ -23,42 +24,16 @@ class GameApplication
+             $fightResultSet->addRound();
+ 
+             // Player's turn
+-            $damage = $player->attack();
+-            if ($damage === 0) {
+-                self::$printer->writeln('You\'re exhausted for a turn');
+-                $fightResultSet->of($player)->addExhaustedTurn();
+-            }
+-
+-            $damageDealt = $ai->receiveAttack($damage);
+-            $fightResultSet->of($player)->addDamageDealt($damageDealt);
+-
+-            self::$printer->writeln(sprintf(
+-                'Your attack does %d damage',
+-                $damageDealt
+-            ));
+-            self::$printer->writeln('');
+-            usleep(300000);
++            $attackCommand = new AttackCommand($player, $ai, $fightResultSet);
++            $attackCommand->execute();
+ 
+             if ($this->didPlayerDie($ai)) {
+                 return $this->endBattle($fightResultSet, $player, $ai);
+             }
+ 
+             // AI's turn
+-            $aiDamage = $ai->attack();
+-
+-            if ($damage === 0) {
+-                self::$printer->writeln('AI got exhausted');
+-                $fightResultSet->of($ai)->addExhaustedTurn();
+-            }
+-
+-            $damageReceived = $player->receiveAttack($aiDamage);
+-            $fightResultSet->of($ai)->addDamageReceived($damageReceived);
+-
+-            self::$printer->writeln(sprintf(
+-                'AI attack does %d damage',
+-                $aiDamage
+-            ));
+-            self::$printer->writeln('');
++            $aiAttackCommand = new AttackCommand($ai, $player, $fightResultSet);
++            $aiAttackCommand->execute();
+ 
+             if ($this->didPlayerDie($player)) {
+                 return $this->endBattle($fightResultSet, $ai, $player);

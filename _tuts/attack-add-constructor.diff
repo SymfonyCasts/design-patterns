@@ -1,0 +1,23 @@
+diff --git a/src/ActionCommand/AttackCommand.php b/src/ActionCommand/AttackCommand.php
+index 4778fc3..73b62da 100644
+--- a/src/ActionCommand/AttackCommand.php
++++ b/src/ActionCommand/AttackCommand.php
+@@ -2,8 +2,18 @@
+ 
+ namespace App\ActionCommand;
+ 
++use App\Character\Character;
++use App\FightResultSet;
++
+ class AttackCommand implements ActionCommandInterface
+ {
++    public function __construct(
++        private readonly Character $player,
++        private readonly Character $opponent,
++        private readonly FightResultSet $fightResultSet,
++    ) {
++    }
++
+     public function execute(): void
+     {
+     }
