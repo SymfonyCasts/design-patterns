@@ -40,7 +40,7 @@ class GameApplication
             usleep(300000);
 
             if ($this->didPlayerDie($ai)) {
-                return $this->finishFightResult($fightResultSet, $player, $ai);
+                return $this->endBattle($fightResultSet, $player, $ai);
             }
 
             // AI's turn
@@ -61,7 +61,7 @@ class GameApplication
             self::$printer->writeln('');
 
             if ($this->didPlayerDie($player)) {
-                return $this->finishFightResult($fightResultSet, $ai, $player);
+                return $this->endBattle($fightResultSet, $ai, $player);
             }
 
             $this->printCurrentHealth($player, $ai);
@@ -69,26 +69,14 @@ class GameApplication
         }
     }
 
-    private function finishFightResult(FightResultSet $fightResult, Character $winner, Character $loser): FightResultSet
+    private function endBattle(FightResultSet $fightResultSet, Character $winner, Character $loser): FightResultSet
     {
-        $fightResult->setWinner($winner);
-        $fightResult->setLoser($loser);
+        $fightResultSet->setWinner($winner);
+        $fightResultSet->setLoser($loser);
 
-        $this->notify($fightResult);
+        $this->notify($fightResultSet);
 
-        return $fightResult;
-    }
-
-    private function printCurrentHealth(Character $player, Character $ai): void
-    {
-        self::$printer->block(sprintf(
-            'Current Health: %d/%d %sAI Health: %d/%d',
-            $player->getCurrentHealth(),
-            $player->getMaxHealth(),
-            PHP_EOL,
-            $ai->getCurrentHealth(),
-            $ai->getMaxHealth(),
-        ));
+        return $fightResultSet;
     }
 
     private function didPlayerDie(Character $player): bool
@@ -137,8 +125,20 @@ class GameApplication
             'fighter',
             'mage',
             'archer',
-            'mage_archer'
+            'mage_archer',
         ];
+    }
+
+    private function printCurrentHealth(Character $player, Character $ai): void
+    {
+        self::$printer->block(sprintf(
+            'Current Health: %d/%d %sAI Health: %d/%d',
+            $player->getCurrentHealth(),
+            $player->getMaxHealth(),
+            PHP_EOL,
+            $ai->getCurrentHealth(),
+            $ai->getMaxHealth(),
+        ));
     }
 
     private function createCharacterBuilder(): CharacterBuilder
