@@ -2,7 +2,7 @@
 
 namespace App\Observer;
 
-use App\FightResult;
+use App\FightResultSet;
 use App\Service\XpCalculatorInterface;
 
 class XpEarnedObserver implements GameObserverInterface
@@ -12,10 +12,10 @@ class XpEarnedObserver implements GameObserverInterface
     ) {
     }
 
-    public function onFightFinished(FightResult $fightResult): void
+    public function onFightFinished(FightResultSet $fightResultSet): void
     {
-        $winner = $fightResult->getWinner();
-        $loser = $fightResult->getLoser();
+        $winner = $fightResultSet->getWinner();
+        $loser = $fightResultSet->getLoser();
 
         $this->xpCalculator->addXp($winner, $loser->getLevel());
     }

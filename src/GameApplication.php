@@ -14,23 +14,23 @@ class GameApplication
     /** @var GameObserverInterface[] */
     private array $observers = [];
 
-    public function play(Character $player, Character $ai): FightResult
+    public function play(Character $player, Character $ai): FightResultSet
     {
         $player->rest();
 
-        $fightResult = new FightResult();
+        $fightResultSet = new FightResultSet($player->getId(), $ai->getId());
         while (true) {
-            $fightResult->addRound();
+            $fightResultSet->addRound();
 
             // Player's turn
             $damage = $player->attack();
             if ($damage === 0) {
                 self::$printer->writeln('You\'re exhausted for a turn');
-                $fightResult->addExhaustedTurn();
+                $fightResultSet->of($player)->addExhaustedTurn();
             }
 
             $damageDealt = $ai->receiveAttack($damage);
-            $fightResult->addDamageDealt($damageDealt);
+            $fightResultSet->of($player)->addDamageDealt($damageDealt);
 
             self::$printer->writeln(sprintf(
                 'Your attack does %d damage',
@@ -40,7 +40,7 @@ class GameApplication
             usleep(300000);
 
             if ($this->didPlayerDie($ai)) {
-                return $this->finishFightResult($fightResult, $player, $ai);
+                return $this->finishFightResult($fightResultSet, $player, $ai);
             }
 
             // AI's turn
@@ -48,11 +48,11 @@ class GameApplication
 
             if ($damage === 0) {
                 self::$printer->writeln('AI got exhausted');
-                $fightResult->addExhaustedTurn();
+                $fightResultSet->of($ai)->addExhaustedTurn();
             }
 
             $damageReceived = $player->receiveAttack($aiDamage);
-            $fightResult->addDamageReceived($damageReceived);
+            $fightResultSet->of($ai)->addDamageReceived($damageReceived);
 
             self::$printer->writeln(sprintf(
                 'AI attack does %d damage',
@@ -61,7 +61,7 @@ class GameApplication
             self::$printer->writeln('');
 
             if ($this->didPlayerDie($player)) {
-                return $this->finishFightResult($fightResult, $ai, $player);
+                return $this->finishFightResult($fightResultSet, $ai, $player);
             }
 
             $this->printCurrentHealth($player, $ai);
@@ -69,7 +69,7 @@ class GameApplication
         }
     }
 
-    private function finishFightResult(FightResult $fightResult, Character $winner, Character $loser): FightResult
+    private function finishFightResult(FightResultSet $fightResult, Character $winner, Character $loser): FightResultSet
     {
         $fightResult->setWinner($winner);
         $fightResult->setLoser($loser);
@@ -162,10 +162,10 @@ class GameApplication
         }
     }
 
-    private function notify(FightResult $fightResult): void
+    private function notify(FightResultSet $fightResultSet): void
     {
         foreach ($this->observers as $observer) {
-            $observer->onFightFinished($fightResult);
+            $observer->onFightFinished($fightResultSet);
         }
     }
 }

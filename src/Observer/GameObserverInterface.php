@@ -2,9 +2,9 @@
 
 namespace App\Observer;
 
-use App\FightResult;
+use App\FightResultSet;
 
 interface GameObserverInterface
 {
-    public function onFightFinished(FightResult $fightResult): void;
+    public function onFightFinished(FightResultSet $fightResultSet): void;
 }

@@ -3,7 +3,7 @@
 namespace App\Command;
 
 use App\Character\Character;
-use App\FightResult;
+use App\FightResultSet;
 use App\GameApplication;
 use App\Printer\MessagePrinter;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -64,9 +64,9 @@ class GameCommand extends Command
             GameApplication::$printer->writeln(sprintf('Opponent Found: <comment>%s</comment>', $aiCharacter->getNickname()));
             usleep(300000);
 
-            $fightResult = $this->game->play($player, $aiCharacter);
+            $fightResultSet = $this->game->play($player, $aiCharacter);
 
-            $this->printResult($fightResult, $player);
+            $this->printResult($fightResultSet, $player);
 
             $answer = GameApplication::$printer->choice('Want to keep playing?', [
                 1 => 'Fight!',
@@ -86,23 +86,23 @@ class GameCommand extends Command
         return $aiCharacter;
     }
 
-    private function printResult(FightResult $fightResult, Character $player): void
+    private function printResult(FightResultSet $fightResultSet, Character $player): void
     {
         GameApplication::$printer->writeln('');
 
         GameApplication::$printer->writeln('------------------------------');
-        if ($fightResult->getWinner() === $player) {
+        if ($fightResultSet->getWinner() === $player) {
             GameApplication::$printer->writeln('Result: <bg=green;fg=white>You WON!</>');
         } else {
             GameApplication::$printer->writeln('Result: <bg=red;fg=white>You lost...</>');
         }
 
-        GameApplication::$printer->writeln('Total Rounds: ' . $fightResult->getRounds());
-        GameApplication::$printer->writeln('Damage dealt: ' . $fightResult->getDamageDealt());
-        GameApplication::$printer->writeln('Damage received: ' . $fightResult->getDamageReceived());
+        GameApplication::$printer->writeln('Total Rounds: ' . $fightResultSet->getRounds());
+        GameApplication::$printer->writeln('Damage dealt: ' . $fightResultSet->of($player)->getDamageDealt());
+        GameApplication::$printer->writeln('Damage received: ' . $fightResultSet->of($player)->getDamageReceived());
         GameApplication::$printer->writeln('XP: ' . $player->getXp());
         GameApplication::$printer->writeln('Level: ' . $player->getLevel());
-        GameApplication::$printer->writeln('Exhausted Turns: ' . $fightResult->getExhaustedTurns());
+        GameApplication::$printer->writeln('Exhausted Turns: ' . $fightResultSet->of($player)->getExhaustedTurns());
         GameApplication::$printer->writeln('------------------------------');
     }
 
