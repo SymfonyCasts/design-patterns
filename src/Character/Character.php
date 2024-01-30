@@ -8,7 +8,7 @@ use App\Dice;
 
 class Character
 {
-    private const MAX_STAMINA = 100;
+    public const MAX_STAMINA = 100;
 
     private int $currentStamina = self::MAX_STAMINA;
     private int $currentHealth;
