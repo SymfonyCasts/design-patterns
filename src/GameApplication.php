@@ -74,6 +74,9 @@ class GameApplication
         $fightResultSet->setWinner($winner);
         $fightResultSet->setLoser($loser);
 
+        $fightResultSet->of($winner)->addVictory();
+        $fightResultSet->of($loser)->addDefeat();
+
         $this->notify($fightResultSet);
 
         return $fightResultSet;
