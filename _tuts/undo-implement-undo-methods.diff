@@ -1,5 +1,5 @@
 diff --git a/src/ActionCommand/AttackCommand.php b/src/ActionCommand/AttackCommand.php
-index 8692bb9..9651837 100644
+index 8692bb9..0339630 100644
 --- a/src/ActionCommand/AttackCommand.php
 +++ b/src/ActionCommand/AttackCommand.php
 @@ -8,6 +8,9 @@ use App\FightResultSet;
@@ -12,7 +12,7 @@ index 8692bb9..9651837 100644
      public function __construct(
          private readonly Character $player,
          private readonly Character $opponent,
-@@ -17,6 +20,9 @@ class AttackCommand implements ActionCommandInterface
+@@ -17,15 +20,20 @@ class AttackCommand implements ActionCommandInterface
  
      public function execute(): void
      {
@@ -22,7 +22,10 @@ index 8692bb9..9651837 100644
          $damage = $this->player->attack();
          if ($damage === 0) {
              GameApplication::$printer->printFor($this->player)->exhaustedMessage();
-@@ -26,6 +32,7 @@ class AttackCommand implements ActionCommandInterface
+             $this->fightResultSet->of($this->player)->addExhaustedTurn();
++            $this->damageDealt = 0;
+ 
+             return;
          }
  
          $damageDealt = $this->opponent->receiveAttack($damage);
@@ -30,7 +33,7 @@ index 8692bb9..9651837 100644
          $this->fightResultSet->of($this->player)->addDamageDealt($damageDealt);
          $this->fightResultSet->of($this->opponent)->addDamageReceived($damageDealt);
  
-@@ -33,4 +40,13 @@ class AttackCommand implements ActionCommandInterface
+@@ -33,4 +41,13 @@ class AttackCommand implements ActionCommandInterface
          GameApplication::$printer->writeln('');
          usleep(300000);
      }

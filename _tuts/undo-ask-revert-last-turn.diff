@@ -1,15 +1,17 @@
 diff --git a/src/GameApplication.php b/src/GameApplication.php
-index 3af463f..e3c2ce4 100644
+index 541f5d8..de1a16e 100644
 --- a/src/GameApplication.php
 +++ b/src/GameApplication.php
-@@ -49,7 +49,14 @@ class GameApplication
+@@ -49,8 +49,15 @@ class GameApplication
              $aiAttackCommand->execute();
  
              if ($this->didPlayerDie($player)) {
--                return $this->endBattle($fightResultSet, $ai, $player);
+-                $this->endBattle($fightResultSet, $ai, $player);
+-                return;
 +                $undoChoice = GameApplication::$printer->confirm('You died! Do you want to undo your last turn?');
 +                if (!$undoChoice) {
-+                    return $this->endBattle($fightResultSet, $ai, $player);
++                    $this->endBattle($fightResultSet, $ai, $player);
++                    return;
 +                }
 +
 +                // These have to be undone in the order they were executed

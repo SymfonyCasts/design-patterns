@@ -1,5 +1,5 @@
 diff --git a/src/GameApplication.php b/src/GameApplication.php
-index bdb1a2f..974f999 100644
+index f75ba7e..ad454a8 100644
 --- a/src/GameApplication.php
 +++ b/src/GameApplication.php
 @@ -2,6 +2,7 @@
@@ -10,7 +10,7 @@ index bdb1a2f..974f999 100644
  use App\Builder\CharacterBuilder;
  use App\Character\Character;
  use App\Observer\GameObserverInterface;
-@@ -23,42 +24,16 @@ class GameApplication
+@@ -22,21 +23,8 @@ class GameApplication
              $fightResultSet->addRound();
  
              // Player's turn
@@ -33,7 +33,8 @@ index bdb1a2f..974f999 100644
 +            $attackCommand->execute();
  
              if ($this->didPlayerDie($ai)) {
-                 return $this->endBattle($fightResultSet, $player, $ai);
+                 $this->endBattle($fightResultSet, $player, $ai);
+@@ -44,21 +32,8 @@ class GameApplication
              }
  
              // AI's turn
@@ -56,4 +57,4 @@ index bdb1a2f..974f999 100644
 +            $aiAttackCommand->execute();
  
              if ($this->didPlayerDie($player)) {
-                 return $this->endBattle($fightResultSet, $ai, $player);
+                 $this->endBattle($fightResultSet, $ai, $player);

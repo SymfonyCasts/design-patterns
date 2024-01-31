@@ -1,0 +1,47 @@
+diff --git a/src/Command/GameCommand.php b/src/Command/GameCommand.php
+index a3b102c..f71d3ca 100644
+--- a/src/Command/GameCommand.php
++++ b/src/Command/GameCommand.php
+@@ -24,6 +24,7 @@ class GameCommand extends Command
+ 
+     protected function execute(InputInterface $input, OutputInterface $output): int
+     {
++        $this->game->initialize();
+         $io = new SymfonyStyle($input, $output);
+ 
+         $io->section('Welcome to the game where warriors fight against each other for honor and glory... and 🍕!');
+diff --git a/src/GameApplication.php b/src/GameApplication.php
+index de1a16e..98b077e 100644
+--- a/src/GameApplication.php
++++ b/src/GameApplication.php
+@@ -6,6 +6,10 @@ use App\ActionCommand\AttackCommand;
+ use App\ActionCommand\HealCommand;
+ use App\ActionCommand\SurrenderCommand;
+ use App\Builder\CharacterBuilder;
++use App\ChainHandler\CasinoHandler;
++use App\ChainHandler\LevelHandler;
++use App\ChainHandler\OnFireHandler;
++use App\ChainHandler\XpBonusHandlerInterface;
+ use App\Character\Character;
+ use App\Observer\GameObserverInterface;
+ use App\Printer\MessagePrinter;
+@@ -16,6 +20,19 @@ class GameApplication
+ 
+     /** @var GameObserverInterface[] */
+     private array $observers = [];
++    private XpBonusHandlerInterface $xpBonusHandler;
++
++    public function initialize(): void
++    {
++        $casinoHandler = new CasinoHandler();
++        $levelHandler = new LevelHandler();
++        $onFireHandler = new OnFireHandler();
++
++        $casinoHandler->setNext($levelHandler);
++        $levelHandler->setNext($onFireHandler);
++
++        $this->xpBonusHandler = $casinoHandler;
++    }
+ 
+     public function play(Character $player, Character $ai, FightResultSet $fightResultSet): void
+     {

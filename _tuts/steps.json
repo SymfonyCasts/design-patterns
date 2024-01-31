@@ -64,7 +64,32 @@
             "id": "undo-ask-revert-last-turn",
             "name": "Undo: ask revert last turn",
             "description": null
+        },
+        {
+            "id": "cor-create-interface",
+            "name": "CoR: create interface",
+            "description": null
+        },
+        {
+            "id": "cor-add-casino-handler",
+            "name": "CoR: add casino handler",
+            "description": null
+        },
+        {
+            "id": "cor-add-other-handlers",
+            "name": "CoR: add other handlers",
+            "description": null
+        },
+        {
+            "id": "cor-initialize-the-chain",
+            "name": "CoR: initialize the chain",
+            "description": null
+        },
+        {
+            "id": "cor-execute-the-chain",
+            "name": "CoR: execute the chain",
+            "description": null
         }
     ],
-    "sha": "932d1c4ae9fd98b7d2b1f539937e2e1339ba3062"
+    "sha": "398f7bd796d16e8974802abcba420e553f2ced42"
 }

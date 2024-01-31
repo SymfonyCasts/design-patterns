@@ -1,0 +1,48 @@
+diff --git a/src/ChainHandler/CasinoHandler.php b/src/ChainHandler/CasinoHandler.php
+new file mode 100644
+index 0000000..9b30f6e
+--- /dev/null
++++ b/src/ChainHandler/CasinoHandler.php
+@@ -0,0 +1,42 @@
++<?php
++
++namespace App\ChainHandler;
++
++use App\Character\Character;
++use App\Dice;
++use App\FightResult;
++use App\GameApplication;
++
++class CasinoHandler implements XpBonusHandlerInterface
++{
++    private XpBonusHandlerInterface $next;
++
++    public function handle(Character $player, FightResult $fightResult): int
++    {
++        $roll = Dice::roll(6) + Dice::roll(6);
++
++        // exit immediately
++        if ($roll === 7) {
++            return 0;
++        }
++
++        // The player wins if rolled a pair
++        if ($roll % 2 === 0) {
++            GameApplication::$printer->info('You earned extra XP thanks to the casino handler!');
++
++            return 25;
++        }
++
++        if (isset($this->next)) {
++            return $this->next->handle($player, $fightResult);
++        }
++
++        return 0;
++    }
++
++    public function setNext(XpBonusHandlerInterface $next): void
++    {
++        $this->next = $next;
++    }
++}
++

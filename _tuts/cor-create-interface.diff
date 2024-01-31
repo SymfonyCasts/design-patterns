@@ -1,0 +1,19 @@
+diff --git a/src/ChainHandler/XpBonusHandlerInterface.php b/src/ChainHandler/XpBonusHandlerInterface.php
+new file mode 100644
+index 0000000..2e04f16
+--- /dev/null
++++ b/src/ChainHandler/XpBonusHandlerInterface.php
+@@ -0,0 +1,13 @@
++<?php
++
++namespace App\ChainHandler;
++
++use App\Character\Character;
++use App\FightResult;
++
++interface XpBonusHandlerInterface
++{
++    public function handle(Character $player, FightResult $fightResult): int;
++
++    public function setNext(XpBonusHandlerInterface $next): void;
++}

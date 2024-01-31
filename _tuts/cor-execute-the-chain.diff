@@ -1,0 +1,15 @@
+diff --git a/src/GameApplication.php b/src/GameApplication.php
+index 98b077e..7ff2fc8 100644
+--- a/src/GameApplication.php
++++ b/src/GameApplication.php
+@@ -89,8 +89,8 @@ class GameApplication
+         $fightResultSet->of($winner)->addVictory();
+         $fightResultSet->of($loser)->addDefeat();
+ 
+-        $fightResultSet->of($winner)->addVictory();
+-        $fightResultSet->of($loser)->addDefeat();
++        $xpBonus = $this->xpBonusHandler->handle($winner, $fightResultSet->of($winner));
++        $winner->addXp($xpBonus);
+ 
+         $this->notify($fightResultSet);
+     }
