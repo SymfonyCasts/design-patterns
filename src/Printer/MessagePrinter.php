@@ -47,4 +47,9 @@ class MessagePrinter
     {
         return $this->io->confirm($question, $default);
     }
+
+    public function info(string|array $message): void
+    {
+        $this->io->info($message);
+    }
 }

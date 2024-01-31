@@ -11,15 +11,24 @@ class FightResultSet
     private Character $loser;
     private int $rounds = 0;
 
-    public function __construct(string $playerId, string $aiId)
+    public function __construct(string $playerId)
     {
-        $this->results[$playerId] = new FightResult();
-        $this->results[$aiId] = new FightResult();
+        $this->add($playerId);
     }
 
     public function of(Character $character): FightResult
     {
         return $this->results[$character->getId()];
+    }
+
+    public function add(string $playerId): void
+    {
+        $this->results[$playerId] = new FightResult();
+    }
+
+    public function remove(string $playerId): void
+    {
+        unset($this->results[$playerId]);
     }
 
     public function getWinner(): Character
