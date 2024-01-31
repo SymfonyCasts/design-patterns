@@ -62,6 +62,11 @@ class FightResult
         return $this->loseStreak;
     }
 
+    public function getTotalVictories(): int
+    {
+        return $this->victories;
+    }
+
     public function addVictory(): void
     {
         $this->victories++;

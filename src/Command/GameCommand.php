@@ -48,6 +48,8 @@ class GameCommand extends Command
             $player->getNickname()
         ));
 
+        $fightResultSet = new FightResultSet($player->getId());
+
         do {
             // let's make it *feel* like a proper battle!
             $weapons = ['🛡', '⚔️', '🏹'];
@@ -64,9 +66,12 @@ class GameCommand extends Command
             GameApplication::$printer->writeln(sprintf('Opponent Found: <comment>%s</comment>', $aiCharacter->getNickname()));
             usleep(300000);
 
-            $fightResultSet = $this->game->play($player, $aiCharacter);
+            $fightResultSet->add($aiCharacter->getId());
+            $this->game->play($player, $aiCharacter, $fightResultSet);
 
             $this->printResult($fightResultSet, $player);
+
+            $fightResultSet->remove($aiCharacter->getId());
 
             $answer = GameApplication::$printer->choice('Want to keep playing?', [
                 1 => 'Fight!',
@@ -97,12 +102,14 @@ class GameCommand extends Command
             GameApplication::$printer->writeln('Result: <bg=red;fg=white>You lost...</>');
         }
 
+        $fightResult = $fightResultSet->of($player);
         GameApplication::$printer->writeln('Total Rounds: ' . $fightResultSet->getRounds());
-        GameApplication::$printer->writeln('Damage dealt: ' . $fightResultSet->of($player)->getDamageDealt());
-        GameApplication::$printer->writeln('Damage received: ' . $fightResultSet->of($player)->getDamageReceived());
+        GameApplication::$printer->writeln('Damage dealt: ' . $fightResult->getDamageDealt());
+        GameApplication::$printer->writeln('Damage received: ' . $fightResult->getDamageReceived());
         GameApplication::$printer->writeln('XP: ' . $player->getXp());
         GameApplication::$printer->writeln('Level: ' . $player->getLevel());
-        GameApplication::$printer->writeln('Exhausted Turns: ' . $fightResultSet->of($player)->getExhaustedTurns());
+        GameApplication::$printer->writeln('Win Streak: ' . $fightResult->getWinStreak());
+        GameApplication::$printer->writeln('Exhausted Turns: ' . $fightResult->getExhaustedTurns());
         GameApplication::$printer->writeln('------------------------------');
     }
 

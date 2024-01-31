@@ -14,11 +14,10 @@ class GameApplication
     /** @var GameObserverInterface[] */
     private array $observers = [];
 
-    public function play(Character $player, Character $ai): FightResultSet
+    public function play(Character $player, Character $ai, FightResultSet $fightResultSet): void
     {
         $player->rest();
 
-        $fightResultSet = new FightResultSet($player->getId(), $ai->getId());
         while (true) {
             $fightResultSet->addRound();
 
@@ -40,7 +39,8 @@ class GameApplication
             usleep(300000);
 
             if ($this->didPlayerDie($ai)) {
-                return $this->endBattle($fightResultSet, $player, $ai);
+                $this->endBattle($fightResultSet, $player, $ai);
+                return;
             }
 
             // AI's turn
@@ -61,7 +61,8 @@ class GameApplication
             self::$printer->writeln('');
 
             if ($this->didPlayerDie($player)) {
-                return $this->endBattle($fightResultSet, $ai, $player);
+                $this->endBattle($fightResultSet, $ai, $player);
+                return;
             }
 
             $this->printCurrentHealth($player, $ai);
@@ -69,17 +70,17 @@ class GameApplication
         }
     }
 
-    private function endBattle(FightResultSet $fightResultSet, Character $winner, Character $loser): FightResultSet
+    private function endBattle(FightResultSet $fightResultSet, Character $winner, Character $loser): void
     {
         $fightResultSet->setWinner($winner);
         $fightResultSet->setLoser($loser);
+        $fightResultSet->of($winner)->addVictory();
+        $fightResultSet->of($loser)->addDefeat();
 
         $fightResultSet->of($winner)->addVictory();
         $fightResultSet->of($loser)->addDefeat();
 
         $this->notify($fightResultSet);
-
-        return $fightResultSet;
     }
 
     private function didPlayerDie(Character $player): bool
