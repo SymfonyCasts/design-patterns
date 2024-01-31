@@ -1,0 +1,79 @@
+diff --git a/src/ChainHandler/CasinoHandler.php b/src/ChainHandler/CasinoHandler.php
+index 0cd693a..3ba84cf 100644
+--- a/src/ChainHandler/CasinoHandler.php
++++ b/src/ChainHandler/CasinoHandler.php
+@@ -6,7 +6,11 @@ use App\Character\Character;
+ use App\Dice;
+ use App\FightResult;
+ use App\GameApplication;
++use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
+ 
++#[Autoconfigure(
++    calls: [['setNext' => ['@'.LevelHandler::class]]]
++)]
+ class CasinoHandler implements XpBonusHandlerInterface
+ {
+     private XpBonusHandlerInterface $next;
+diff --git a/src/ChainHandler/LevelHandler.php b/src/ChainHandler/LevelHandler.php
+index b1a2b6e..4958717 100644
+--- a/src/ChainHandler/LevelHandler.php
++++ b/src/ChainHandler/LevelHandler.php
+@@ -5,7 +5,11 @@ namespace App\ChainHandler;
+ use App\Character\Character;
+ use App\FightResult;
+ use App\GameApplication;
++use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
+ 
++#[Autoconfigure(
++    calls: [['setNext' => ['@'.OnFireHandler::class]]]
++)]
+ class LevelHandler implements XpBonusHandlerInterface
+ {
+     private XpBonusHandlerInterface $next;
+diff --git a/src/Command/GameCommand.php b/src/Command/GameCommand.php
+index d00cd77..0dfb98c 100644
+--- a/src/Command/GameCommand.php
++++ b/src/Command/GameCommand.php
+@@ -24,7 +24,6 @@ class GameCommand extends Command
+ 
+     protected function execute(InputInterface $input, OutputInterface $output): int
+     {
+-        $this->game->initialize();
+         $io = new SymfonyStyle($input, $output);
+ 
+         $io->section('Welcome to the game where warriors fight against each other for honor and glory... and 🍕!');
+diff --git a/src/GameApplication.php b/src/GameApplication.php
+index 40dacb7..3277de3 100644
+--- a/src/GameApplication.php
++++ b/src/GameApplication.php
+@@ -13,6 +13,7 @@ use App\ChainHandler\XpBonusHandlerInterface;
+ use App\Character\Character;
+ use App\Observer\GameObserverInterface;
+ use App\Printer\MessagePrinter;
++use Symfony\Component\DependencyInjection\Attribute\Autowire;
+ 
+ class GameApplication
+ {
+@@ -20,18 +21,11 @@ class GameApplication
+ 
+     /** @var GameObserverInterface[] */
+     private array $observers = [];
+-    private XpBonusHandlerInterface $xpBonusHandler;
+ 
+-    public function initialize(): void
+-    {
+-        $casinoHandler = new CasinoHandler();
+-        $levelHandler = new LevelHandler();
+-        $onFireHandler = new OnFireHandler();
+-
+-        $casinoHandler->setNext($levelHandler);
+-        $levelHandler->setNext($onFireHandler);
+-
+-        $this->xpBonusHandler = $casinoHandler;
++    public function __construct(
++        #[Autowire(service: CasinoHandler::class)]
++        private readonly XpBonusHandlerInterface $xpBonusHandler
++    ) {
+     }
+ 
+     public function play(Character $player, Character $ai, FightResultSet $fightResultSet): void

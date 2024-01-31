@@ -89,7 +89,22 @@
             "id": "cor-execute-the-chain",
             "name": "CoR: execute the chain",
             "description": null
+        },
+        {
+            "id": "null-object-create-handler",
+            "name": "Null Object: create handler",
+            "description": null
+        },
+        {
+            "id": "null-object-refactor-handlers",
+            "name": "Null Object: refactor handlers",
+            "description": null
+        },
+        {
+            "id": "cor-autoconfigure-handlers",
+            "name": "CoR: autoconfigure handlers",
+            "description": null
         }
     ],
-    "sha": "398f7bd796d16e8974802abcba420e553f2ced42"
+    "sha": "9c98db4cd4b96ecc1dfb95cea03f5b5e3a51e08e"
 }

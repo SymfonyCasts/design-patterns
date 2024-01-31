@@ -1,0 +1,87 @@
+diff --git a/src/ChainHandler/CasinoHandler.php b/src/ChainHandler/CasinoHandler.php
+index 9cdb178..0cd693a 100644
+--- a/src/ChainHandler/CasinoHandler.php
++++ b/src/ChainHandler/CasinoHandler.php
+@@ -11,6 +11,11 @@ class CasinoHandler implements XpBonusHandlerInterface
+ {
+     private XpBonusHandlerInterface $next;
+ 
++    public function __construct()
++    {
++        $this->next = new NullHandler();
++    }
++
+     public function handle(Character $player, FightResult $fightResult): int
+     {
+         $dice1 = Dice::roll(6);
+@@ -28,11 +33,7 @@ class CasinoHandler implements XpBonusHandlerInterface
+             return 25;
+         }
+ 
+-        if (isset($this->next)) {
+-            return $this->next->handle($player, $fightResult);
+-        }
+-
+-        return 0;
++        return $this->next->handle($player, $fightResult);
+     }
+ 
+     public function setNext(XpBonusHandlerInterface $next): void
+diff --git a/src/ChainHandler/LevelHandler.php b/src/ChainHandler/LevelHandler.php
+index c50e13c..b1a2b6e 100644
+--- a/src/ChainHandler/LevelHandler.php
++++ b/src/ChainHandler/LevelHandler.php
+@@ -10,6 +10,11 @@ class LevelHandler implements XpBonusHandlerInterface
+ {
+     private XpBonusHandlerInterface $next;
+ 
++    public function __construct()
++    {
++        $this->next = new NullHandler();
++    }
++
+     public function handle(Character $player, FightResult $fightResult): int
+     {
+         if ($player->getLevel() === 1) {
+@@ -18,11 +23,7 @@ class LevelHandler implements XpBonusHandlerInterface
+             return 25;
+         }
+ 
+-        if (isset($this->next)) {
+-            return $this->next->handle($player, $fightResult);
+-        }
+-
+-        return 0;
++        return $this->next->handle($player, $fightResult);
+     }
+ 
+     public function setNext(XpBonusHandlerInterface $next): void
+diff --git a/src/ChainHandler/OnFireHandler.php b/src/ChainHandler/OnFireHandler.php
+index 1a30c6d..f7d8f68 100644
+--- a/src/ChainHandler/OnFireHandler.php
++++ b/src/ChainHandler/OnFireHandler.php
+@@ -10,6 +10,11 @@ class OnFireHandler implements XpBonusHandlerInterface
+ {
+     private XpBonusHandlerInterface $next;
+ 
++    public function __construct()
++    {
++        $this->next = new NullHandler();
++    }
++
+     public function handle(Character $player, FightResult $fightResult): int
+     {
+         if ($fightResult->getWinStreak() >= 3) {
+@@ -18,11 +23,7 @@ class OnFireHandler implements XpBonusHandlerInterface
+             return 25;
+         }
+ 
+-        if (isset($this->next)) {
+-            return $this->next->handle($player, $fightResult);
+-        }
+-
+-        return 0;
++        return $this->next->handle($player, $fightResult);
+     }
+ 
+     public function setNext(XpBonusHandlerInterface $next): void

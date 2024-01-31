@@ -1,9 +1,9 @@
 diff --git a/src/ChainHandler/CasinoHandler.php b/src/ChainHandler/CasinoHandler.php
 new file mode 100644
-index 0000000..9b30f6e
+index 0000000..9cdb178
 --- /dev/null
 +++ b/src/ChainHandler/CasinoHandler.php
-@@ -0,0 +1,42 @@
+@@ -0,0 +1,43 @@
 +<?php
 +
 +namespace App\ChainHandler;
@@ -19,15 +19,16 @@ index 0000000..9b30f6e
 +
 +    public function handle(Character $player, FightResult $fightResult): int
 +    {
-+        $roll = Dice::roll(6) + Dice::roll(6);
++        $dice1 = Dice::roll(6);
++        $dice2 = Dice::roll(6);
 +
 +        // exit immediately
-+        if ($roll === 7) {
++        if ($dice1 + $dice2 === 7) {
 +            return 0;
 +        }
 +
 +        // The player wins if rolled a pair
-+        if ($roll % 2 === 0) {
++        if ($dice1 === $dice2) {
 +            GameApplication::$printer->info('You earned extra XP thanks to the casino handler!');
 +
 +            return 25;

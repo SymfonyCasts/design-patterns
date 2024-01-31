@@ -1,8 +1,8 @@
 diff --git a/src/GameApplication.php b/src/GameApplication.php
-index 541f5d8..de1a16e 100644
+index 11a64a0..5a6cb0b 100644
 --- a/src/GameApplication.php
 +++ b/src/GameApplication.php
-@@ -49,8 +49,15 @@ class GameApplication
+@@ -53,8 +53,15 @@ class GameApplication
              $aiAttackCommand->execute();
  
              if ($this->didPlayerDie($player)) {

@@ -1,0 +1,26 @@
+diff --git a/src/ChainHandler/NullHandler.php b/src/ChainHandler/NullHandler.php
+new file mode 100644
+index 0000000..237565e
+--- /dev/null
++++ b/src/ChainHandler/NullHandler.php
+@@ -0,0 +1,20 @@
++<?php
++
++namespace App\ChainHandler;
++
++use App\Character\Character;
++use App\FightResult;
++
++class NullHandler implements XpBonusHandlerInterface
++{
++
++    public function handle(Character $player, FightResult $fightResult): int
++    {
++        return 0;
++    }
++
++    public function setNext(XpBonusHandlerInterface $next): void
++    {
++        // Doing nothing
++    }
++}

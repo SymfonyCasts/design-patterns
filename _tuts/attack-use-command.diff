@@ -1,5 +1,5 @@
 diff --git a/src/GameApplication.php b/src/GameApplication.php
-index f75ba7e..ad454a8 100644
+index f5a09bb..2313bfa 100644
 --- a/src/GameApplication.php
 +++ b/src/GameApplication.php
 @@ -2,6 +2,7 @@
@@ -10,23 +10,20 @@ index f75ba7e..ad454a8 100644
  use App\Builder\CharacterBuilder;
  use App\Character\Character;
  use App\Observer\GameObserverInterface;
-@@ -22,21 +23,8 @@ class GameApplication
-             $fightResultSet->addRound();
+@@ -26,18 +27,8 @@ class GameApplication
+             ), '']);
  
              // Player's turn
 -            $damage = $player->attack();
 -            if ($damage === 0) {
--                self::$printer->writeln('You\'re exhausted for a turn');
+-                self::$printer->printFor($player)->exhaustedMessage();
 -                $fightResultSet->of($player)->addExhaustedTurn();
 -            }
 -
 -            $damageDealt = $ai->receiveAttack($damage);
 -            $fightResultSet->of($player)->addDamageDealt($damageDealt);
 -
--            self::$printer->writeln(sprintf(
--                'Your attack does %d damage',
--                $damageDealt
--            ));
+-            self::$printer->printFor($player)->attackMessage($damageDealt);
 -            self::$printer->writeln('');
 -            usleep(300000);
 +            $attackCommand = new AttackCommand($player, $ai, $fightResultSet);
@@ -34,24 +31,21 @@ index f75ba7e..ad454a8 100644
  
              if ($this->didPlayerDie($ai)) {
                  $this->endBattle($fightResultSet, $player, $ai);
-@@ -44,21 +32,8 @@ class GameApplication
+@@ -45,18 +36,8 @@ class GameApplication
              }
  
              // AI's turn
 -            $aiDamage = $ai->attack();
 -
 -            if ($damage === 0) {
--                self::$printer->writeln('AI got exhausted');
+-                self::$printer->printFor($ai)->exhaustedMessage();
 -                $fightResultSet->of($ai)->addExhaustedTurn();
 -            }
 -
 -            $damageReceived = $player->receiveAttack($aiDamage);
 -            $fightResultSet->of($ai)->addDamageReceived($damageReceived);
 -
--            self::$printer->writeln(sprintf(
--                'AI attack does %d damage',
--                $aiDamage
--            ));
+-            self::$printer->printFor($ai)->attackMessage($damageReceived);
 -            self::$printer->writeln('');
 +            $aiAttackCommand = new AttackCommand($ai, $player, $fightResultSet);
 +            $aiAttackCommand->execute();
