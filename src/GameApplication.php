@@ -20,21 +20,22 @@ class GameApplication
 
         while (true) {
             $fightResultSet->addRound();
+            GameApplication::$printer->writeln([
+                '------------------------------',
+                sprintf('ROUND %d', $fightResultSet->getRounds()
+            ), '']);
 
             // Player's turn
             $damage = $player->attack();
             if ($damage === 0) {
-                self::$printer->writeln('You\'re exhausted for a turn');
+                self::$printer->printFor($player)->exhaustedMessage();
                 $fightResultSet->of($player)->addExhaustedTurn();
             }
 
             $damageDealt = $ai->receiveAttack($damage);
             $fightResultSet->of($player)->addDamageDealt($damageDealt);
 
-            self::$printer->writeln(sprintf(
-                'Your attack does %d damage',
-                $damageDealt
-            ));
+            self::$printer->printFor($player)->attackMessage($damageDealt);
             self::$printer->writeln('');
             usleep(300000);
 
@@ -47,17 +48,14 @@ class GameApplication
             $aiDamage = $ai->attack();
 
             if ($damage === 0) {
-                self::$printer->writeln('AI got exhausted');
+                self::$printer->printFor($ai)->exhaustedMessage();
                 $fightResultSet->of($ai)->addExhaustedTurn();
             }
 
             $damageReceived = $player->receiveAttack($aiDamage);
             $fightResultSet->of($ai)->addDamageReceived($damageReceived);
 
-            self::$printer->writeln(sprintf(
-                'AI attack does %d damage',
-                $aiDamage
-            ));
+            self::$printer->printFor($ai)->attackMessage($damageReceived);
             self::$printer->writeln('');
 
             if ($this->didPlayerDie($player)) {
@@ -79,6 +77,8 @@ class GameApplication
 
         $fightResultSet->of($winner)->addVictory();
         $fightResultSet->of($loser)->addDefeat();
+
+        GameApplication::$printer->printFor($winner)->victoryMessage($loser);
 
         $this->notify($fightResultSet);
     }
@@ -135,14 +135,14 @@ class GameApplication
 
     private function printCurrentHealth(Character $player, Character $ai): void
     {
-        self::$printer->block(sprintf(
-            'Current Health: %d/%d %sAI Health: %d/%d',
+        self::$printer->writeln([sprintf(
+            'Current Health: <comment>%d/%d</comment> %sAI Health: <comment>%d/%d</comment>',
             $player->getCurrentHealth(),
             $player->getMaxHealth(),
             PHP_EOL,
             $ai->getCurrentHealth(),
             $ai->getMaxHealth(),
-        ));
+        ), '']);
     }
 
     private function createCharacterBuilder(): CharacterBuilder

@@ -53,7 +53,7 @@ class GameCommand extends Command
         do {
             // let's make it *feel* like a proper battle!
             $weapons = ['🛡', '⚔️', '🏹'];
-            GameApplication::$printer->writeln(['']);
+            GameApplication::$printer->writeln('');
             GameApplication::$printer->write('(Searching for a worthy opponent) ');
             for ($i = 0; $i < 4; $i++) {
                 GameApplication::$printer->write($weapons[array_rand($weapons)]);
@@ -64,6 +64,7 @@ class GameCommand extends Command
             $aiCharacter = $this->selectAiCharacter();
 
             GameApplication::$printer->writeln(sprintf('Opponent Found: <comment>%s</comment>', $aiCharacter->getNickname()));
+            GameApplication::$printer->writeln('');
             usleep(300000);
 
             $fightResultSet->add($aiCharacter->getId());
@@ -106,10 +107,9 @@ class GameCommand extends Command
         GameApplication::$printer->writeln('Total Rounds: ' . $fightResultSet->getRounds());
         GameApplication::$printer->writeln('Damage dealt: ' . $fightResult->getDamageDealt());
         GameApplication::$printer->writeln('Damage received: ' . $fightResult->getDamageReceived());
-        GameApplication::$printer->writeln('XP: ' . $player->getXp());
         GameApplication::$printer->writeln('Level: ' . $player->getLevel());
+        GameApplication::$printer->writeln('XP: ' . $player->getXp());
         GameApplication::$printer->writeln('Win Streak: ' . $fightResult->getWinStreak());
-        GameApplication::$printer->writeln('Exhausted Turns: ' . $fightResult->getExhaustedTurns());
         GameApplication::$printer->writeln('------------------------------');
     }
 

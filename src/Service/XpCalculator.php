@@ -28,10 +28,10 @@ class XpCalculator implements XpCalculatorInterface
             $levelDiff === 0 => $rawXp,
 
             // You get less XP when the opponent is lower level than you
-            $levelDiff > 0 => $rawXp - floor($loserLevel * 0.20),
+            $levelDiff > 0 => $rawXp - floor($rawXp * $levelDiff * 0.20),
 
             // You get extra XP when the opponent is higher level than you
-            $levelDiff < 0 => $rawXp + floor($loserLevel * 0.20),
+            $levelDiff < 0 => $rawXp + floor($rawXp * $levelDiff * 0.20),
         };
     }
 

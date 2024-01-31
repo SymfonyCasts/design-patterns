@@ -2,6 +2,7 @@
 
 namespace App\Printer;
 
+use App\Character\Character;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 class AiPrinter implements CharacterPrinterInterface
@@ -17,8 +18,13 @@ class AiPrinter implements CharacterPrinterInterface
 
     public function attackMessage(int $damage): void
     {
-        $this->io->writeln(sprintf('AI attack does %d damage',
+        $this->io->writeln(sprintf('AI attack does <comment>%d</comment> damage',
             $damage
         ));
+    }
+
+    public function victoryMessage(Character $player): void
+    {
+        $this->io->writeln('You\'ve been defeated');
     }
 }
