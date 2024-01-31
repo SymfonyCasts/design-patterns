@@ -70,6 +70,8 @@ class GameApplication
 
     private function endBattle(FightResultSet $fightResultSet, Character $winner, Character $loser): void
     {
+        GameApplication::$printer->printFor($winner)->victoryMessage($loser);
+        
         $fightResultSet->setWinner($winner);
         $fightResultSet->setLoser($loser);
         $fightResultSet->of($winner)->addVictory();
