@@ -60,4 +60,9 @@ class FightResultSet
     {
         $this->rounds++;
     }
+
+    public function resetRounds(): void
+    {
+        $this->rounds = 0;
+    }
 }

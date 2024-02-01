@@ -19,6 +19,7 @@ class CharacterBuilder
     private int $baseDamage;
     private array $attackTypes;
     private string $armorType;
+    private int $level;
 
     public function setMaxHealth(int $maxHealth): self
     {
@@ -48,6 +49,13 @@ class CharacterBuilder
         return $this;
     }
 
+    public function setLevel(int $level): self
+    {
+        $this->level = $level;
+
+        return $this;
+    }
+
     public function buildCharacter(): Character
     {
         $attackTypes = array_map(fn(string $attackType) => $this->createAttackType($attackType), $this->attackTypes);
@@ -57,12 +65,17 @@ class CharacterBuilder
             $attackType = new MultiAttackType($attackTypes);
         }
 
-        return new Character(
+        $character = new Character(
             $this->maxHealth,
             $this->baseDamage,
             $attackType,
             $this->createArmorType(),
         );
+        for ($i = 1; $i < $this->level; $i++) {
+            $character->levelUp();
+        }
+
+        return $character;
     }
 
     private function createAttackType(string $attackType): AttackType

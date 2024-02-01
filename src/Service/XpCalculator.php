@@ -37,7 +37,7 @@ class XpCalculator implements XpCalculatorInterface
 
     private function getXpForNextLvl(int $currentLvl): int
     {
-        $baseXp = 100;
+        $baseXp = 75;
         $xpNeededForCurrentLvl = $this->fibonacciProgressionFormula($baseXp, $currentLvl);
         $xpNeededForNextLvl = $this->fibonacciProgressionFormula($baseXp, $currentLvl + 1);
 

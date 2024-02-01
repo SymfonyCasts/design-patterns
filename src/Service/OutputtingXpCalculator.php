@@ -24,10 +24,10 @@ class OutputtingXpCalculator implements XpCalculatorInterface
         $afterLevel = $winner->getLevel();
         if ($afterLevel > $beforeLevel) {
             $output = new ConsoleOutput();
-            $output->writeln('--------------------------------');
+            $output->writeln(['', '--------------------------------']);
             $output->writeln('<bg=green;fg=white>Congratulations! You\'ve leveled up!</>');
             $output->writeln(sprintf('You are now level "%d"', $winner->getLevel()));
-            $output->writeln('--------------------------------');
+            $output->writeln(['--------------------------------', '']);
         }
     }
 }

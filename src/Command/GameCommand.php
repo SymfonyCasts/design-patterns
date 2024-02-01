@@ -32,7 +32,7 @@ class GameCommand extends Command
         $playerChoice = $io->choice('Select your character', $characters);
 
         $playerCharacter = $this->game->createCharacter($playerChoice);
-        $playerCharacter->setNickname($this->humanize($playerChoice));
+        $playerCharacter->setNickname($playerChoice);
 
         // Static field so we can print messages from anywhere
         GameApplication::$printer = new MessagePrinter($io, $playerCharacter->getId());
@@ -61,7 +61,7 @@ class GameCommand extends Command
             }
             GameApplication::$printer->writeln(['', '']);
 
-            $aiCharacter = $this->selectAiCharacter();
+            $aiCharacter = $this->game->createAiCharacter();
 
             GameApplication::$printer->writeln(sprintf('Opponent Found: <comment>%s</comment>', $aiCharacter->getNickname()));
             GameApplication::$printer->writeln('');
@@ -70,26 +70,23 @@ class GameCommand extends Command
             $fightResultSet->add($aiCharacter->getId());
             $this->game->play($player, $aiCharacter, $fightResultSet);
 
+            if ($fightResultSet->getWinner() === $player) {
+                $this->game->victory($player, $fightResultSet->of($player));
+            } else {
+                $this->game->defeat($player, $fightResultSet->of($player));
+            }
+
             $this->printResult($fightResultSet, $player);
 
             $fightResultSet->remove($aiCharacter->getId());
+            $fightResultSet->resetRounds();
+            $fightResultSet->of($player)->prepareForNextMatch();
 
             $answer = GameApplication::$printer->choice('Want to keep playing?', [
                 1 => 'Fight!',
                 2 => 'Exit Game',
             ]);
         } while ($answer === 'Fight!');
-    }
-
-    private function selectAiCharacter(): Character
-    {
-        $characters = $this->game->getCharactersList();
-        $aiCharacterString = $characters[array_rand($characters)];
-
-        $aiCharacter = $this->game->createCharacter($aiCharacterString);
-        $aiCharacter->setNickname($this->humanize($aiCharacterString));
-
-        return $aiCharacter;
     }
 
     private function printResult(FightResultSet $fightResultSet, Character $player): void
@@ -110,11 +107,7 @@ class GameCommand extends Command
         GameApplication::$printer->writeln('Level: ' . $player->getLevel());
         GameApplication::$printer->writeln('XP: ' . $player->getXp());
         GameApplication::$printer->writeln('Win Streak: ' . $fightResult->getWinStreak());
+        GameApplication::$printer->writeln('Lose Streak: ' . $fightResult->getLoseStreak());
         GameApplication::$printer->writeln('------------------------------');
-    }
-
-    private function humanize(mixed $characterChoice): string
-    {
-        return ucfirst(str_replace('_', ' ', $characterChoice));
     }
 }

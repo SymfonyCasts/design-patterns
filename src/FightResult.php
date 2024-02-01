@@ -80,4 +80,11 @@ class FightResult
         $this->loseStreak++;
         $this->winStreak = 0;
     }
+
+    public function prepareForNextMatch(): void
+    {
+        $this->damageDealt = 0;
+        $this->damageReceived = 0;
+        $this->exhaustedTurns = 0;
+    }
 }

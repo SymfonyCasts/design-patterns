@@ -11,8 +11,15 @@ class GameApplication
 {
     public static MessagePrinter $printer;
 
+    private GameDifficultyContext $difficultyContext;
+
     /** @var GameObserverInterface[] */
     private array $observers = [];
+
+    public function __construct()
+    {
+        $this->difficultyContext = new GameDifficultyContext();
+    }
 
     public function play(Character $player, Character $ai, FightResultSet $fightResultSet): void
     {
@@ -53,7 +60,7 @@ class GameApplication
             }
 
             $damageReceived = $player->receiveAttack($aiDamage);
-            $fightResultSet->of($ai)->addDamageReceived($damageReceived);
+            $fightResultSet->of($player)->addDamageReceived($damageReceived);
 
             self::$printer->printFor($ai)->attackMessage($damageReceived);
             self::$printer->writeln('');
@@ -68,6 +75,16 @@ class GameApplication
         }
     }
 
+    public function victory(Character $player, FightResult $fightResult): void
+    {
+        $this->difficultyContext->victory($player, $fightResult);
+    }
+
+    public function defeat(Character $player, FightResult $fightResult): void
+    {
+        $this->difficultyContext->defeat($player, $fightResult);
+    }
+
     private function endBattle(FightResultSet $fightResultSet, Character $winner, Character $loser): void
     {
         GameApplication::$printer->printFor($winner)->victoryMessage($loser);
@@ -77,11 +94,6 @@ class GameApplication
         $fightResultSet->of($winner)->addVictory();
         $fightResultSet->of($loser)->addDefeat();
 
-        $fightResultSet->of($winner)->addVictory();
-        $fightResultSet->of($loser)->addDefeat();
-
-        GameApplication::$printer->printFor($winner)->victoryMessage($loser);
-
         $this->notify($fightResultSet);
     }
 
@@ -90,35 +102,55 @@ class GameApplication
         return $player->getCurrentHealth() <= 0;
     }
 
-    public function createCharacter(string $character): Character
+    public function createAiCharacter(): Character
+    {
+        $characters = $this->getCharactersList();
+        $aiCharacterString = $characters[array_rand($characters)];
+
+        $aiCharacter = $this->createCharacter(
+            $aiCharacterString,
+            $this->difficultyContext->enemyAttackBonus,
+            $this->difficultyContext->enemyHealthBonus,
+            1 + $this->difficultyContext->enemyLevelBonus
+        );
+        $aiCharacter->setNickname($aiCharacterString);
+
+        return $aiCharacter;
+    }
+
+    public function createCharacter(string $character, int $extraBaseDamage = 0, int $extraHealth = 0, int $level = 1): Character
     {
         return match (strtolower($character)) {
             'fighter' => $this->createCharacterBuilder()
-                ->setMaxHealth(60)
-                ->setBaseDamage(12)
+                ->setMaxHealth(60 + $extraHealth)
+                ->setBaseDamage(12 + $extraBaseDamage)
                 ->setAttackType('sword')
                 ->setArmorType('shield')
+                ->setLevel($level)
                 ->buildCharacter(),
 
             'archer' => $this->createCharacterBuilder()
-                ->setMaxHealth(50)
-                ->setBaseDamage(10)
+                ->setMaxHealth(50 + $extraHealth)
+                ->setBaseDamage(10 + $extraBaseDamage)
                 ->setAttackType('bow')
                 ->setArmorType('leather_armor')
+                ->setLevel($level)
                 ->buildCharacter(),
 
             'mage' => $this->createCharacterBuilder()
-                ->setMaxHealth(40)
-                ->setBaseDamage(8)
+                ->setMaxHealth(40 + $extraHealth)
+                ->setBaseDamage(8 + $extraBaseDamage)
                 ->setAttackType('fire_bolt')
                 ->setArmorType('ice_block')
+                ->setLevel($level)
                 ->buildCharacter(),
 
             'mage_archer' => $this->createCharacterBuilder()
-                ->setMaxHealth(50)
-                ->setBaseDamage(9)
+                ->setMaxHealth(50 + $extraHealth)
+                ->setBaseDamage(9 + $extraBaseDamage)
                 ->setAttackType('fire_bolt', 'bow')
                 ->setArmorType('shield')
+                ->setLevel($level)
                 ->buildCharacter(),
 
             default => throw new \RuntimeException('Undefined Character')

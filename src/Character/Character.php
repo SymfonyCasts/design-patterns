@@ -12,10 +12,15 @@ class Character
 
     private int $currentStamina = self::MAX_STAMINA;
     private int $currentHealth;
+    private string $id;
     private string $nickname = '';
     private int $level = 1;
     private int $xp = 0;
-    private string $id;
+
+    /**
+     * XP bonus in percentage
+     */
+    private int $xpBonus = 0;
 
     public function __construct(
         private int $maxHealth,
@@ -26,6 +31,11 @@ class Character
     {
         $this->currentHealth = $this->maxHealth;
         $this->id = uniqid();
+    }
+
+    public function getId(): string
+    {
+        return $this->id;
     }
 
     public function attack(): int
@@ -83,9 +93,14 @@ class Character
 
     public function addXp(int $xpEarned): int
     {
-        $this->xp += $xpEarned;
+        $this->xp += $xpEarned * (1 + $this->xpBonus / 100);
 
         return $this->xp;
+    }
+
+    public function setXpBonus(int $xpBonus): void
+    {
+        $this->xpBonus = $xpBonus;
     }
 
     public function getXp(): int
@@ -111,11 +126,6 @@ class Character
     public function setStamina(int $stamina): void
     {
         $this->currentStamina = $stamina;
-    }
-
-    public function getId(): string
-    {
-        return $this->id;
     }
 
     /**
