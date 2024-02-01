@@ -31,7 +31,7 @@ index b1a2b6e..4958717 100644
  {
      private XpBonusHandlerInterface $next;
 diff --git a/src/Command/GameCommand.php b/src/Command/GameCommand.php
-index d00cd77..0dfb98c 100644
+index 7acd4f5..c389f4e 100644
 --- a/src/Command/GameCommand.php
 +++ b/src/Command/GameCommand.php
 @@ -24,7 +24,6 @@ class GameCommand extends Command
@@ -43,7 +43,7 @@ index d00cd77..0dfb98c 100644
  
          $io->section('Welcome to the game where warriors fight against each other for honor and glory... and 🍕!');
 diff --git a/src/GameApplication.php b/src/GameApplication.php
-index 40dacb7..3277de3 100644
+index e8879f7..204e10f 100644
 --- a/src/GameApplication.php
 +++ b/src/GameApplication.php
 @@ -13,6 +13,7 @@ use App\ChainHandler\XpBonusHandlerInterface;
@@ -54,7 +54,7 @@ index 40dacb7..3277de3 100644
  
  class GameApplication
  {
-@@ -20,18 +21,11 @@ class GameApplication
+@@ -22,18 +23,11 @@ class GameApplication
  
      /** @var GameObserverInterface[] */
      private array $observers = [];
@@ -76,4 +76,4 @@ index 40dacb7..3277de3 100644
 +    ) {
      }
  
-     public function play(Character $player, Character $ai, FightResultSet $fightResultSet): void
+     public function __construct()

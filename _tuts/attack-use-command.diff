@@ -1,5 +1,5 @@
 diff --git a/src/GameApplication.php b/src/GameApplication.php
-index f5a09bb..2313bfa 100644
+index 41f1c70..212f4e8 100644
 --- a/src/GameApplication.php
 +++ b/src/GameApplication.php
 @@ -2,6 +2,7 @@
@@ -10,7 +10,7 @@ index f5a09bb..2313bfa 100644
  use App\Builder\CharacterBuilder;
  use App\Character\Character;
  use App\Observer\GameObserverInterface;
-@@ -26,18 +27,8 @@ class GameApplication
+@@ -33,18 +34,8 @@ class GameApplication
              ), '']);
  
              // Player's turn
@@ -31,7 +31,7 @@ index f5a09bb..2313bfa 100644
  
              if ($this->didPlayerDie($ai)) {
                  $this->endBattle($fightResultSet, $player, $ai);
-@@ -45,18 +36,8 @@ class GameApplication
+@@ -52,18 +43,8 @@ class GameApplication
              }
  
              // AI's turn
@@ -43,7 +43,7 @@ index f5a09bb..2313bfa 100644
 -            }
 -
 -            $damageReceived = $player->receiveAttack($aiDamage);
--            $fightResultSet->of($ai)->addDamageReceived($damageReceived);
+-            $fightResultSet->of($player)->addDamageReceived($damageReceived);
 -
 -            self::$printer->printFor($ai)->attackMessage($damageReceived);
 -            self::$printer->writeln('');

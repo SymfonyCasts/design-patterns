@@ -1,5 +1,5 @@
 diff --git a/src/Command/GameCommand.php b/src/Command/GameCommand.php
-index 0dfb98c..d00cd77 100644
+index c389f4e..7acd4f5 100644
 --- a/src/Command/GameCommand.php
 +++ b/src/Command/GameCommand.php
 @@ -24,6 +24,7 @@ class GameCommand extends Command
@@ -11,7 +11,7 @@ index 0dfb98c..d00cd77 100644
  
          $io->section('Welcome to the game where warriors fight against each other for honor and glory... and 🍕!');
 diff --git a/src/GameApplication.php b/src/GameApplication.php
-index 5a6cb0b..e4cf66f 100644
+index 11acfdc..c0d4b43 100644
 --- a/src/GameApplication.php
 +++ b/src/GameApplication.php
 @@ -6,6 +6,10 @@ use App\ActionCommand\AttackCommand;
@@ -25,7 +25,7 @@ index 5a6cb0b..e4cf66f 100644
  use App\Character\Character;
  use App\Observer\GameObserverInterface;
  use App\Printer\MessagePrinter;
-@@ -16,6 +20,19 @@ class GameApplication
+@@ -18,6 +22,19 @@ class GameApplication
  
      /** @var GameObserverInterface[] */
      private array $observers = [];
@@ -43,5 +43,5 @@ index 5a6cb0b..e4cf66f 100644
 +        $this->xpBonusHandler = $casinoHandler;
 +    }
  
-     public function play(Character $player, Character $ai, FightResultSet $fightResultSet): void
+     public function __construct()
      {

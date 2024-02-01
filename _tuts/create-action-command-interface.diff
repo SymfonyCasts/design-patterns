@@ -12,16 +12,3 @@ index 0000000..a155131
 +{
 +    public function execute(): void;
 +}
-diff --git a/src/GameApplication.php b/src/GameApplication.php
-index 6162889..f5a09bb 100644
---- a/src/GameApplication.php
-+++ b/src/GameApplication.php
-@@ -80,8 +80,6 @@ class GameApplication
-         $fightResultSet->of($winner)->addVictory();
-         $fightResultSet->of($loser)->addDefeat();
- 
--        GameApplication::$printer->printFor($winner)->victoryMessage($loser);
--
-         $this->notify($fightResultSet);
-     }
- 
