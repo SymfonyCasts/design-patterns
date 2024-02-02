@@ -1,0 +1,17 @@
+diff --git a/src/GameDifficultyContext.php b/src/GameDifficultyContext.php
+index db3e4fb..02e0692 100644
+--- a/src/GameDifficultyContext.php
++++ b/src/GameDifficultyContext.php
+@@ -3,10 +3,11 @@
+ namespace App;
+ 
+ use App\Character\Character;
++use App\DifficultyState\DifficultyStateInterface;
+ 
+ class GameDifficultyContext
+ {
+-    public int $level = 1;
++    public DifficultyStateInterface $difficultyState;
+     public int $enemyLevelBonus = 0;
+     public int $enemyHealthBonus = 0;
+     public int $enemyAttackBonus = 0;

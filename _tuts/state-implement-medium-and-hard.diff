@@ -1,0 +1,87 @@
+diff --git a/src/DifficultyState/HardState.php b/src/DifficultyState/HardState.php
+index 644ecc3..decf34d 100644
+--- a/src/DifficultyState/HardState.php
++++ b/src/DifficultyState/HardState.php
+@@ -3,16 +3,40 @@
+ namespace App\DifficultyState;
+ 
+ use App\Character\Character;
++use App\Dice;
+ use App\FightResult;
++use App\GameApplication;
+ use App\GameDifficultyContext;
+ 
+ class HardState implements DifficultyStateInterface
+ {
+     public function victory(GameDifficultyContext $difficultyContext, Character $player, FightResult $fightResult): void
+     {
++        // This is D&D style, where rolling 1 means epic failure and 20 critical success
++        switch (Dice::roll(20)) {
++            case 1:
++                $difficultyContext->enemyLevelBonus = $player->getLevel() + 5;
++                break;
++            case 20:
++                $player->setXpBonus(100);
++                break;
++            default:
++                // restore bonus settings
++                $difficultyContext->enemyLevelBonus = $player->getLevel() + 1;
++                $player->setXpBonus(50);
++                break;
++        }
+     }
+ 
+     public function defeat(GameDifficultyContext $difficultyContext, Character $player, FightResult $fightResult): void
+     {
++        if ($fightResult->getLoseStreak() >= 2) {
++            $difficultyContext->enemyHealthBonus = 5;
++            $difficultyContext->enemyAttackBonus = 5;
++            $player->setXpBonus(25);
++            $difficultyContext->difficultyState = new MediumState();
++
++            GameApplication::$printer->info('Game difficulty level decreased to Medium!');
++        }
+     }
+ }
+diff --git a/src/DifficultyState/MediumState.php b/src/DifficultyState/MediumState.php
+index 1c8bd4f..20deb43 100644
+--- a/src/DifficultyState/MediumState.php
++++ b/src/DifficultyState/MediumState.php
+@@ -3,16 +3,37 @@
+ namespace App\DifficultyState;
+ 
+ use App\Character\Character;
++use App\Dice;
+ use App\FightResult;
++use App\GameApplication;
+ use App\GameDifficultyContext;
+ 
+ class MediumState implements DifficultyStateInterface
+ {
+     public function victory(GameDifficultyContext $difficultyContext, Character $player, FightResult $fightResult): void
+     {
++        if ($player->getLevel() >= 4 || $fightResult->getWinStreak() >= 4) {
++            $difficultyContext->enemyLevelBonus = $player->getLevel() + 1;
++            $difficultyContext->enemyHealthBonus = 10;
++            $difficultyContext->enemyAttackBonus = 8;
++            $player->setXpBonus(50);
++            $difficultyContext->difficultyState = new HardState();
++
++            GameApplication::$printer->info('Game difficulty level increased to Hard!');
++        }
+     }
+ 
+     public function defeat(GameDifficultyContext $difficultyContext, Character $player, FightResult $fightResult): void
+     {
++        // 60% chance to go back to level 1
++        if (Dice::roll(100) <= 60) {
++            // Back to level 1
++            $difficultyContext->enemyAttackBonus = 0;
++            $difficultyContext->enemyHealthBonus = 0;
++            $player->setXpBonus(0);
++            $difficultyContext->difficultyState = new EasyState();
++
++            GameApplication::$printer->info('Game difficulty level decreased to Easy!');
++        }
+     }
+ }

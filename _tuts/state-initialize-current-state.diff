@@ -1,0 +1,24 @@
+diff --git a/src/GameDifficultyContext.php b/src/GameDifficultyContext.php
+index 93af0fc..caa1074 100644
+--- a/src/GameDifficultyContext.php
++++ b/src/GameDifficultyContext.php
+@@ -4,6 +4,7 @@ namespace App;
+ 
+ use App\Character\Character;
+ use App\DifficultyState\DifficultyStateInterface;
++use App\DifficultyState\EasyState;
+ 
+ class GameDifficultyContext
+ {
+@@ -12,6 +13,11 @@ class GameDifficultyContext
+     public int $enemyHealthBonus = 0;
+     public int $enemyAttackBonus = 0;
+ 
++    public function __construct()
++    {
++        $this->difficultyState = new EasyState();
++    }
++
+     public function victory(Character $player, FightResult $fightResult): void
+     {
+         $this->difficultyState->victory($this, $player, $fightResult);

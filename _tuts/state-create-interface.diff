@@ -1,0 +1,20 @@
+diff --git a/src/DifficultyState/DifficultyStateInterface.php b/src/DifficultyState/DifficultyStateInterface.php
+new file mode 100644
+index 0000000..c58a58f
+--- /dev/null
++++ b/src/DifficultyState/DifficultyStateInterface.php
+@@ -0,0 +1,14 @@
++<?php
++
++namespace App\DifficultyState;
++
++use App\Character\Character;
++use App\FightResult;
++use App\GameDifficultyContext;
++
++interface DifficultyStateInterface
++{
++    public function victory(GameDifficultyContext $difficultyContext, Character $player, FightResult $fightResult): void;
++
++    public function defeat(GameDifficultyContext $difficultyContext, Character $player, FightResult $fightResult): void;
++}

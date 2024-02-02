@@ -1,0 +1,19 @@
+diff --git a/src/DifficultyState/EasyState.php b/src/DifficultyState/EasyState.php
+index a99e579..4595586 100644
+--- a/src/DifficultyState/EasyState.php
++++ b/src/DifficultyState/EasyState.php
+@@ -10,6 +10,14 @@ class EasyState implements DifficultyStateInterface
+ {
+     public function victory(GameDifficultyContext $difficultyContext, Character $player, FightResult $fightResult): void
+     {
++        if ($player->getLevel() >= 2 || $fightResult->getTotalVictories() >= 2) {
++            $this->enemyAttackBonus = 5;
++            $this->enemyHealthBonus = 5;
++            $player->setXpBonus(25);
++            $this->level++;
++
++            GameApplication::$printer->info('Game difficulty level increased to Medium!');
++        }
+     }
+ 
+     public function defeat(GameDifficultyContext $difficultyContext, Character $player, FightResult $fightResult): void

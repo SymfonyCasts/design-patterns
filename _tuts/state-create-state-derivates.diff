@@ -1,0 +1,72 @@
+diff --git a/src/DifficultyState/EasyState.php b/src/DifficultyState/EasyState.php
+new file mode 100644
+index 0000000..a99e579
+--- /dev/null
++++ b/src/DifficultyState/EasyState.php
+@@ -0,0 +1,18 @@
++<?php
++
++namespace App\DifficultyState;
++
++use App\Character\Character;
++use App\FightResult;
++use App\GameDifficultyContext;
++
++class EasyState implements DifficultyStateInterface
++{
++    public function victory(GameDifficultyContext $difficultyContext, Character $player, FightResult $fightResult): void
++    {
++    }
++
++    public function defeat(GameDifficultyContext $difficultyContext, Character $player, FightResult $fightResult): void
++    {
++    }
++}
+diff --git a/src/DifficultyState/HardState.php b/src/DifficultyState/HardState.php
+new file mode 100644
+index 0000000..644ecc3
+--- /dev/null
++++ b/src/DifficultyState/HardState.php
+@@ -0,0 +1,18 @@
++<?php
++
++namespace App\DifficultyState;
++
++use App\Character\Character;
++use App\FightResult;
++use App\GameDifficultyContext;
++
++class HardState implements DifficultyStateInterface
++{
++    public function victory(GameDifficultyContext $difficultyContext, Character $player, FightResult $fightResult): void
++    {
++    }
++
++    public function defeat(GameDifficultyContext $difficultyContext, Character $player, FightResult $fightResult): void
++    {
++    }
++}
+diff --git a/src/DifficultyState/MediumState.php b/src/DifficultyState/MediumState.php
+new file mode 100644
+index 0000000..1c8bd4f
+--- /dev/null
++++ b/src/DifficultyState/MediumState.php
+@@ -0,0 +1,18 @@
++<?php
++
++namespace App\DifficultyState;
++
++use App\Character\Character;
++use App\FightResult;
++use App\GameDifficultyContext;
++
++class MediumState implements DifficultyStateInterface
++{
++    public function victory(GameDifficultyContext $difficultyContext, Character $player, FightResult $fightResult): void
++    {
++    }
++
++    public function defeat(GameDifficultyContext $difficultyContext, Character $player, FightResult $fightResult): void
++    {
++    }
++}

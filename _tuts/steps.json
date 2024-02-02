@@ -104,7 +104,47 @@
             "id": "cor-autoconfigure-handlers",
             "name": "CoR: autoconfigure handlers",
             "description": null
+        },
+        {
+            "id": "state-create-interface",
+            "name": "State: create interface",
+            "description": null
+        },
+        {
+            "id": "state-refactor-level-prop",
+            "name": "State: refactor level prop",
+            "description": null
+        },
+        {
+            "id": "state-create-state-derivates",
+            "name": "State: create state derivates",
+            "description": null
+        },
+        {
+            "id": "state-copy-paste-easy-victory-logic",
+            "name": "State: copy paste easy victory logic",
+            "description": null
+        },
+        {
+            "id": "state-fix-easy-victory-code",
+            "name": "State: fix easy victory code",
+            "description": null
+        },
+        {
+            "id": "state-implement-medium-and-hard",
+            "name": "State: implement medium and hard",
+            "description": null
+        },
+        {
+            "id": "state-delegate-to-state-object",
+            "name": "State: delegate to state object",
+            "description": null
+        },
+        {
+            "id": "state-initialize-current-state",
+            "name": "State: initialize current state",
+            "description": null
         }
     ],
-    "sha": "68987807f69625f8cdcfd5bbd899d66e48169f80"
+    "sha": "bfd81386ef205b8a8ae6db78815df1bcd938e8b3"
 }

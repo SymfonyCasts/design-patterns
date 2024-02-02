@@ -43,10 +43,16 @@ index 7acd4f5..c389f4e 100644
  
          $io->section('Welcome to the game where warriors fight against each other for honor and glory... and 🍕!');
 diff --git a/src/GameApplication.php b/src/GameApplication.php
-index e8879f7..204e10f 100644
+index e8879f7..0416e3e 100644
 --- a/src/GameApplication.php
 +++ b/src/GameApplication.php
-@@ -13,6 +13,7 @@ use App\ChainHandler\XpBonusHandlerInterface;
+@@ -7,12 +7,11 @@ use App\ActionCommand\HealCommand;
+ use App\ActionCommand\SurrenderCommand;
+ use App\Builder\CharacterBuilder;
+ use App\ChainHandler\CasinoHandler;
+-use App\ChainHandler\LevelHandler;
+-use App\ChainHandler\OnFireHandler;
+ use App\ChainHandler\XpBonusHandlerInterface;
  use App\Character\Character;
  use App\Observer\GameObserverInterface;
  use App\Printer\MessagePrinter;
@@ -54,7 +60,7 @@ index e8879f7..204e10f 100644
  
  class GameApplication
  {
-@@ -22,18 +23,11 @@ class GameApplication
+@@ -22,22 +21,11 @@ class GameApplication
  
      /** @var GameObserverInterface[] */
      private array $observers = [];
@@ -70,10 +76,14 @@ index e8879f7..204e10f 100644
 -        $levelHandler->setNext($onFireHandler);
 -
 -        $this->xpBonusHandler = $casinoHandler;
+-    }
+-
+-    public function __construct()
+-    {
 +    public function __construct(
 +        #[Autowire(service: CasinoHandler::class)]
 +        private readonly XpBonusHandlerInterface $xpBonusHandler
 +    ) {
+         $this->difficultyContext = new GameDifficultyContext();
      }
  
-     public function __construct()

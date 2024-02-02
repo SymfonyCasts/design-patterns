@@ -1,0 +1,26 @@
+diff --git a/src/DifficultyState/EasyState.php b/src/DifficultyState/EasyState.php
+index 4595586..49e0abe 100644
+--- a/src/DifficultyState/EasyState.php
++++ b/src/DifficultyState/EasyState.php
+@@ -4,6 +4,7 @@ namespace App\DifficultyState;
+ 
+ use App\Character\Character;
+ use App\FightResult;
++use App\GameApplication;
+ use App\GameDifficultyContext;
+ 
+ class EasyState implements DifficultyStateInterface
+@@ -11,10 +12,10 @@ class EasyState implements DifficultyStateInterface
+     public function victory(GameDifficultyContext $difficultyContext, Character $player, FightResult $fightResult): void
+     {
+         if ($player->getLevel() >= 2 || $fightResult->getTotalVictories() >= 2) {
+-            $this->enemyAttackBonus = 5;
+-            $this->enemyHealthBonus = 5;
++            $difficultyContext->enemyAttackBonus = 5;
++            $difficultyContext->enemyHealthBonus = 5;
+             $player->setXpBonus(25);
+-            $this->level++;
++            $difficultyContext->difficultyState = new MediumState();
+ 
+             GameApplication::$printer->info('Game difficulty level increased to Medium!');
+         }
