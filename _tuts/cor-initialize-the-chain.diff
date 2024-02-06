@@ -11,7 +11,7 @@ index c389f4e..7acd4f5 100644
  
          $io->section('Welcome to the game where warriors fight against each other for honor and glory... and 🍕!');
 diff --git a/src/GameApplication.php b/src/GameApplication.php
-index 11acfdc..c0d4b43 100644
+index eab03d6..6fa3075 100644
 --- a/src/GameApplication.php
 +++ b/src/GameApplication.php
 @@ -6,6 +6,10 @@ use App\ActionCommand\AttackCommand;
@@ -43,5 +43,5 @@ index 11acfdc..c0d4b43 100644
 +        $this->xpBonusHandler = $casinoHandler;
 +    }
  
-     public function __construct()
+     public function __construct(private readonly CharacterBuilder $characterBuilder)
      {

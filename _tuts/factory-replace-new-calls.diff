@@ -1,0 +1,42 @@
+diff --git a/src/Builder/CharacterBuilder.php b/src/Builder/CharacterBuilder.php
+index 0fbfc91..e1783e7 100644
+--- a/src/Builder/CharacterBuilder.php
++++ b/src/Builder/CharacterBuilder.php
+@@ -6,11 +6,7 @@ use App\ArmorType\ArmorType;
+ use App\ArmorType\IceBlockType;
+ use App\ArmorType\LeatherArmorType;
+ use App\ArmorType\ShieldType;
+-use App\AttackType\AttackType;
+-use App\AttackType\BowType;
+-use App\AttackType\FireBoltType;
+ use App\AttackType\MultiAttackType;
+-use App\AttackType\TwoHandedSwordType;
+ use App\Character\Character;
+ use App\Factory\AttackTypeFactory;
+ 
+@@ -63,7 +59,7 @@ class CharacterBuilder
+ 
+     public function buildCharacter(): Character
+     {
+-        $attackTypes = array_map(fn(string $attackType) => $this->createAttackType($attackType), $this->attackTypes);
++        $attackTypes = array_map(fn(string $attackType) => $this->attackTypeFactory->create($attackType), $this->attackTypes);
+         if (count($attackTypes) === 1) {
+             $attackType = $attackTypes[0];
+         } else {
+@@ -85,16 +81,6 @@ class CharacterBuilder
+         return $character;
+     }
+ 
+-    private function createAttackType(string $attackType): AttackType
+-    {
+-        return match ($attackType) {
+-            'bow' => new BowType(),
+-            'fire_bolt' => new FireBoltType(),
+-            'sword' => new TwoHandedSwordType(),
+-            default => throw new \RuntimeException('Invalid attack type given')
+-        };
+-    }
+-
+     private function createArmorType(): ArmorType
+     {
+         return match ($this->armorType) {

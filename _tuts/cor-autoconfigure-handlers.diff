@@ -43,7 +43,7 @@ index 7acd4f5..c389f4e 100644
  
          $io->section('Welcome to the game where warriors fight against each other for honor and glory... and 🍕!');
 diff --git a/src/GameApplication.php b/src/GameApplication.php
-index e8879f7..0416e3e 100644
+index 834d1bf..c752477 100644
 --- a/src/GameApplication.php
 +++ b/src/GameApplication.php
 @@ -7,12 +7,11 @@ use App\ActionCommand\HealCommand;
@@ -60,7 +60,7 @@ index e8879f7..0416e3e 100644
  
  class GameApplication
  {
-@@ -22,22 +21,11 @@ class GameApplication
+@@ -22,22 +21,12 @@ class GameApplication
  
      /** @var GameObserverInterface[] */
      private array $observers = [];
@@ -78,11 +78,12 @@ index e8879f7..0416e3e 100644
 -        $this->xpBonusHandler = $casinoHandler;
 -    }
 -
--    public function __construct()
+-    public function __construct(private readonly CharacterBuilder $characterBuilder)
 -    {
 +    public function __construct(
 +        #[Autowire(service: CasinoHandler::class)]
-+        private readonly XpBonusHandlerInterface $xpBonusHandler
++        private readonly XpBonusHandlerInterface $xpBonusHandler,
++        private readonly CharacterBuilder $characterBuilder
 +    ) {
          $this->difficultyContext = new GameDifficultyContext();
      }

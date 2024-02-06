@@ -144,7 +144,27 @@
             "id": "state-initialize-current-state",
             "name": "State: initialize current state",
             "description": null
+        },
+        {
+            "id": "factory-create-factory-class",
+            "name": "Factory: create factory class",
+            "description": null
+        },
+        {
+            "id": "factory-inject-dependency",
+            "name": "Factory: inject dependency",
+            "description": null
+        },
+        {
+            "id": "factory-replace-new-calls",
+            "name": "Factory: replace new calls",
+            "description": null
+        },
+        {
+            "id": "factory-update-game-info",
+            "name": "Factory: update game info",
+            "description": null
         }
     ],
-    "sha": "bfd81386ef205b8a8ae6db78815df1bcd938e8b3"
+    "sha": "495232a38fe258d31a095be410aa27043404b194"
 }

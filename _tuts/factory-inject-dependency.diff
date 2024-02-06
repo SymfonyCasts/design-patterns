@@ -1,0 +1,23 @@
+diff --git a/src/Builder/CharacterBuilder.php b/src/Builder/CharacterBuilder.php
+index 9355b2b..0fbfc91 100644
+--- a/src/Builder/CharacterBuilder.php
++++ b/src/Builder/CharacterBuilder.php
+@@ -12,6 +12,7 @@ use App\AttackType\FireBoltType;
+ use App\AttackType\MultiAttackType;
+ use App\AttackType\TwoHandedSwordType;
+ use App\Character\Character;
++use App\Factory\AttackTypeFactory;
+ 
+ class CharacterBuilder
+ {
+@@ -21,6 +22,10 @@ class CharacterBuilder
+     private string $armorType;
+     private int $level;
+ 
++    public function __construct(private readonly AttackTypeFactory $attackTypeFactory)
++    {
++    }
++
+     public function setMaxHealth(int $maxHealth): self
+     {
+         $this->maxHealth = $maxHealth;
