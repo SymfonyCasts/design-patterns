@@ -31,7 +31,7 @@ class GameInfoCommand extends Command
         $swordAvgDmg = $this->computeAverageDamage('sword');
         $io->writeln(sprintf('<comment>Two Handed Sword:</comment> used by fighters. Average damage %s', $swordAvgDmg));
 
-        $bowAvgDmg = $this->computeAverageDamage('bow');
+        $bowAvgDmg = $this->computeAverageDamage('bow', 1);
         $io->writeln(sprintf('<comment>Bow:</comment> used by archers. Does %s times character damage', $bowAvgDmg));
 
         $fireBoltAvgDmg = $this->computeAverageDamage('fire_bolt');
@@ -40,13 +40,13 @@ class GameInfoCommand extends Command
         return Command::SUCCESS;
     }
 
-    private function computeAverageDamage(string $attackTypeString): float
+    private function computeAverageDamage(string $attackTypeString, int $baseDamage = 0): float
     {
         $attackType = $this->createAttackType($attackTypeString);
         $damage = 0;
         $sampleSize = 1000;
         for ($i = 0; $i < $sampleSize; $i++) {
-            $damage += $attackType->performAttack(1);
+            $damage += $attackType->performAttack($baseDamage);
         }
 
         return round($damage / $sampleSize, 1);
