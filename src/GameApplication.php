@@ -16,7 +16,7 @@ class GameApplication
     /** @var GameObserverInterface[] */
     private array $observers = [];
 
-    public function __construct()
+    public function __construct(private readonly CharacterBuilder $characterBuilder)
     {
         $this->difficultyContext = new GameDifficultyContext();
     }
@@ -121,7 +121,7 @@ class GameApplication
     public function createCharacter(string $character, int $extraBaseDamage = 0, int $extraHealth = 0, int $level = 1): Character
     {
         return match (strtolower($character)) {
-            'fighter' => $this->createCharacterBuilder()
+            'fighter' => $this->characterBuilder
                 ->setMaxHealth(60 + $extraHealth)
                 ->setBaseDamage(12 + $extraBaseDamage)
                 ->setAttackType('sword')
@@ -129,7 +129,7 @@ class GameApplication
                 ->setLevel($level)
                 ->buildCharacter(),
 
-            'archer' => $this->createCharacterBuilder()
+            'archer' => $this->characterBuilder
                 ->setMaxHealth(50 + $extraHealth)
                 ->setBaseDamage(10 + $extraBaseDamage)
                 ->setAttackType('bow')
@@ -137,7 +137,7 @@ class GameApplication
                 ->setLevel($level)
                 ->buildCharacter(),
 
-            'mage' => $this->createCharacterBuilder()
+            'mage' => $this->characterBuilder
                 ->setMaxHealth(40 + $extraHealth)
                 ->setBaseDamage(8 + $extraBaseDamage)
                 ->setAttackType('fire_bolt')
@@ -145,7 +145,7 @@ class GameApplication
                 ->setLevel($level)
                 ->buildCharacter(),
 
-            'mage_archer' => $this->createCharacterBuilder()
+            'mage_archer' => $this->characterBuilder
                 ->setMaxHealth(50 + $extraHealth)
                 ->setBaseDamage(9 + $extraBaseDamage)
                 ->setAttackType('fire_bolt', 'bow')
@@ -177,11 +177,6 @@ class GameApplication
             $ai->getCurrentHealth(),
             $ai->getMaxHealth(),
         ), '']);
-    }
-
-    private function createCharacterBuilder(): CharacterBuilder
-    {
-        return new CharacterBuilder();
     }
 
     public function subscribe(GameObserverInterface $observer): void

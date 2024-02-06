@@ -75,6 +75,8 @@ class CharacterBuilder
             $character->levelUp();
         }
 
+        $this->resetBuilder();
+
         return $character;
     }
 
@@ -96,5 +98,14 @@ class CharacterBuilder
             'leather_armor' => new LeatherArmorType(),
             default => throw new \RuntimeException('Invalid armor type given')
         };
+    }
+
+    private function resetBuilder(): void
+    {
+        $this->maxHealth = 0;
+        $this->baseDamage = 0;
+        $this->attackTypes = [];
+        $this->armorType = '';
+        $this->level = 0;
     }
 }
