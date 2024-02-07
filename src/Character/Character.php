@@ -83,6 +83,7 @@ class Character
 
         $this->level++;
         $this->maxHealth = floor($this->maxHealth * $bonus);
+        $this->currentHealth = $this->maxHealth;
         $this->baseDamage = floor($this->baseDamage * $bonus);
     }
 
