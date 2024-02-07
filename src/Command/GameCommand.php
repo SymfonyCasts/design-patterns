@@ -26,6 +26,9 @@ class GameCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
+        // Static field so we can print messages from anywhere
+        GameApplication::$printer = new MessagePrinter($io);
+
         $io->section('Welcome to the game where warriors fight against each other for honor and glory... and 🍕!');
 
         $characters = $this->game->getCharactersList();
@@ -34,8 +37,7 @@ class GameCommand extends Command
         $playerCharacter = $this->game->createCharacter($playerChoice);
         $playerCharacter->setNickname($playerChoice);
 
-        // Static field so we can print messages from anywhere
-        GameApplication::$printer = new MessagePrinter($io, $playerCharacter->getId());
+        GameApplication::$printer->initPlayerPrinters($playerCharacter->getId());
 
         $this->play($playerCharacter);
 

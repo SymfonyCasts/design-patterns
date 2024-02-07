@@ -10,10 +10,17 @@ class MessagePrinter
 {
     /** @var CharacterPrinterInterface[] */
     private array $printers = [];
+    private string $playerId;
 
-    public function __construct(private SymfonyStyle $io, private string $playerId) {
-        $this->printers[$playerId] = new PlayerPrinter($io);
-        $this->printers['ai'] = new AiPrinter($io);
+    public function __construct(private readonly SymfonyStyle $io)
+    {
+    }
+
+    public function initPlayerPrinters(string $playerId): void
+    {
+        $this->printers[$playerId] = new PlayerPrinter($this->io);
+        $this->printers['ai'] = new AiPrinter($this->io);
+        $this->playerId = $playerId;
     }
 
     public function printFor(Character $character): CharacterPrinterInterface
