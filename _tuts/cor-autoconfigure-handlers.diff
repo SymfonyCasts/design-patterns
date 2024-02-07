@@ -31,7 +31,7 @@ index b1a2b6e..4958717 100644
  {
      private XpBonusHandlerInterface $next;
 diff --git a/src/Command/GameCommand.php b/src/Command/GameCommand.php
-index 7acd4f5..c389f4e 100644
+index 3430f1e..5e8ca5d 100644
 --- a/src/Command/GameCommand.php
 +++ b/src/Command/GameCommand.php
 @@ -24,7 +24,6 @@ class GameCommand extends Command
@@ -41,7 +41,7 @@ index 7acd4f5..c389f4e 100644
 -        $this->game->initialize();
          $io = new SymfonyStyle($input, $output);
  
-         $io->section('Welcome to the game where warriors fight against each other for honor and glory... and 🍕!');
+         // Static field so we can print messages from anywhere
 diff --git a/src/GameApplication.php b/src/GameApplication.php
 index 834d1bf..c752477 100644
 --- a/src/GameApplication.php

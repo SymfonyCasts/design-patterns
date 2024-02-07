@@ -164,7 +164,52 @@
             "id": "factory-update-game-info",
             "name": "Factory: update game info",
             "description": null
+        },
+        {
+            "id": "factory-create-interface",
+            "name": "Factory: create interface",
+            "description": null
+        },
+        {
+            "id": "factory-create-ultimate-attack-factory",
+            "name": "Factory: create ultimate attack factory",
+            "description": null
+        },
+        {
+            "id": "factory-add-ultimate-derivatives",
+            "name": "Factory: add ultimate derivatives",
+            "description": null
+        },
+        {
+            "id": "factory-implement-ultimate-factory",
+            "name": "Factory: implement ultimate factory",
+            "description": null
+        },
+        {
+            "id": "factory-implement-interface",
+            "name": "Factory: implement interface",
+            "description": null
+        },
+        {
+            "id": "factory-builder-add-setter",
+            "name": "Factory: builder add setter",
+            "description": null
+        },
+        {
+            "id": "factory-config-interface-alias",
+            "name": "Factory: config interface alias",
+            "description": null
+        },
+        {
+            "id": "factory-add-cheat-code-option",
+            "name": "Factory: add cheat code option",
+            "description": null
+        },
+        {
+            "id": "factory-implement-cheat-code",
+            "name": "Factory: implement cheat code",
+            "description": null
         }
     ],
-    "sha": "495232a38fe258d31a095be410aa27043404b194"
+    "sha": "63e1364a6f969bc106c92f59a3481545b1cb7ea4"
 }

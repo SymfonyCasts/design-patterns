@@ -1,0 +1,47 @@
+diff --git a/src/Command/GameCommand.php b/src/Command/GameCommand.php
+index 6e21c21..69e3702 100644
+--- a/src/Command/GameCommand.php
++++ b/src/Command/GameCommand.php
+@@ -25,7 +25,7 @@ class GameCommand extends Command
+ 
+     protected function configure()
+     {
+-        $this->addOption('cheatCode', 'cc', InputOption::VALUE_OPTIONAL, 'You should not see this...');
++        $this->addOption('cheatCode', 'c', InputOption::VALUE_OPTIONAL, 'You should not see this...');
+     }
+ 
+     protected function execute(InputInterface $input, OutputInterface $output): int
+diff --git a/src/GameApplication.php b/src/GameApplication.php
+index c752477..2b2ab89 100644
+--- a/src/GameApplication.php
++++ b/src/GameApplication.php
+@@ -9,6 +9,7 @@ use App\Builder\CharacterBuilder;
+ use App\ChainHandler\CasinoHandler;
+ use App\ChainHandler\XpBonusHandlerInterface;
+ use App\Character\Character;
++use App\Factory\UltimateAttackTypeFactory;
+ use App\Observer\GameObserverInterface;
+ use App\Printer\MessagePrinter;
+ use Symfony\Component\DependencyInjection\Attribute\Autowire;
+@@ -30,6 +31,21 @@ class GameApplication
+         $this->difficultyContext = new GameDifficultyContext();
+     }
+ 
++    public function activateCheatCode(string $cheatCode): void
++    {
++        switch ($cheatCode) {
++            // Famous Konami Code
++            case 'up-up-down-down-left-right-left-right-b-a-start':
++                $this->characterBuilder->setAttackTypeFactory(new UltimateAttackTypeFactory());
++
++                GameApplication::$printer->info('Cheat code activated!!');
++                break;
++            default:
++                GameApplication::$printer->info('Invalid cheat code - better luck next time!');
++                break;
++        }
++    }
++
+     public function play(Character $player, Character $ai, FightResultSet $fightResultSet): void
+     {
+         $player->rest();

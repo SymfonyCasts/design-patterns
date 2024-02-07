@@ -1,0 +1,10 @@
+diff --git a/config/services.yaml b/config/services.yaml
+index d09be8b..a8529b4 100644
+--- a/config/services.yaml
++++ b/config/services.yaml
+@@ -24,3 +24,5 @@ services:
+     # please note that last definitions always *replace* previous ones
+ 
+     App\Service\XpCalculatorInterface: '@App\Service\XpCalculator'
++
++    App\Factory\AttackTypeFactoryInterface: '@App\Factory\AttackTypeFactory'

@@ -1,0 +1,69 @@
+diff --git a/src/AttackType/Ultimate/MeteorType.php b/src/AttackType/Ultimate/MeteorType.php
+new file mode 100644
+index 0000000..be56e9c
+--- /dev/null
++++ b/src/AttackType/Ultimate/MeteorType.php
+@@ -0,0 +1,19 @@
++<?php
++
++namespace App\AttackType\Ultimate;
++
++use App\AttackType\AttackType;
++use App\Dice;
++
++class MeteorType implements AttackType
++{
++    /**
++     * 9d8 damage.
++     */
++    public function performAttack(int $baseDamage): int
++    {
++        return Dice::roll(8) + Dice::roll(8) + Dice::roll(8)
++               + Dice::roll(8) + Dice::roll(8) + Dice::roll(8)
++               + Dice::roll(8) + Dice::roll(8) + Dice::roll(8);
++    }
++}
+diff --git a/src/AttackType/Ultimate/SkullBreakerSwordType.php b/src/AttackType/Ultimate/SkullBreakerSwordType.php
+new file mode 100644
+index 0000000..db0ec31
+--- /dev/null
++++ b/src/AttackType/Ultimate/SkullBreakerSwordType.php
+@@ -0,0 +1,16 @@
++<?php
++
++namespace App\AttackType\Ultimate;
++
++use App\AttackType\AttackType;
++use App\Dice;
++
++class SkullBreakerSwordType implements AttackType
++{
++    public function performAttack(int $baseDamage): int
++    {
++        $swordDamage = Dice::roll(20) + Dice::roll(20) + Dice::roll(20);
++
++        return ($baseDamage * 1.25) + $swordDamage;
++    }
++}
+diff --git a/src/AttackType/Ultimate/TitaniumBowType.php b/src/AttackType/Ultimate/TitaniumBowType.php
+new file mode 100644
+index 0000000..ba0560b
+--- /dev/null
++++ b/src/AttackType/Ultimate/TitaniumBowType.php
+@@ -0,0 +1,16 @@
++<?php
++
++namespace App\AttackType\Ultimate;
++
++use App\AttackType\AttackType;
++
++class TitaniumBowType implements AttackType
++{
++    /**
++     * Always perform a critical strike.
++     */
++    public function performAttack(int $baseDamage): int
++    {
++        return $baseDamage * 3;
++    }
++}

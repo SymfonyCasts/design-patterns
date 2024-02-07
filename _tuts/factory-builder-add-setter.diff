@@ -1,0 +1,30 @@
+diff --git a/src/Builder/CharacterBuilder.php b/src/Builder/CharacterBuilder.php
+index e1783e7..a8e6147 100644
+--- a/src/Builder/CharacterBuilder.php
++++ b/src/Builder/CharacterBuilder.php
+@@ -8,7 +8,7 @@ use App\ArmorType\LeatherArmorType;
+ use App\ArmorType\ShieldType;
+ use App\AttackType\MultiAttackType;
+ use App\Character\Character;
+-use App\Factory\AttackTypeFactory;
++use App\Factory\AttackTypeFactoryInterface;
+ 
+ class CharacterBuilder
+ {
+@@ -18,10 +18,15 @@ class CharacterBuilder
+     private string $armorType;
+     private int $level;
+ 
+-    public function __construct(private readonly AttackTypeFactory $attackTypeFactory)
++    public function __construct(private AttackTypeFactoryInterface $attackTypeFactory)
+     {
+     }
+ 
++    public function setAttackTypeFactory(AttackTypeFactoryInterface $attackTypeFactory): void
++    {
++        $this->attackTypeFactory = $attackTypeFactory;
++    }
++
+     public function setMaxHealth(int $maxHealth): self
+     {
+         $this->maxHealth = $maxHealth;

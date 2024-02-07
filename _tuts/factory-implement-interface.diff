@@ -1,0 +1,13 @@
+diff --git a/src/Factory/AttackTypeFactory.php b/src/Factory/AttackTypeFactory.php
+index 7a821df..50324de 100644
+--- a/src/Factory/AttackTypeFactory.php
++++ b/src/Factory/AttackTypeFactory.php
+@@ -7,7 +7,7 @@ use App\AttackType\BowType;
+ use App\AttackType\FireBoltType;
+ use App\AttackType\TwoHandedSwordType;
+ 
+-class AttackTypeFactory
++class AttackTypeFactory implements AttackTypeFactoryInterface
+ {
+     public function create(string $type): AttackType
+     {

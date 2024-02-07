@@ -1,0 +1,35 @@
+diff --git a/src/Command/GameCommand.php b/src/Command/GameCommand.php
+index 5e8ca5d..6e21c21 100644
+--- a/src/Command/GameCommand.php
++++ b/src/Command/GameCommand.php
+@@ -9,6 +9,7 @@ use App\Printer\MessagePrinter;
+ use Symfony\Component\Console\Attribute\AsCommand;
+ use Symfony\Component\Console\Command\Command;
+ use Symfony\Component\Console\Input\InputInterface;
++use Symfony\Component\Console\Input\InputOption;
+ use Symfony\Component\Console\Output\OutputInterface;
+ use Symfony\Component\Console\Style\SymfonyStyle;
+ 
+@@ -22,6 +23,11 @@ class GameCommand extends Command
+         parent::__construct();
+     }
+ 
++    protected function configure()
++    {
++        $this->addOption('cheatCode', 'cc', InputOption::VALUE_OPTIONAL, 'You should not see this...');
++    }
++
+     protected function execute(InputInterface $input, OutputInterface $output): int
+     {
+         $io = new SymfonyStyle($input, $output);
+@@ -34,6 +40,10 @@ class GameCommand extends Command
+         $characters = $this->game->getCharactersList();
+         $playerChoice = $io->choice('Select your character', $characters);
+ 
++        if ($input->getOption('cheatCode')) {
++            $this->game->activateCheatCode($input->getOption('cheatCode'));
++        }
++
+         $playerCharacter = $this->game->createCharacter($playerChoice);
+         $playerCharacter->setNickname($playerChoice);
+ 

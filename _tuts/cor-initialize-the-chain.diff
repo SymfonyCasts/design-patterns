@@ -1,5 +1,5 @@
 diff --git a/src/Command/GameCommand.php b/src/Command/GameCommand.php
-index c389f4e..7acd4f5 100644
+index 5e8ca5d..3430f1e 100644
 --- a/src/Command/GameCommand.php
 +++ b/src/Command/GameCommand.php
 @@ -24,6 +24,7 @@ class GameCommand extends Command
@@ -9,7 +9,7 @@ index c389f4e..7acd4f5 100644
 +        $this->game->initialize();
          $io = new SymfonyStyle($input, $output);
  
-         $io->section('Welcome to the game where warriors fight against each other for honor and glory... and 🍕!');
+         // Static field so we can print messages from anywhere
 diff --git a/src/GameApplication.php b/src/GameApplication.php
 index eab03d6..6fa3075 100644
 --- a/src/GameApplication.php
