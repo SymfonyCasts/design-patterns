@@ -1,52 +1,39 @@
 # Command Pattern Definition
 
-Are you ready for a new design patterns episode? Go grab a cup of coffee and sit tight
-because we'll take a deep dive into the command pattern.
+Ready for a new design patterns episode? Grab a cup of coffee and settle in, because we're taking a deep dive into the *command pattern*! We'll start with the basics - the definition and theory. *Later*, we'll
+have some fun by applying what we've learned to our game application.
 
-Let's start with the boring part first, the definition and theory, and later we'll
-have some fun applying it into our game application.
-
-The command pattern is a behavioral pattern. In case you already forgot what it means
-here's a quick reminder. Behavioral patterns are those that help you design classes
-with specific responsibilities that can then work together, instead of putting
+Let's begin with the most obvious question: What *is* the command pattern? The command pattern is a *behavioral pattern*. If you forgot what that means, here's a refresher. Behavioral patterns help us design classes with specific responsibilities that can work together, instead of putting
 all of that code into one giant class.
 
-The official definition says that the command pattern **encapsulates** a request
-as a stand-alone object, allowing parameterization of clients with different requests,
-queueing or logging requests, and support undoable operations.
+The *official* definition of command pattern says that they "*encapsulate* a request as a stand-alone object, allowing parameterization of clients with different requests, queueing or logging requests, and support undoable operations."
 
-Uhm, whaat?. Ok, let's try it again with a more friendly definition.
+Um... *what*?. Okay, let's try that again with a less confusing definition. 
+"The *command pattern* encapsulates a task into an object, deciphering what it does, how it does it, and when it gets done. It also makes *undoing* actions easy because it keeps a history of changes."
 
-The command pattern encapsulates a task into an object, **decoupling** what it does,
-how it does it, and when it gets done. Also, it allows to undo its actions
-by **remembering** enough information of what things need to be reverted.
-
-Ha! I don't know if it got any better but don't worry, it will make more sense
-when we see it in action.
+Still confusing? Don't worry! This will make *a lot* more sense when we see it in action.
 
 ## Pattern Anatomy
 
-The pattern is composed by three main parts:
-- It has a Command Interface with a single public method that's usually called `execute()`.
-- There are concrete commands which implement the Command Interface and hold the task's logic.
-- And third, there's an **Invoker** object which holds a command reference and calls `execute()` at some point.
+The command pattern is composed of three main parts:
 
-If you look over the internet you'll discover that I didn't mention two other parts,
-the **receiver** and **client**. The receiver is the object that contains the business logic,
-and the client is the one that's on charge of **creating** command objects.
+First is the "Command Interface", which has a single public method that's typically called `execute()`.
 
-In my opinion, those parts increases the complexity of the design and are not totally required.
-They might be useful in a heavy **object-oriented** application so the responsibilities are split better,
-but in our case, we would be **over-engineering** our solution, so we'll
-keep it simple and just ignore them.
+*Second* is the *concrete* commands, which *implement* the Command Interface and hold the task's logic.
+
+*Finally*, it has an *invoker* object which holds a command reference and, at some point, calls `execute()`.
+
+If you've read about this online, you may have noticed that I didn't mention two other parts - the *receiver* and the *client*. The *receiver* is the object that contains the business logic, and the *client* is in charge of creating command objects.
+
+In my opinion, those elements increase the complexity of the design and aren't *super* necessary. They may be useful in heavy, object-oriented applications so responsibilities are better organized, but in our case, using these would over-engineer our application. So, for simplicity's sake, we're just going to ignore them.
 
 ## Imaginary Example
 
-Ok, that's enough theory. Let's see an example. Suppose that we want to implement a remote control for a TV.
-It has many buttons to interact with it, it can turn the volume up or down, power it on or off, and so on.
+Okay, now that we've covered the *theory* side of things, let's see an example. Suppose that we want to implement a remote control for a TV.
+Our remote has several buttons that allow us to interact with our TV, like turning the volume up or down, powering it on or off, and so on.
 
-Without much thinking, we could easily implement it with a `switch-case` statement, where each `case`
-would represent a button's action containing all the logic.
+An easy way to do this is with a `switch-case` statement, where each `case`
+represents a button's action with all of the logic it needs to perform that action.
 
 ```php
 public function pressButton(string $button)
@@ -71,16 +58,11 @@ public function pressButton(string $button)
 }
 ```
 
-As we keep implementing more buttons this approach will become a mess pretty quickly. Also,
-it would be a maintenance nightmare and impossible to reuse the code.
+That's pretty simple, but as we add more and more buttons, this is going to get *complicated*. It's messy, hard to maintain, and we won't really be able to reuse this code anywhere else.
 
-A better approach would be to... you guessed it! Implement the command pattern. We could encapsulate
-the logic of each button into their own **command** object.
+There *has* to be a better way to do this... and there *is* - with the *command pattern*. We can group the logic of each button into its *own* command object. Then, in our `pressButton()` method, we would just call `execute()` on the for the command we want to perform.
 
-And, in our `pressButton` method we would just call `execute()` on
-the **right** command instance.
-
-Our code would look like this:
+It looks something like this:
 
 ```php
 public function pressButton(string $button)
@@ -93,19 +75,11 @@ public function pressButton(string $button)
 }
 ```
 
-The `commands` property holds a list of command objects, and if the button name
-is in the list, we call `execute()`.
+The `commands` property holds a list of command objects and, if it finds the button name in that list, it calls `execute()`. Pretty handy! But wait... How do we *instantiate* the commands?
 
-Now, you might be wondering, how do I instantiate the commands?
-Well, creating objects can be addressed in many ways but there are excellent patterns
-that deal with instantiation in a fashion way, for example, my favorite, the **factory** pattern.
-In our example, we could introduce a `CommandFactory` and delegate it all the instantiation logic,
-but that's a topic for a future chapter.
+We can create and instantiate objects several ways, but my *favorite* way is with the *factory* pattern. In our example, we *could* introduce a `CommandFactory` and delegate all of the instantiation logic to it, but we won't go into that right now.
 
-From this very moment you can start notice the benefits of the command pattern. We can add or remove buttons
-without touching the code of the `pressButton` method. Also, all the logic is encapsulated
-into their own class, making it easier to maintain and reuse. And... as a nice side effect,
-we've successfully applied the **Open-Close** principle. This method is now open for extension
-but closed for modification.
+Command patterns are *great* and we can already see how helpful they can be. We can add or remove buttons without touching the code in our `pressButton()` method, and all of the logic is encapsulated into separate classes, making our code easier to maintain and reuse. *And*, as a bonus,
+we've successfully applied the *Open-Close* principle. This method is now open for extension, but *closed* for modification.
 
-Next, let's see the command pattern in action and implement it into our game application!
+Next: Let's see the command pattern in action and implement it in our application!
