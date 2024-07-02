@@ -107,7 +107,7 @@ public function pressButton(string $button)
 
 The `commands` property is an array of button command objects, keyed by a string representation
 of the button. When calling `pressButton()`, we look for the passed button name in this array
-and call `execute()`. Pretty handy!
+and call `execute()` on the found button command object. Pretty handy!
 
 Instantiating this *TV remote* object (and the button commands), then *using* it, would look
 something like this:
