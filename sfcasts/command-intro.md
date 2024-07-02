@@ -88,6 +88,13 @@ in our `pressButton()` method, we would just call `execute()` on the command we 
 It looks something like this:
 
 ```php
+/**
+ * @param array<string, ButtonCommandInterface> $commands
+ */
+public function __construct(private array $commands)
+{
+}
+
 public function pressButton(string $button)
 {
     if (!isset($this->commands[$button])) {
@@ -100,11 +107,16 @@ public function pressButton(string $button)
 
 The `commands` property holds a list of command objects and, if it finds the
 button name in that list, it calls `execute()`. Pretty handy! 
-But wait... How do we *instantiate* the commands?
 
-We can create objects in several ways, but my *favorite* way is
-with the *factory* pattern. In our example, we *could* introduce a `CommandFactory` and 
-delegate all of the instantiation logic to it, but we won't go into that right now.
+```php
+$remote = new Remote([
+    'turnOn' => new TurnOnCommand(),
+    'turnOff' => new TurnOffCommand(),
+    'mute' => new MuteCommand(),
+]);
+
+$remote->pressButton('mute'); // executes MuteCommand logic
+```
 
 The command pattern is *great*, and we can already see how helpful it can be.
 We can add or remove buttons without touching the code in our `pressButton()` method,
