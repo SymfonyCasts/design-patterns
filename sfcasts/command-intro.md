@@ -105,8 +105,12 @@ public function pressButton(string $button)
 }
 ```
 
-The `commands` property holds a list of command objects and, if it finds the
-button name in that list, it calls `execute()`. Pretty handy! 
+The `commands` property is an array of button command objects, keyed by a string representation
+of the button. When calling `pressButton()`, we look for the passed button name in this array
+and call `execute()`. Pretty handy!
+
+Instantiating this *TV remote* object (and the button commands), then *using* it, would look
+something like this:
 
 ```php
 $remote = new Remote([
