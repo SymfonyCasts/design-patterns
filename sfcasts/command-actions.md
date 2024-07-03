@@ -1,6 +1,6 @@
 # Implementing More Actions
 
-All right! We're ready to add more actions to our game and allow players to make *choices*.
+All right! We're ready to add more actions to our game and allow players to *choose* their actions.
 
 *First*, we need to create an *interface* for our commands. To do that, inside the `/ActionCommand` directory, let's create a new PHP file and call it `ActionCommandInterface`. Inside, we'll add a single method called `execute()` with no arguments. Interface *done*!
 
