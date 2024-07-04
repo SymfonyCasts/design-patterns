@@ -14,7 +14,7 @@ If we take a look at the `SurrenderCommand`, the constructor here is the same as
 
 ## Asking the Player to Choose an Action
 
-All right! It's time to ask the player to choose an action! I'll close a few files first. Okay, head back to the `GameApplication`... and right before we define `$playerAction`, say `$actionChoice` and set it to `GameApplication::$printer->choice()`, where the question is `Your Turn`, and the choices are `Attack`, `Heal`, and `Surrender`. *Then*, we'll replace the `AttackCommand` instantiation with a `match` expression, but copy this first, because we'll need it in a moment. Now say `match ($actionChoice)`. Inside, the first case we want to add is `Attack`, and now... *paste*. For the second case, say `Heal` and set it to `new HealCommand($player)`. The third and final case is `Surrender`, and we'll set that to `new SurrenderCommand($player)`. *Perfect*!
+All right! It's time to ask the player to choose an action! I'll close a few files first. Okay, head back to the `GameApplication`... and right before we define `$playerAction`, write `$actionChoice` and set it to `GameApplication::$printer->choice()`, where the question is `Your Turn`, and the choices are `Attack`, `Heal`, and `Surrender`. *Then*, we'll replace the `AttackCommand` instantiation with a `match` expression, but copy this first, because we'll need it in a moment. Now write `match ($actionChoice)`. Inside, the first case we want to add is `Attack`, and now... *paste*. For the second case, write `Heal` and set it to `new HealCommand($player)`. The third and final case is `Surrender`, and we'll set that to `new SurrenderCommand($player)`. *Perfect*!
 
 Let's give this a try. Spin over to your terminal and run:
 
