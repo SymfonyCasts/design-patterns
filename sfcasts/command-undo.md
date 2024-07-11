@@ -2,7 +2,7 @@
 
 There we were... in the middle of a *fierce* battle and... uh, what's that? We *lost*? *No way*! Our opponent got *super* lucky. Surely there's a way to undo that operation and try again, right? There *is* - with the *command pattern*. Our commands only need to remember some *state* about the things that need to be reverted. In our case, we want to undo the last turn's actions if the player lost, so they get a second chance to play better and win the battle. Let's do this!
 
-The first thing we need to do is add a new method to `ActionCommandInterface.php`. Open that up and, below `execute()`, write `public function undo()` with *no* arguments.
+The first thing we need to do is add a new method to `ActionCommandInterface`. Open that up and, below `execute()`, write `public function undo();` with *no* arguments.
 
 Next, we need to *implement* it in all of our commands. Let's start with `AttackCommand.php`. Open that and, up here at the top, we can see that PHP Storm is already mad at us because it's missing the `undo()` method. To implement that, click on the interface and press "Alt" + "Enter". Select "Add method stubs", and since the `undo()` method is already selected, we can just press "Enter". At the bottom, we can see that our method was added. We can leave our "TODO" comment here for now because we still need to figure out what data the command needs to remember.
 
@@ -18,9 +18,9 @@ Finally, open `SurrenderCommand.php` and do this one more time - add the `undo()
 
 All right! It's time to ask the player if they want to revert the last action in case of defeat. I'll close a few files and go back to `GameApplication.php`. Find the AI's turn, and inside this `if()` where we check if the player died, write `$undoChoice = GameApplication::$printer->confirm()`. The question will read:
 
-`You\'ve lost! Do you want to undo your last turn?`.
+`You've lost! Do you want to undo your last turn?`.
 
-If the answer is "no", we need to end the battle and exit, so I'll move these two lines inside `if`. If the answer is "yes", we *undo* actions from the last turn, which means that we need to call `undo()` on the command objects. But we can't just undo these commands in any order. We need to undo them in the reverse order that they were executed... or weird things could happen. This is basically a "FILO" stack - "First In, Last Out".
+If the answer is "no", we need to end the battle and exit, so I'll move these two lines inside the `if`. If the answer is "yes", we *undo* actions from the last turn, which means that we need to call `undo()` on the command objects. But we can't just undo these commands in any order. We need to undo them in the reverse order that they were executed... or weird things could happen. This is basically a "FILO" stack - "First In, Last Out".
 
 Anyway, let's undo the AI's attack first with `$aiAttackCommand->undo()`. *Then* we'll undo the player's action - `$playerAction->undo()`. Awesome! Now we can give this a try. Spin over to your terminal and run:
 
