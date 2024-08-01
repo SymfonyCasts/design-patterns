@@ -49,6 +49,8 @@ Two: If the player has won 3 times or more in a row.
 And three, to add some randomness, the player will throw two six-sided dice.
 They win if a *pair* is rolled, but if the result is 7, they do not.
 
+Each condition will reward the player with 25 XP.
+
 Okay, let's do this! The first step we need to take is creating an interface
 for our handlers. Inside the `src/` directory, create a new folder
 called `ChainHandler/`. And inside *that*, we'll add a new PHP class called...
@@ -57,9 +59,10 @@ pattern as part of the interface name so it's more obvious what pattern we're
 using.
 
 Now we can add the first method - `public function handle()` - and the
-arguments - `Character $player` and `FightResult $fightResult`. We're
-using `FightResult` here because we're only interested in the data of
-this `$player` object. Oh! And don't forget to add the return type `int`.
+arguments - `Character $player` and `FightResult $fightResult`. These
+are the two objects required for calculating all the above conditions.
+
+Oh! And don't forget to add the return type `int`. This will be the XP.
 
 For the next method
 write `public function setNext(XpBonusHandlerInterface $next): void`. And I
@@ -98,8 +101,8 @@ with this repetition. Surely there's a better way to do this, right? There *is*,
 and we'll talk about that later, but for now, let's finish up this method and
 return `0` at the bottom.
 
-For the last handler condition, where we roll dice and check to see if we rolled
-a pair or a 7, let's call it `CasinoHandler`, since we're doing a little
+On to the last handler condition, where we roll two dice and check to see if we rolled
+a pair or a 7. Let's call it `CasinoHandler`, since we're doing a little
 gambling. We'll start this in the same way, implementing the interface and
 adding the methods by holding "Option" + "Enter". Then, just like before,
 implement `setNext()`. Inside, write `$this->next = $next` and add the property
@@ -117,5 +120,5 @@ write `return $this->next->handle($player, $fightResult)`... and return `0` at
 the bottom.
 
 Phew! We finished implementing our handlers! But before we can give this a try,
-we'll need to *initialize* the chain. When we do that, we'll get to see the
+we'll need to *initialize* the chain. When we do that, we'll get to see a
 *downside* of this pattern. Let's do that *next*.
