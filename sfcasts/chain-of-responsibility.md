@@ -28,8 +28,9 @@ choosing which handlers we want in the sequence and in what order they appear.
 This sequence is called a *chain*. The `handle()` method is where we put our business logic.
 
 *Second* is the *concrete handlers*, which implement the `HandlerInterface`.
-They hold a `HandlerInterface` object and decide if the next handler should be
-called or not.
+They can hold the *next* `HandlerInterface` object (added with `setNext()`) and
+decide if it should be called or not. If they don't contain the next handler,
+this handler is the final link in the chain.
 
 Finally, we have a *client* that sets up the chain, ensuring that the sequence
 is in the right order and triggers the first handler.
