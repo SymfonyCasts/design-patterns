@@ -25,7 +25,7 @@ First, it has a `HandlerInterface`, which usually contains two
 methods: `setNext()` and `handle()`. The `setNext()` method receives a
 new `HandlerInterface` object. This allows us to set up a sequence of handlers,
 choosing which handlers we want in the sequence and in what order they appear.
-This sequence is called *chain*. The `handle()` method is where we put our business logic.
+This sequence is called a *chain*. The `handle()` method is where we put our business logic.
 
 *Second* is the *concrete handlers*, which implement the `HandlerInterface`.
 They hold a `HandlerInterface` object and decide if the next handler should be
@@ -47,7 +47,7 @@ The conditions for XP rewards are as follows:
 One: If the player is level 1.
 Two: If the player has won 3 times or more in a row.
 And three, to add some randomness, the player will throw two six-sided dice.
-They win if a *pair* is rolled, but if the result is 7, we exit immediately.
+They win if a *pair* is rolled, but if the result is 7, they do not.
 
 Okay, let's do this! The first step we need to take is creating an interface
 for our handlers. Inside the `src/` directory, create a new folder
