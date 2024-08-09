@@ -8,7 +8,7 @@ We'll start by opening `CasinoHandler` and, above the class name, add
 the `#[Autoconfigure()]` attribute. When this class is *instantiated*, we want
 to call `setNext()` and pass another handler object. To do that, we'll use
 the `calls` option, so inside
-write `calls: [['setNext' => ['@'.LevelHandler::class]]]`. Note and be careful with this nested array syntax.
+write `calls: [['setNext' => ['@'.LevelHandler::class]]]`. Be careful with this nested array syntax.
 
 Now, when Symfony instantiates this class, it will call `setNext()` and pass a `LevelHandler` object.
 
@@ -32,7 +32,7 @@ write `service: CasinoHandler::class` because it is the first handler
 in our chain.
 
 We need the `#[Autowire]` attribute because Symfony won't know how to inject
-`XpBonusHandlerInterface` because there are multiple classes that implement
+`XpBonusHandlerInterface` as there are multiple classes that implement
 it.
 
 All right! Let's give this a try! Spin over to your terminal and run:
