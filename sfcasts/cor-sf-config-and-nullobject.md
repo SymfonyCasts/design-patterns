@@ -61,7 +61,8 @@ So let's get to it! Back in our code, find that `if` we've been talking about,
 which is inside any handler. What we need to do is remove the `if` and call the
 next handler *directly*. *Easy peasy*. Create a new handler class and call
 it `NullHandler`. Make it implement the `XpBonusHandlerInterface` and hold 
-"Option" + "Enter" to implement the methods.
+"Option" + "Enter" to implement the methods. And now... Let's have the handler
+do *nothing*! Well, as close to nothing as possible.
 The `setNext()` method returns nothing, so we can leave it empty, but
 the `handle()` method returns an `int`. When you find a method that returns
 something, you should always ask yourself how the value is being used. The
