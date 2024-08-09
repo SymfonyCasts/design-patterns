@@ -8,9 +8,13 @@ We'll start by opening `CasinoHandler` and, above the class name, add
 the `#[Autoconfigure()]` attribute. When this class is *instantiated*, we want
 to call `setNext()` and pass another handler object. To do that, we'll use
 the `calls` option, so inside
-write `calls: [['setNext' => ['@'.LevelHandler::class]]]`. *So* when Symfony
-instantiates this class, it will call `setNext()` and pass a `LevelHandler` object.
-That's *it*!
+write `calls: [['setNext' => ['@'.LevelHandler::class]]]`. Note and be careful with this nested array syntax.
+
+Now, when Symfony instantiates this class, it will call `setNext()` and pass a `LevelHandler` object.
+
+By the way, if you're wondering what this `@` symbol prefix is all about, good eye!
+This tells Symfony to pass the `LevelHandler` _service_. If we didn't add this,
+it would pass the `LevelHandler` class string which is definitely not what we want.
 
 We'll do the same thing in the `LevelHandler` class. Open that up,
 write `#[Autoconfigure()]`, and
@@ -24,8 +28,12 @@ constructor except this line. The *final* step is to configure
 the `$xpBonusHandler` property. We can add it to the constructor by
 writing `private readonly XpBonusHandlerInterface $xpBonusHandler`. Above
 *that*, use the `#[Autowire]` attribute, and inside,
-write `service: CasinoHandler::class` because it is our first element
-in the chain.
+write `service: CasinoHandler::class` because it is the first handler
+in our chain.
+
+We need the `#[Autowire]` attribute because Symfony won't know how to inject
+`XpBonusHandlerInterface` because there are multiple classes that implement
+it.
 
 All right! Let's give this a try! Spin over to your terminal and run:
 
@@ -53,7 +61,7 @@ So let's get to it! Back in our code, find that `if` we've been talking about,
 which is inside any handler. What we need to do is remove the `if` and call the
 next handler *directly*. *Easy peasy*. Create a new handler class and call
 it `NullHandler`. Make it implement the `XpBonusHandlerInterface` and hold 
-"Option" + "Enter" to implement the methods. And now... *nothing*!
+"Option" + "Enter" to implement the methods.
 The `setNext()` method returns nothing, so we can leave it empty, but
 the `handle()` method returns an `int`. When you find a method that returns
 something, you should always ask yourself how the value is being used. The
