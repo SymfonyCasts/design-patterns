@@ -64,7 +64,7 @@ This is how the `DraftState` class would look like:
 ```php
 class DraftState implements StateInterface {
     public function publish(Article $article) {
-        $article()->setStatus('moderation');
+        $article->setStatus('moderation');
         $this->notifyModerator();
     }
 }
