@@ -10,6 +10,8 @@ to call `setNext()` and pass another handler object. To do that, we'll use
 the `calls` option, so inside
 write `calls: [['setNext' => ['@'.LevelHandler::class]]]`. Be careful with this nested array syntax.
 
+[[[ code('d878e0e315') ]]]
+
 Now, when Symfony instantiates this class, it will call `setNext()` and pass a `LevelHandler` object.
 
 By the way, if you're wondering what this `@` symbol prefix is all about, good eye!
@@ -22,6 +24,8 @@ then `calls: [['setNext' => ['@'.OnFireHandler::class]]]`. We can leave
 the `OnFireHandler` as it is because it's the last handler in the chain.
 *Perfect*!
 
+[[[ code('94270e65bc') ]]]
+
 Now that the chain is set up, we can remove the code that manually
 initializes it in `GameApplication`. Open that... and delete everything inside its
 constructor except this line. The *final* step is to configure
@@ -30,6 +34,8 @@ writing `private readonly XpBonusHandlerInterface $xpBonusHandler`. Above
 *that*, use the `#[Autowire]` attribute, and inside,
 write `service: CasinoHandler::class` because it is the first handler
 in our chain.
+
+[[[ code('21aae2b95f') ]]]
 
 We need the `#[Autowire]` attribute because Symfony won't know how to inject
 `XpBonusHandlerInterface` as there are multiple classes that implement
@@ -72,13 +78,22 @@ the player will earn. If this value were used for *multiplication* however, like
 a value that multiplies the XP earned for each match, returning `0` would cause
 problems.
 
+[[[ code('5cbf84b53b') ]]]
+
 Okay, let's keep going! Open up `CasinoHandler` and add a constructor where
 we'll initialize `$this->next` to a `new NullHandler()` object. Copy this
 constructor because we'll need it for the other handlers. Inside the `handle()`
 method, find that pesky `if` and remove it. We'll also remove this `return 0` at
 the bottom. Now we'll always return the output of the next handler. That's the
-*beauty* of the Null Object pattern. We'll do the same thing to the other
-handlers, and... perfect! Let's give this a try!
+*beauty* of the Null Object pattern.
+
+[[[ code('81da8e6c5e') ]]]
+
+We'll do the same thing to the other handlers, and... perfect! Let's give this a try!
+
+[[[ code('ba630e7a95') ]]]
+
+[[[ code('65226eba9c') ]]]
 
 Spin over to your terminal and run:
 
