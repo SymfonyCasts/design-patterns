@@ -27,7 +27,7 @@ iteration and execution of voters in the chain *internally* - Voters
 *themselves* don't have direct references to *other* voters in the chain.
 
 Let's take a closer look at how Voters are used in Symfony. Over at your
-browser, go to GitHub, and inside, find the *Symfony/security-core* repository.
+browser, go to GitHub, and find the `symfony/security-core` repository.
 I already have it open. Now, search for the `AccessDecisionManager` class. If we
 check out its constructor, we can see that it receives a list of *voters*, and
 at some point, it iterates *over* them and calls `vote()`. This class does a lot
