@@ -1,0 +1,333 @@
+WEBVTT
+
+00:00:00.076 --> 00:00:03.876 align:middle
+Esta es una aplicación Symfony, así
+que vamos a aprovecharnos de ello
+
+00:00:03.876 --> 00:00:06.796 align:middle
+y utilizar la función de autoconfiguración
+para configurar nuestra cadena.
+
+00:00:07.316 --> 00:00:11.616 align:middle
+Incluso hay un atributo Autoconfigure superútil
+que podemos utilizar en nuestras clases manejadoras.
+
+00:00:12.176 --> 00:00:16.056 align:middle
+Empezaremos abriendo CasinoHandler
+y, encima del nombre de la clase,
+
+00:00:16.096 --> 00:00:17.756 align:middle
+añadiremos el atributo #[Autoconfigure()].
+
+00:00:18.566 --> 00:00:23.836 align:middle
+Cuando se instancie esta clase, queremos llamar
+a setNext() y pasarle otro objeto manejador.
+
+00:00:24.306 --> 00:00:28.656 align:middle
+Para ello, utilizaremos la opción calls,
+por lo que dentro escribiremos las llamadas :
+
+00:00:28.656 --> 00:00:34.196 align:middle
+[['setNext' => ['@'.LevelHandler::class]]].
+
+00:00:34.196 --> 00:00:37.006 align:middle
+Ten cuidado con esta sintaxis de array anidado.
+
+00:00:37.006 --> 00:00:39.296 align:middle
+Ahora, cuando Symfony instancie esta clase,
+
+00:00:39.296 --> 00:00:42.666 align:middle
+llamará a setNext() y le
+pasará un objeto LevelHandler.
+
+00:00:43.416 --> 00:00:47.236 align:middle
+Por cierto, si te estás preguntando a qué
+viene este prefijo de símbolo @, ¡buen ojo!
+
+00:00:47.766 --> 00:00:50.566 align:middle
+Esto le dice a Symfony que
+pase el servicio LevelHandler.
+
+00:00:50.936 --> 00:00:54.276 align:middle
+Si no añadiéramos esto, pasaría
+la cadena de clase LevelHandler
+
+00:00:54.276 --> 00:00:55.876 align:middle
+, que definitivamente no es lo que queremos.
+
+00:00:56.546 --> 00:00:58.776 align:middle
+Haremos lo mismo en la clase LevelHandler.
+
+00:00:59.086 --> 00:01:02.616 align:middle
+Ábrela, escribe #[Autoconfigure()],
+y luego llama a :
+
+00:01:02.616 --> 00:01:08.516 align:middle
+[['setNext' => ['@'.OnFireHandler::class]]].
+
+00:01:08.516 --> 00:01:12.466 align:middle
+Podemos dejar el OnFireHandler como está
+porque es el último manejador de la cadena.
+
+00:01:13.236 --> 00:01:16.426 align:middle
+¡Perfecto! Ahora que la cadena está
+configurada, podemos eliminar el código
+
+00:01:16.426 --> 00:01:19.296 align:middle
+que la inicializa manualmente
+en GameApplication.
+
+00:01:20.066 --> 00:01:20.986 align:middle
+Abre ese...
+
+00:01:20.986 --> 00:01:24.166 align:middle
+y borra todo lo que haya dentro de
+su constructor excepto esta línea.
+
+00:01:24.926 --> 00:01:28.506 align:middle
+El último paso es configurar
+la propiedad $xpBonusHandler.
+
+00:01:29.026 --> 00:01:30.456 align:middle
+Podemos añadirla al constructor
+
+00:01:30.456 --> 00:01:36.006 align:middle
+escribiendo private readonly
+XpBonusHandlerInterface $xpBonusHandler.
+
+00:01:36.596 --> 00:01:43.346 align:middle
+Encima, utiliza el atributo #[Autowire] y,
+dentro, escribe service: CasinoHandler::class
+
+00:01:43.626 --> 00:01:45.436 align:middle
+porque es el primer
+manejador de nuestra cadena.
+
+00:01:46.196 --> 00:01:48.706 align:middle
+Necesitamos el atributo #[Autowire]
+porque Symfony no sabrá cómo
+
+00:01:48.706 --> 00:01:52.926 align:middle
+inyectar XpBonusHandlerInterface ya que
+hay múltiples clases que lo implementan.
+
+00:01:53.756 --> 00:01:54.256 align:middle
+¡Muy bien!
+
+00:01:54.256 --> 00:01:55.206 align:middle
+¡Vamos a intentarlo!
+
+00:01:55.206 --> 00:01:57.296 align:middle
+Ve a tu terminal y ejecuta:
+
+00:01:57.296 --> 00:02:02.236 align:middle
+php bin/console app:game:play
+Ejecuta: El juego se está ejecutando.
+
+00:02:02.356 --> 00:02:03.106 align:middle
+¡Buena señal!
+
+00:02:03.106 --> 00:02:04.516 align:middle
+Y si luchamos...
+
+00:02:08.296 --> 00:02:12.076 align:middle
+¡hemos perdido! Por el lado bueno, podemos ver
+nuestro mensaje de información diciéndonos
+
+00:02:12.076 --> 00:02:16.036 align:middle
+que el CasinoHandler ha funcionado,
+y no hemos conseguido XP extra,
+
+00:02:16.036 --> 00:02:17.536 align:middle
+así que todo funciona bien.
+
+00:02:18.396 --> 00:02:19.596 align:middle
+¿Listo para un tema extra?
+
+00:02:19.596 --> 00:02:22.266 align:middle
+Es hora de hablar del patrón Objeto Nulo.
+
+00:02:22.746 --> 00:02:24.296 align:middle
+¿Qué es el patrón Objeto Nulo?
+
+00:02:24.976 --> 00:02:28.106 align:middle
+En pocas palabras, es una forma inteligente
+de evitar las comprobaciones de null.
+
+00:02:28.446 --> 00:02:31.666 align:middle
+En lugar de comprobar si una propiedad
+es null, como hemos hecho en el pasado,
+
+00:02:31.926 --> 00:02:35.566 align:middle
+crearemos un "objeto nulo" que
+implemente la misma interfaz
+
+00:02:35.566 --> 00:02:37.056 align:middle
+y no haga nada en sus métodos.
+
+00:02:37.496 --> 00:02:38.236 align:middle
+¿Qué significa esto?
+
+00:02:38.926 --> 00:02:43.726 align:middle
+En pocas palabras, si un método devuelve un
+valor, devolverá lo más parecido posible a null.
+
+00:02:43.726 --> 00:02:47.876 align:middle
+Por ejemplo, si devuelve un array,
+devolverá una matriz vacía.
+
+00:02:48.256 --> 00:02:50.036 align:middle
+¿Una cadena? Devuelve una cadena vacía.
+
+00:02:50.406 --> 00:02:51.966 align:middle
+¿Un int? Devuelve 0.
+
+00:02:52.556 --> 00:02:55.486 align:middle
+Puede complicarse aún más,
+pero ya te haces una idea.
+
+00:02:55.486 --> 00:02:57.146 align:middle
+Así que ¡manos a la obra!
+
+00:02:57.526 --> 00:03:01.796 align:middle
+De vuelta a nuestro código, encuentra ese if del que hemos
+estado hablando, que está dentro de cualquier manejador.
+
+00:03:02.456 --> 00:03:06.466 align:middle
+Lo que tenemos que hacer es eliminar el if y
+llamar directamente al siguiente manejador.
+
+00:03:06.876 --> 00:03:08.606 align:middle
+Muy fácil.
+
+00:03:08.606 --> 00:03:11.206 align:middle
+Crea una nueva clase de
+manejador y llámala NullHandler.
+
+00:03:12.286 --> 00:03:16.256 align:middle
+Haz que implemente el XpBonusHandlerInterface
+y mantén pulsadas las teclas "Opción" +
+
+00:03:16.256 --> 00:03:17.746 align:middle
+"Intro" para implementar los métodos.
+
+00:03:19.336 --> 00:03:19.906 align:middle
+Y ahora...
+
+00:03:20.076 --> 00:03:21.866 align:middle
+¡Que el manejador no haga nada!
+
+00:03:22.496 --> 00:03:24.436 align:middle
+Bueno, lo más parecido a nada posible.
+
+00:03:25.226 --> 00:03:28.136 align:middle
+El método setNext() no devuelve
+nada, así que podemos dejarlo vacío,
+
+00:03:28.556 --> 00:03:30.286 align:middle
+pero el método handle() devuelve un int.
+
+00:03:31.066 --> 00:03:32.916 align:middle
+Cuando encuentres un método que devuelva algo,
+
+00:03:33.126 --> 00:03:36.076 align:middle
+siempre debes preguntarte cómo
+se está utilizando el valor.
+
+00:03:36.526 --> 00:03:40.136 align:middle
+La respuesta te ayudará a identificar el
+valor más cercano a nulo que debes devolver.
+
+00:03:40.676 --> 00:03:43.746 align:middle
+En nuestro caso, podemos
+devolver 0 y estará bien
+
+00:03:43.746 --> 00:03:46.806 align:middle
+porque representa la XP
+extra que ganará el jugador.
+
+00:03:46.806 --> 00:03:50.266 align:middle
+Sin embargo, si este valor se
+utilizara para multiplicar,
+
+00:03:50.496 --> 00:03:56.046 align:middle
+como un valor que multiplica la XP ganada por
+cada partido, devolver 0 causaría problemas.
+
+00:03:56.796 --> 00:03:58.036 align:middle
+Bien, ¡continuemos!
+
+00:03:58.566 --> 00:04:03.836 align:middle
+Abre CasinoHandler y añade un constructor
+
+00:04:04.016 --> 00:04:08.286 align:middle
+en el que inicializaremos $this->next
+en un objeto new NullHandler().
+
+00:04:08.816 --> 00:04:11.626 align:middle
+Copia este constructor porque lo
+necesitaremos para los otros manejadores.
+
+00:04:12.196 --> 00:04:15.226 align:middle
+Dentro del método handle(),
+busca ese molesto if y elimínalo.
+
+00:04:16.786 --> 00:04:19.196 align:middle
+También eliminaremos este
+return 0 de la parte inferior.
+
+00:04:19.946 --> 00:04:22.376 align:middle
+Ahora siempre devolveremos la
+salida del siguiente manejador.
+
+00:04:22.726 --> 00:04:24.696 align:middle
+Ésa es la belleza del patrón Objeto Nulo.
+
+00:04:25.426 --> 00:04:37.486 align:middle
+Haremos lo mismo con los
+demás manejadores, y...
+
+00:04:38.016 --> 00:04:39.886 align:middle
+¡perfecto! ¡Vamos a probarlo!
+
+00:04:39.886 --> 00:04:51.136 align:middle
+Ve a tu terminal y ejecuta: php
+bin/console app:game:play ¡Eh, eh!
+
+00:04:51.136 --> 00:04:54.906 align:middle
+¡Hemos ganado! ¡Y hemos ganado
+XP extra gracias a LevelHandler!
+
+00:04:55.396 --> 00:04:58.696 align:middle
+Todo funciona y el código tiene un aspecto
+estupendo, pero conozco un pequeño truco
+
+00:04:58.696 --> 00:05:00.076 align:middle
+que podría hacerlo aún mejor.
+
+00:05:00.526 --> 00:05:05.306 align:middle
+Podríamos hacer que la propiedad del manejador $next
+fuera un argumento del constructor e inyectar NullHandler
+
+00:05:05.366 --> 00:05:12.006 align:middle
+en el último de la cadena utilizando el
+atributo Autowire que hemos visto antes, así:
+
+00:05:12.006 --> 00:05:14.696 align:middle
+Esto nos permitiría incluso
+eliminar el método setNext()
+
+00:05:14.696 --> 00:05:16.766 align:middle
+de la interfaz, lo que es bastante práctico.
+
+00:05:17.326 --> 00:05:20.396 align:middle
+No quiero desviarme tanto del
+diseño del patrón original,
+
+00:05:20.396 --> 00:05:23.016 align:middle
+así que lo desharé, pero
+es bueno tenerlo en cuenta.
+
+00:05:23.636 --> 00:05:27.806 align:middle
+A continuación: Conoceremos al primo de la
+Cadena de Responsabilidad: el patrón Middleware.
