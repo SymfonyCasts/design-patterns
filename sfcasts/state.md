@@ -1,43 +1,28 @@
 # The State Pattern
 
-It's now turn to talk about the *State pattern*, this is how I like to define it:
+It's time to talk about the *State pattern*. Here's how I like to define it:
 
-State is a way to organize your code so that an object can change its *behavior*
-when its internal state changes. It helps you represent different states as separate classes
-and allows the object to switch between these states seamlessly.
+*State* is a way to organize your code so that an object can change its *behavior* when its *internal state* changes. It helps you represent different states as separate classes and allows the *object* to switch between these states *seamlessly*.
 
-Long story short, state helps you replace *chained if-elseif* statements into a set of classes
-and hide the internal states of an object.
-(do you think this is redundant?)
+How does it do that? Let's check it out!
 
 ## Pattern Anatomy
 
-The State pattern consists of the following elements:
+The State pattern consists of three elements:
 
-A *Context* class that represents the object whose behavior changes based on its internal state.
-The context class has a reference to the current state object.
+-A *Context* class that represents the object whose behavior *changes* based on its internal state. This references the *current* state object.
 
-A common interface for all concrete state classes. It declares methods that represent 
-the actions that can be taken in each state.
+-A common interface for all concrete state classes. This declares methods that represent actions that can be taken in each state.
 
-And lastly, concrete states. Each class represent a state of the context.
+-And lastly, *concrete* states, where each class represents a state of the context.
 
 ## Objects Collaboration
 
-This is how those elements collaborate together:
-
-The context delegates state-specific actions to the current state object, and it may
-pass itself as an argument.
-
-Either context or concrete states can decide which state succeeds another and can
-be responsible for instantiating state objects.
+These elements collaborate together in a couple of different ways. The context can delegate state-specific actions to the current state object, and it may pass *itself* as an argument. Context or concrete states can also decide which state *succeeds* another and they can be responsible for *instantiating* state objects. What does that look like? Let's see an example.
 
 ## Imaginary Example
 
-Suppose we have a `publishPost()` function that depending on the *status* of an article
-it will do different things. If the article is a *draft* it will change the status to *moderation*
-and notify the moderator. If it's already in *moderation* and the user is an admin,
-it will change the status to *published* and send a tweet.
+Suppose we have a `publishPost()` function that will do different things based on the *status* of an article. If the article is a *draft*, it will change the status to "moderation" and notify the moderator. If it's *already* in moderation and the user is an *admin*, it will change the status to "published" and send a tweet.
 
 ```php
 public function publishPost(Article $article) {
@@ -55,12 +40,7 @@ public function publishPost(Article $article) {
 }
 ```
 
-If we apply the state pattern to this function, we'd need to create a class for each state,
-in other words, we would end up with a `DraftState`, `ModerationState`, and `PublishedState` classes.
-(here's where I'd like to show an animation of the if-elseif-else statements becoming classes)
-Each of them would have a `publish()` method that encapsulates the *specific* logic for that state.
-
-This is how the `DraftState` class would look like:
+If we apply the State pattern to this function, we need to create a *class* for each state: `DraftState`, `ModerationState`, and `PublishedState`. Each class will have a `publish()` method that encapsulates the specific logic for that state, so the `DraftState` class would look something like this:
 
 ```php
 class DraftState implements StateInterface {
@@ -71,6 +51,4 @@ class DraftState implements StateInterface {
 }
 ```
 
-Ok! It's time to get some fun and put this into practice. We'll refactor how our
-game application handles difficulty levels so it uses the State pattern.
-That's next!
+Okay, it's time to have some fun and put this into practice! Let's refactor how our game application handles *difficulty levels* using the State pattern. That's *next*!
