@@ -1,61 +1,16 @@
 # Handling Difficulties with the State Pattern
 
-Alright! Let's start by reviewing how *difficulty levels* are handled in our application.
-Open up `GameCommand`, inside the `play()` method find where we check the outcome of the
-match. If the player wins we call `victory()` on the game object, otherwise we call `defeat()`.
-Let's see what does the `victory()` method do. Hold "Command" and click on it.
-Oh! It's just a shortcut for calling `victory()`on this `difficultyContext` property,
-which is an instance of the `GameDifficultyContext` class, and it's on charge
-of managing the difficulty levels. Good, let's keep digging. Hold "Command" and click
-on this `victory()` method. Aha! We finally see some real code. Here's a `switch-case`
-statement for increasing the difficulty level based on the current level and some conditions.
-For example, to move from level 1 to level 2, the player must be at least level 2
-or have won 2 fights, then we make the game harder by increasing some enemy stats,
-but to keep it fair and fun! We also increase the player's XP bonus.
-Level 2 is quite similar but the conditions are just harder to meet. And, for level 3
-we have some randomness where we roll a 20 sided dice and depending on the outcome
-some bonuses may apply. Cool! Ok, below that it's the `defeat()` method, which is the opposite
-of `victory()`. If the player loses there's a chance to decrease the difficulty level,
-and if so it restores the bonus settings.
+How are *difficulty levels* handled in our application? Open up `GameCommand.php` and, inside the `play()` method, find the part where we check the outcome of the match. If the player *wins*, we call `victory()` on the game object, *otherwise* we call `defeat()`. Let's check out the `victory()` method. Hold "Command", click, and... oh! It's just a shortcut for calling `victory()` on this `difficultyContext` property. That's an instance of the `GameDifficultyContext` class, and it's in charge of managing the difficulty levels.
 
-Okay! The plan is to refactor this code so it leverages the *State pattern*. The first step
-is to move the logic of each level or "state" into its own class. Let's start by
-creating an interface for our states. Inside `src/` add a new folder named `DifficultyState`,
-and inside add a PHP file, call it `DifficultyStateInterface`. The state's interface
-must have a method for each possible event, in our case that would be, `victory()` and `defeat()`.
-So, write `public function victory()` and for the arguments write, `GameDifficultyContext $difficultyContext`,
-then `Character $player`, and finally `FightResult $fightResult`. The `defeat()` method
-has the same arguments so I'll duplicate this line and rename it to `defeat`.
-By the way the `$player` and `$fightResult` arguments could've been wrapped
-in the `DifficultyContext`.
+Hold "Command" and click on the `victory()` method again and... *aha* - some *real* code. Here's a `switch-case` statement for increasing the difficulty level based on the *current* level, as well as some conditions. For example, to move from level 1 to level 2, the player must be *at least* level 2 or have won two fights. Then it makes the game harder by increasing some of the *enemy's* stats. *But*, to keep it fair and fun, it also increases the player's XP bonus. Level 2 is pretty similar, but the conditions are just harder to meet. And for level 3, we have some randomness where we roll a 20-sided die and, depending on the outcome, may apply some bonuses. *Sweet*! Below *that*, we have the `defeat()` method, which is the *opposite* of `victory()`. If the player *loses*, there's a chance the difficulty level will decrease, and *if so*, it restores the bonus settings.
 
-Ok! We're ready to add some *states*. Create a new PHP class inside the same folder,
-and instead of using numbers to represent levels, we'll make it better by naming
-levels as "easy", "medium", etc. So, name it `EasyState`, then make it implement the interface
-and hold "option" + "enter" to add the methods. Perfect! Let's start with the `victory()`
-method. Go back to `GameDifficultyContext` and copy the first case of the `victory()` method.
-Then paste it into `EasyState` and change the `$this` references by `$difficultyContext`.
-The `level` property is not going to be an `int` anymore, it'll hold a reference to
-the current state object, so rename it to `difficultyState` and set it to the
-next state `new MediumState()`. We'll create this class in a moment. Now add the
-property, hold "Options" + "Enter" and change its type-hint to `DifficultyStateInterface`.
-Good! Let's handle the `defeat` function now, scroll down and... there's nothing to do
-when there's a defeat in the `EasyState`, it is the lowest level. Let's keep going
-and refactor level 2. Add another PHP class and name it `MediumState`. You know the drill,
-implement the interface, add the methods by holding "Option" + "Enter", and copy the
-code from level 2 in `GameDifficultyContext`. Then, paste it into the `MediumState` class
-and fix the code. This state will move us into the `HardState`, so
-set `difficultyState` to `new HardState()`. Good! Now copy the code for the `defeat()` method,
-fix the code, and it will move us back to the `EasyState`, so set `difficultyState`
-to `new EasyState()`. Lastly, the `HardState`, add another PHP class, name it `HardState`
-and repeat the process... just don't forget to change the `difficultyState` to `new MediumState()`.
-(we can speed up the video here)
+Okay! The *plan* is to refactor this code so it leverages the *State* pattern. The *first* step is to move the logic of each level, or "state", into its own class. Let's start by creating an interface for our states. Inside `src/`, add a new folder called `DifficultyState`, and inside *that*, add a new PHP file - `DifficultyStateInterface`. The state's interface *must* have a method for each possible event. In our case, that would be `victory()` and `defeat()`, so write `public function victory()`. For the arguments, write `GameDifficultyContext $difficultyContext`, `Character $player`, and `FightResult $fightResult`. The `defeat()` method has the same arguments, so we can duplicate this line and rename it to "defeat". The `$player` and `$fightResult` arguments *could have* been wrapped in the `DifficultyContext`, but we'll leave it like this.
 
-Phew! We're almost there, we only need to initialize the starting level. Add a
-constructor to the `GameDifficultyContext` and set the `difficultyState` to `new EasyState()`.
-Before we give this a try I'm gonna cheat a little bit to trigger the `victory()` method.
-In `GameApplication`, I'll set the player's health to 100 at the start of each round
-so I never lose - after all I'm the game master! Ok, let's see if it works.
+All right, we're ready to add some *states*. Create a new PHP class inside the same folder, and instead of using *numbers* to represent difficulty levels, we're going to *name* them - "Easy", "Medium", etc. So let's name this `EasyState`, make it implement the interface, and hold "option" + "enter" to add the methods. Perfect! I'll close a few things, then, back in `GameDifficultyContext.php`, find the first case in the `victory()` method and copy it. Then, in `EasyState.php`, paste that and replace `$this` with `$difficultyContext`. We'll also change this `level` property to reference the current state object, so rename it to `difficultyState` and set it to the *next* state - `new MediumState()`. We haven't created this class yet, but we will in a moment. To add the properties, hold "option" + "enter" and change its type hint to `DifficultyStateInterface`. Awesome! And if we take a quick look at the `defeat` function, scroll down and... okay. There's nothing to do when a player is defeated in the `EasyState`, since that's the lowest level, so we can leave this as it is.
+
+*Now* let's refactor level 2. Add another PHP class and name it `MediumState`. This next part should look familiar! We'll implement the interface... add the methods by holding "option" + "enter"... copy the code from level 2 in `GameDifficultyContext.php`... paste it into the `MediumState` class, and fix the code. *This* state will move us into the "hard" difficulty, so set `difficultyState` to `new HardState()`. That doesn't exist yet either, but we're getting to that. Now we can copy the code for the `defeat()` method, fix it, and *that* will move us back to the `EasyState`, so set `difficultyState` to `new EasyState()`. *Finally*, we'll create our last difficulty state. Add a new PHP class called `HardState`, and then we'll repeat the process one last time. And don't forget to change the `difficultyState` to `new MediumState()`!
+
+Whew... we're almost there! Now we just need to initialize the starting level. Add a constructor to `GameDifficultyContext` and set the `difficultyState` to `new EasyState()`. But before we give this a try, I'm going to cheat a little bit to trigger the `victory()` method. In `GameApplication.php`, let's set the player's health to "100" at the start of each round so we never lose. After all, I *am* the game master! Now let's see if that works.
 
 Spin over to your terminal and run:
 
@@ -63,20 +18,12 @@ Spin over to your terminal and run:
 php bin/console app:game:play
 ```
 
-Let's play two battles and see what happens... Yes! There's our message, the difficulty
-level increased to medium! So, this is working nicely, but I'm guessing you did not like how
-I instantiated those state objects. What if they had some dependencies? Or if they were
-expensive to create? Here are a few recommendations: if the states are simple to create,
-do what we did, it will keep your code simple. 
-If they have dependencies and are expensive to create, leverage the `AutowireLocator`
-attribute to inject them lazily and reuse the same instance.
-(how does Ryan manage links? https://symfony.com/doc/current/service_container/service_subscribers_locators.html#service-locator_autowire-locator)
-If you need a fresh state object every time, use a *factory* to create them and
-inject into the `GameDifficultyContext`. We'll talk about factories soon.
+We'll play a few rounds until we win, and... *yes*! We did it! But we need to win *two* battles before we can level up, so let's keep going. And... woohoo! There's our message!
 
-Ok! With this new and fancy design, adding new levels to the game would be super easy.
-Suppose that we want to add a "hardest" level, we would just need to add a new state class,
-and make a tiny change to the `HardState`, it would need to move us to the "hardest" level
-in the `victory()` method, and we would be done!
+`Game difficulty level increased to Medium!`
 
-Ok! Coming next: the *state pattern* in the real world!
+This is working nicely, *but* you may not be the biggest fan of how we instantiated those state objects. What if they had some dependencies? Or what if they were expensive to create? Great questions! If the states are simple to create, do what we did, because it will keep your code simple. If they have dependencies and are *expensive* to create, leverage the `AutowireLocator` attribute to inject them *lazily* and reuse the same instance. If you need a *fresh* state object every time, use a *factory* to create them, and inject them into the `GameDifficultyContext`. We'll talk more about factories soon.
+
+All right! Our new setup makes it super easy to add new levels to the game. If we wanted to add a "hardest" level, we would just add a new state class and make a tiny change to the `HardState` so it moves us up to the "hardest" level in the `victory()` method. It's *that* simple!
+
+Next: Let's take a look at the State pattern in the *real* world!
