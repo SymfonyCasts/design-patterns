@@ -65,8 +65,11 @@ And don't forget to change the `difficultyState` to `new MediumState()`!
 
 Phew... we're almost there! Now we just need to initialize the starting level.
 Add a constructor to `GameDifficultyContext` and set the `difficultyState` to
-`new EasyState()`. But before we give this a try, I'm going to cheat a little
-bit to trigger the `victory()` method. In `GameApplication`, let's set the
+`new EasyState()`. And, don't forget to update the `victory()` and `defeat()` methods
+so they now call the `difficultyState` property. 
+
+Ok, we're ready to give this a try, but before that, I'm going to cheat a little
+bit to always trigger the `victory()` method. In `GameApplication`, let's set the
 player's health to "100" at the start of each round so we never lose. After all,
 I *am* the game master! Now let's see if that works.
 
