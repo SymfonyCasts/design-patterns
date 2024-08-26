@@ -1,0 +1,163 @@
+WEBVTT
+
+00:00:01.056 --> 00:00:04.226 align:middle
+¿Sabías que el patrón Cadena
+de Responsabilidad tiene un primo?
+
+00:00:04.636 --> 00:00:06.186 align:middle
+Se llama patrón Middleware.
+
+00:00:06.626 --> 00:00:11.066 align:middle
+Los dos patrones son muy parecidos, pero el
+patrón Middleware tiene una sutil diferencia:
+
+00:00:11.376 --> 00:00:13.786 align:middle
+este patrón siempre llega
+al final de la cadena.
+
+00:00:14.286 --> 00:00:18.736 align:middle
+En otras palabras, siempre se ejecuta cada
+uno de los manejadores (o middleware).
+
+00:00:19.256 --> 00:00:23.856 align:middle
+Es una forma genial de introducir más
+acciones o lógica al procesar una petición.
+
+00:00:24.336 --> 00:00:29.646 align:middle
+Por ejemplo, si utilizas un middleware para gestionar las
+inscripciones de usuarios, podrías tener un middleware
+
+00:00:29.646 --> 00:00:35.366 align:middle
+para enviar análisis a una API, otro para
+rastrear un parámetro de consulta en la petición
+
+00:00:35.366 --> 00:00:37.556 align:middle
+con fines de marketing, etc.
+
+00:00:38.246 --> 00:00:42.446 align:middle
+En nuestra aplicación de juego, podríamos utilizarlo
+para terminar de construir nuestros objetos personaje.
+
+00:00:42.886 --> 00:00:46.196 align:middle
+Podríamos tener un middleware que
+diera un arma aleatoria al personaje,
+
+00:00:46.436 --> 00:00:49.296 align:middle
+o que aumentara su nivel, o
+incluso que potenciara su salud.
+
+00:00:49.866 --> 00:00:54.726 align:middle
+En resumen, todos los middlewares se
+ejecutarán, y utilizarlos es una forma estupenda
+
+00:00:54.726 --> 00:00:56.736 align:middle
+de hacer que tu aplicación sea más flexible.
+
+00:00:57.436 --> 00:01:02.226 align:middle
+Bien, antes de pasar al siguiente patrón,
+echemos un vistazo a un ejemplo del mundo real.
+
+00:01:02.866 --> 00:01:06.616 align:middle
+Symfony aprovecha la Cadena de
+Responsabilidad en su componente de seguridad.
+
+00:01:07.156 --> 00:01:09.666 align:middle
+Utiliza un concepto llamado
+"Votantes" para determinar
+
+00:01:09.666 --> 00:01:12.816 align:middle
+si un usuario tiene acceso a
+un recurso específico o no.
+
+00:01:13.406 --> 00:01:16.456 align:middle
+Pero Symfony implementa este patrón
+de una forma ligeramente diferente.
+
+00:01:16.976 --> 00:01:21.916 align:middle
+En lugar de tener referencias explícitas a otros
+votantes, Symfony maneja internamente la iteración
+
+00:01:21.916 --> 00:01:24.936 align:middle
+y ejecución de los votantes en la
+
+00:01:25.426 --> 00:01:29.526 align:middle
+cadena- los votantes en sí no tienen referencias
+directas a otros votantes en la cadena.
+
+00:01:30.326 --> 00:01:33.236 align:middle
+Echemos un vistazo más de cerca a cómo
+se utilizan los Votantes en Symfony.
+
+00:01:33.756 --> 00:01:38.896 align:middle
+En tu navegador, ve a GitHub y busca
+el repositorio symfony/security-core.
+
+00:01:39.326 --> 00:01:40.396 align:middle
+Yo ya lo tengo abierto.
+
+00:01:40.996 --> 00:01:44.416 align:middle
+Ahora, busca la clase AccessDecisionManager.
+
+00:01:45.866 --> 00:01:50.906 align:middle
+Si nos fijamos en su constructor, podemos ver que
+recibe una lista de votantes, y en algún momento,
+
+00:01:50.956 --> 00:01:53.266 align:middle
+itera sobre ellos y llama a vote().
+
+00:01:53.896 --> 00:01:57.346 align:middle
+Esta clase hace mucho más que eso, por
+supuesto, pero podemos ver la esencia
+
+00:01:57.346 --> 00:01:59.426 align:middle
+de la Cadena de Responsabilidad
+en funcionamiento aquí.
+
+00:02:00.336 --> 00:02:01.696 align:middle
+Bien, ¡ese es el patrón!
+
+00:02:01.846 --> 00:02:02.566 align:middle
+Sencillo, ¿verdad?
+
+00:02:03.096 --> 00:02:08.066 align:middle
+Repasemos algunas de sus ventajas e inconvenientes:
+Lo más importante es que te permite añadir
+
+00:02:08.066 --> 00:02:12.696 align:middle
+o eliminar manejadores dinámicamente
+cambiando los miembros o el orden de la cadena.
+
+00:02:13.376 --> 00:02:18.586 align:middle
+También aprovecha el Principio de Responsabilidad
+Única, que nos permite desacoplar las clases
+
+00:02:18.586 --> 00:02:21.056 align:middle
+que hacen el trabajo de las
+clases que las utilizan.
+
+00:02:21.056 --> 00:02:24.796 align:middle
+Y, por último, aprovecha el
+Principio Abierto/Cerrado.
+
+00:02:25.346 --> 00:02:29.726 align:middle
+Eso nos permite introducir nuevos manejadores en
+la aplicación sin tocar el código existente.
+
+00:02:29.726 --> 00:02:33.146 align:middle
+Pero, como ya hemos visto,
+puede ser difícil de depurar.
+
+00:02:33.146 --> 00:02:37.576 align:middle
+Las peticiones también pueden acabar sin
+gestionar si ningún objeto las gestiona.
+
+00:02:38.196 --> 00:02:41.856 align:middle
+Y, por desgracia, si la cadena es demasiado
+larga, puede afectar al rendimiento.
+
+00:02:42.656 --> 00:02:43.466 align:middle
+Así que ¡ahí lo tienes!
+
+00:02:44.006 --> 00:02:49.226 align:middle
+Lo siguiente: Pasemos al patrón de Estado y
+manejemos los niveles de dificultad con estilo.
