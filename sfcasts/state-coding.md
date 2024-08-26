@@ -6,16 +6,16 @@ the outcome of the match. If the player *wins*, we call `victory()` on the game
 object, *otherwise* we call `defeat()`. Let's check out the `victory()` method.
 Hold "Command", click, and... oh! It's just a shortcut for calling `victory()`
 on this `difficultyContext` property. That's an instance of the
-`GameDifficultyContext` class, and it's in charge of managing the difficulty
-levels.
+`GameDifficultyContext` class, and it's in charge of managing the *difficulty
+levels*.
 
 Hold "Command" and click on the `victory()` method again and... *aha* - some
-*real* code. Here's a `switch-case` statement for increasing the difficulty
-level based on the *current* level, as well as some conditions. For example, to
-move from level 1 to level 2, the player must be *at least* level 2 or have won
+*real* code. Here's a `switch-case` statement for increasing the *difficulty
+level* based on the *current* level, as well as some conditions. For example, to
+move from *difficulty level* 1 to 2, the *player level* must be *at least* 2 or they have to have won
 two fights. Then it makes the game harder by increasing some of the *enemy's*
 stats. *But*, to keep it fair and fun, it also increases the player's XP bonus.
-Level 2 is pretty similar, but the conditions are just harder to meet. And for
+Difficulty level 2 is pretty similar, but the conditions are just harder to meet. And for
 level 3, we have some randomness where we roll a 20-sided die and, depending on
 the outcome, may apply some bonuses. *Sweet*! Below *that*, we have the
 `defeat()` method, which is the *opposite* of `victory()`. If the player
