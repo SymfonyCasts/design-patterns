@@ -10,18 +10,18 @@ the input.
 
 The factory pattern is composed of five parts:
 
-First is the *interface* of the products we want to create. For example let's say
-we want to create weapons, so we'd have a `WeaponInterface`. In other words,
-our products would be weapons.
+First, an *interface* of the products we want to create. For example let's say
+we want to create weapons for our characters so we'd have a `WeaponInterface`.
+Under this context, products would be weapons.
 
-Second is the *concrete products* that implement the interface. Following the example,
-we'd have `Sword`, `Axe`, `Bow`, etc.
+Second, the *concrete products* that implement the interface. Following the example,
+we'd have classes like `Sword`, `Axe`, `Bow`, etc.
 
-Third is the *factory interface*. This is optional, but it is useful when you need to
+Third, the *factory interface*. This is optional, but it is useful when you need to
 create families of products. 
 
-Fourth is the *concrete factory* that implements the factory interface in case
-there's one. This class is responsible for creating the objects.
+Fourth, is the *concrete factory* that implements the factory interface in case
+there's one. This class is responsible for creating products.
 
 And finally, the *client* that uses a factory to create product objects. This
 class only knows how to use products but not how they are created or what specific
@@ -55,7 +55,7 @@ is easy to have different constructor arguments per each type.
 
 Another approach is having a single `make` method that receives an argument that determines
 what object to create. This is useful when the application is more dynamic, the `$type` value
-can come from the user's input, or from the request, or something else.
+may come from the user's input, or from a request, or something else.
 
 ```php
 class WeaponFactory
@@ -73,18 +73,15 @@ class WeaponFactory
 ```
 
 But, it comes with a downside. You lose type safety because any string can be sent as the type.
-Luckily that can be solved with a good test suite, or transform the string to an `enum`.
-Another problem is that it's harder to have different constructor arguments for each type.
+But, luckily that can be solved with a good test suite, or you can transform the string into an `enum`.
+Another problem is that it's not easy to have different constructor arguments on each type.
 
 ## Abstract Factory
 
-Ok, the last variant we'll talk about is the "Abstract Factory". In this approach you have
+And the last variant we'll talk about is the "Abstract Factory". In this approach you have
 multiple factories implementing the same interface, and each concrete factory creates a family of objects.
-In our weapons example, we could group the weapons based on the material they are made of,
+In our weapons example, we could group weapons based on the material they are made of,
 like steel, silver, etc. and each factory would create weapons of *only* that material.
-Depending on the application you can choose what factory will be used based on some config, or
-change it at runtime. In our game, we could change the weapons factory whenever
-the game level changes, that would make it more exciting!
 
 ```php
 class SteelWeaponFactory implements WeaponFactoryInterface
@@ -113,68 +110,57 @@ class SilverWeaponGameApplication implements WeaponFactoryInterface
     }
 }
 ```
+(this code block can appear on screen as soon as the abstract factory is mentioned)
 
-## Creating a Weapon Factory
+Depending on the application you can choose what factory will be used based on some config, or
+swap the factory at runtime based on some event. In our game, we could change the weapons
+factory whenever the game level changes. That would make it more exciting!
 
-Alright! It's time to put it in action. In our application there are a couple of places
-where we create `AttackType` objects. Take a look at the `CharacterBuilder`, look for the method, etc... we have thsi same `match` in `GameInfoCommand`.
-So, if we add a new `AttackType` or change the constructor arguments we'd need to find
-and update all places where we instantiate them. In a big application, this would
-be a time-consuming and error-prone task. Let's do better and refactor this code with a factory.
+## Creating an AttackType Factory
 
-We'll start by creating the simplest factory possible and then upgrade it into an *abstract factory*.
-Ok, copy this `match` statement...
+Alright! It's time to put the factory pattern in action. We'll start by creating
+the simplest factory possible and then promote it into an *abstract factory*. In our
+application we create `AttackType` objects in a couple of places. One place is the `CharacterBuilder`,
+open it up and look for the `createAttackType()` method, look at the `match` statement,
+we create `AttackType` objects based on some string. Now open `GammeInfoCommand`, at the bottom
+we have the same `match` statement, this type of duplicate code is not ideal because
+if we'd want to add a new `AttackType` or change the constructor arguments, we'd need to find
+and update all the places where we instantiate them. In big applications, this would
+be a time-consuming and error-prone task. 
 
-* show `CharacterBuilder` create method
-* copy `match`
-* create `AttackTypeFactory` class and paste
-```php
-class AttackTypeFactory
-{
-    public function create(string $type): AttackType
-    {
-        return match ($type) {
-            'bow' => new BowType(),
-            'fire_bolt' => new FireBoltType(),
-            'sword' => new TwoHandedSwordType(),
-            default => throw new \RuntimeException('Invalid attack type given')
-        };
-    }
-}
+Ok, let's do it better and refactor this code with a factory. Copy
+this `match` statement code, then inside the `src/` directory create a folder named `Factory/`,
+and inside that add a new PHP class, name it `AttackTypeFactory`. Good, now we need
+a method to create `AttackType` objects, write `public function create()` with
+a `string $type` argument, and it will return `AttackType` objects. Inside `create()` paste
+the code and rename the variable to `$type`. 
+
+What we've done may look insignificant, but we've accomplished a lot because we've encapsulated
+how `AttackType` objects are created throughout our application, and if that's not
+cool enough, we've set the foundation for handling families of `AttackTypes`.
+More on that soon.
+
+Ok, the next step is to inject the `AttackTypeFactory` into the `CharacterBuilder`.
+Open it up, and at the top add a constructor with
+an argument `private readonly AttackTypeFactory $attackTypeFactory`. Then, find
+the `buildCharacter()` method, there's where we call `createAttackType()`.
+I'll split it into multiple lines to make it more readable. And now,
+replace `createAttackType()` with `$this->attackTypeFactory->create()`. 
+Perfect! Let's do the same in `GameInfoCommand`. Open it up, and add a constructor,
+I'll let PhpStorm to auto-generate it for me so it adds the `parent` call, then
+inject the factory `private readonly AttackTypeFactory $attackTypeFactory`.
+Lastly, scroll down and find the `computeAverageDamage()` method, there's where
+we call `createAttackType()` and replace it with `$this->attackTypeFactory->create()`.
+Perfect! We're ready to give it a try. Spin over to your terminal but this time
+run the `GameInfoCommand`
+
+```terminal
+php bin/console app:game:info
 ```
 
-* inject factory into the `CharacterBuilder` and replace the `new` calls
+Yes! This is great! We can see information about out character classes and their weapons.
+Celebrate by removing the duplicated code from the `CharacterBuilder` and `GameInfoCommand`.
 
-```php
-class CharacterBuilder
-{
-    public function __construct(private readonly AttackTypeFactory $attackTypeFactory)
-    {
-    }
-    
-    public function buildCharacter(): Character
-    {
-        $attackTypes = array_map(fn(string $attackType) => $this->attackTypeFactory->create($attackType), $this->attackTypes);        
-    }
-}
-```
-
-* do the same in `GameInfoCommand`
-
-```php
-class GameInfoCommand extends Command
-{
-    public function __construct(private readonly AttackTypeFactory $attackTypeFactory)
-    {
-        parent::__construct();
-    }
-
-    private function computeAverageDamage(string $attackTypeString, int $baseDamage = 0): float
-    {
-        $attackType = $this->attackTypeFactory->create($attackTypeString);
-    }
-}
-```
-
-* Run command `php bin/console app:game:info` and see if it works
-* coming next: factories grouped by families of objects
+Ok! We've successfully implemented the factory pattern, but a very simple one. Let's
+take it to the next level and handle families of `AttackTypes` with an *abstract factory*.
+That's next!
