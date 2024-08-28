@@ -1,7 +1,7 @@
 # State in the Real World
 
-Okay, it's time to see the State pattern in the *real* world. Open up `GameApplication`,
-and select the `play()` method. If we try to refactor it,
+Okay, it's time to see the State pattern in the *real* world.
+Open up `GameApplication`, and select the `play()` method. If we try to refactor it,
 we can see that most of the options are *enabled*. Hm... If we try to refactor a
 *property* instead... more of the options are disabled - we can't change the
 signature *or* make it static. Why? The options available are based on what's
@@ -15,8 +15,8 @@ take a look to the documentation, we can see a few examples. The one I like is
 the "pull request" feature. Here, we can see all of the possible states that a
 pull request can be in, how to transition from one state into another, and what
 events are executed along the way. If it's in the "test" state, for instance,
-and there's an "update" event, it stays in the same state. But, if there's a "
-wait_for_review" event, it *transitions* to the "review" state. Pretty cool,
+and there's an "update" event, it stays in the same state. But, if there's a
+"wait_for_review" event, it *transitions* to the "review" state. Pretty cool,
 right? And the *best* part is that we can configure our state machines using
 YAML! The next time you need to implement a state machine, I *highly* recommend
 you try Symfony Workflow. It's a pretty fun component to work with.
@@ -32,9 +32,10 @@ important difference between each pattern is the *purpose* behind them. The
 object. The *Strategy* pattern allows us to choose from a family of algorithms,
 regardless of the state of the system.
 
-Here's an excellent analogy from Eugene Kovko and Michal Aibin:
+Here's an excellent [analogy](https://bit.ly/state-vs-strategy) from Eugene Kovko
+and Michal Aibin:
 
-`A car can be in different states. The engine can
+> A car can be in different states. The engine can
 be on, and the engine can be off. The battery can
 be dead. The tank can be empty, and so on. In all
 of these states, the car will behave differently.
@@ -42,11 +43,11 @@ However, a driver can access the car’s interface:
 steering wheel, pedals, gears, etc. These are the
 states, and the entire behavior can be considered
 a combination of the conditions. All the states
-would provide a distinct behavior [...]`
+would provide a distinct behavior [...]
 
-This is the State pattern in action. The "state" of the car hasn't changed;
-We've only changed how an internal element of the system works. *That's* the
-Strategy pattern.
+This is the State pattern in action. But, if we change the engine to use gas or diesel,
+it does not change the state of the car it only changes how an internal element
+of the system works. *That's* the Strategy pattern.
 
 ## Conclusion
 
