@@ -1,5 +1,5 @@
 diff --git a/src/Command/GameCommand.php b/src/Command/GameCommand.php
-index 5e8ca5d..6e21c21 100644
+index 5e8ca5d..120bd41 100644
 --- a/src/Command/GameCommand.php
 +++ b/src/Command/GameCommand.php
 @@ -9,6 +9,7 @@ use App\Printer\MessagePrinter;
@@ -16,7 +16,7 @@ index 5e8ca5d..6e21c21 100644
  
 +    protected function configure()
 +    {
-+        $this->addOption('cheatCode', 'cc', InputOption::VALUE_OPTIONAL, 'You should not see this...');
++        $this->addOption('cheatCode', 'c', InputOption::VALUE_OPTIONAL, 'Shh... this is a secret');
 +    }
 +
      protected function execute(InputInterface $input, OutputInterface $output): int
