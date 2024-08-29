@@ -1,6 +1,6 @@
 # State in the Real World
 
-Okay, it's time to see the State pattern in the *real* world.
+Okay, it's time to see the State pattern in the *real* world - our IDE.
 Open up `GameApplication`, and select the `play()` method. If we try to refactor it,
 we can see that most of the options are *enabled*. Hm... If we try to refactor a
 *property* instead... more of the options are disabled - we can't change the
@@ -11,13 +11,13 @@ change its internal state.
 
 Another place we can see the State pattern at work is in the Symfony Workflow
 component. This component allows us to easily create *state machines*. If we
-take a look to the documentation, we can see a few examples. The one I like is
+take a look at the documentation, we can see a few examples. The one I like is
 the "pull request" feature. Here, we can see all of the possible states that a
 pull request can be in, how to transition from one state into another, and what
 events are executed along the way. If it's in the "test" state, for instance,
 and there's an "update" event, it stays in the same state. But, if there's a
 "wait_for_review" event, it *transitions* to the "review" state. Pretty cool,
-right? And the *best* part is that we can configure our state machines using
+right? And the *best* part is, we can configure our state machines using
 YAML! The next time you need to implement a state machine, I *highly* recommend
 you try Symfony Workflow. It's a pretty fun component to work with.
 
