@@ -21,7 +21,7 @@ example, we would have classes like `Sword`, `Axe`, `Bow`, and so on.
 when you need to create *families* of products.
 
 *Fourth* is the *concrete factory* that implements the factory interface if we
-have one. This class is responsible for creating products.
+have one. This class knows everything about creating products.
 
 And lastly, we have the *client*, which uses a factory to create *product objects*.
 This class only knows how to *use* products, but not how they're *created*, *or* what
@@ -126,12 +126,13 @@ creating the *simplest* factory possible, and then we'll *promote* it to an
 *abstract* factory. We've already created `AttackType` objects in a few places
 in our application. One of them is in the `CharacterBuilder`. Open that up and
 find the `createAttackType()` method. If we look at the `match` statement, we
-see that we're creating `AttackType` objects based on a string. If we open
-`GammeInfoCommand.php`, at the bottom... we have the *same* `match` statement.
-This duplicate code isn't *super* ideal because if we ever want to add a *new*
-`AttackType` or change the constructor arguments, we would have to find and
-update *all* of the places we instantiate them. In larger applications, this
-process would be error-prone and take a *ton* of time.
+see that we're creating `AttackType` objects based on a string input. So,
+we're using the *single method* variant. If we open `GammeInfoCommand`,
+at the bottom... we have the *same* `match` statement. This duplicate code
+isn't *super* ideal because if we ever want to add a *new* `AttackType` or change
+the constructor arguments, we would have to find and update *all* of the places
+we instantiate them. In larger applications, this process would be error-prone
+and take a *ton* of time.
 
 Surely there's a better way, right? There *is*! We're going to refactor this
 code with a *factory*. Copy this `match` statement code, and inside the `src/`
@@ -142,7 +143,7 @@ will create `AttackType` objects. Write `public function create()`, give it a
 paste the code and rename the variable to `$type`.
 
 Okay, what we've done so far may *seem* insignificant, but we've accomplished
-*a lot*. We just defined *how* `AttackType` objects are created *throughout* our
+*a lot*. We've encapsulated *how* `AttackType` objects are created *throughout* our
 application and, as a bonus, we also set the foundation for handling *families*
 of `AttackTypes`. We'll talk about that more later on.
 
@@ -152,12 +153,11 @@ argument - `private readonly AttackTypeFactory $attackTypeFactory`. Then, find
 the `buildCharacter()` method. That's where we call `createAttackType()`. I'll
 split that onto multiple lines so it's easier to read. And now, replace
 `createAttackType()` with `$this->attackTypeFactory->create()`. *Perfect*! Let's
-do the same thing in `GameInfoCommand.php`. Open that... and add a constructor.
+do the same thing in `GameInfoCommand`. Open that... and add a constructor.
 We can let PhpStorm auto-generate that for us so it automatically adds the
-`parent` call. *Then* we'll inject the *factory* -
-`private readonly AttackTypeFactory $attackTypeFactory`. *Finally*, scroll down,
-find the `computeAverageDamage()` method... and once again, replace
-`createAttackType()` with `$this->attackTypeFactory->create()`. Awesome!
+`parent` call. *Then* we'll inject the *factory* - `private readonly AttackTypeFactory $attackTypeFactory`.
+*Finally*, scroll down, find the `computeAverageDamage()` method... and once again,
+replace `createAttackType()` with `$this->attackTypeFactory->create()`. Awesome!
 
 I think we're ready to give this a try! Spin over to your terminal and,
 *this time*, run the `GameInfoCommand`:
@@ -166,7 +166,7 @@ I think we're ready to give this a try! Spin over to your terminal and,
 php bin/console app:game:info
 ```
 
-And... *yes*! This is great! We can see information about out character classes
+And... *yes*! This is great! We can see information about our character classes
 *and* their weapons. Let's celebrate by removing all of the duplicated code from
 `CharacterBuilder` and `GameInfoCommand`.
 
