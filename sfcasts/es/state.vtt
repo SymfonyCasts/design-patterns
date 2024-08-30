@@ -1,0 +1,119 @@
+WEBVTT
+
+00:00:01.066 --> 00:00:03.026 align:middle
+Ha llegado el momento de
+hablar del patrón de Estado.
+
+00:00:03.386 --> 00:00:07.216 align:middle
+Así es como me gusta definirlo: El estado
+es una forma de organizar tu código
+
+00:00:07.216 --> 00:00:11.646 align:middle
+para que un objeto pueda cambiar su
+comportamiento cuando cambie su estado interno.
+
+00:00:12.126 --> 00:00:16.496 align:middle
+Te ayuda a representar distintos estados
+como clases separadas y permite que el objeto
+
+00:00:16.496 --> 00:00:18.826 align:middle
+cambie de un estado a otro sin problemas.
+
+00:00:19.616 --> 00:00:20.476 align:middle
+¿Cómo lo hace?
+
+00:00:20.786 --> 00:00:21.576 align:middle
+¡Veámoslo!
+
+00:00:22.116 --> 00:00:24.576 align:middle
+El patrón Estado consta de tres elementos-
+
+00:00:24.926 --> 00:00:29.236 align:middle
+Una clase Contexto que representa
+al objeto cuyo comportamiento cambia
+
+00:00:29.236 --> 00:00:33.086 align:middle
+en función de su estado interno, y tiene
+una referencia al objeto de estado actual.
+
+00:00:33.636 --> 00:00:36.716 align:middle
+-Una interfaz común para todas
+las clases de estado concretas.
+
+00:00:37.056 --> 00:00:41.026 align:middle
+En ella se declaran los métodos que representan
+las acciones que se pueden realizar en cada estado.
+
+00:00:41.536 --> 00:00:47.366 align:middle
+-Y por último, estados concretos, donde
+cada clase representa un estado del contexto.
+
+00:00:47.916 --> 00:00:51.016 align:middle
+Estos elementos colaboran entre
+sí de un par de formas distintas.
+
+00:00:51.446 --> 00:00:56.346 align:middle
+El contexto puede delegar acciones específicas
+del estado en el objeto estado actual,
+
+00:00:56.616 --> 00:00:59.046 align:middle
+y puede pasarse a sí mismo como argumento.
+
+00:00:59.656 --> 00:01:04.466 align:middle
+El contexto o los estados concretos también
+pueden decidir qué estado sucede a otro
+
+00:01:04.746 --> 00:01:08.146 align:middle
+y pueden encargarse de
+instanciar objetos de estado.
+
+00:01:08.686 --> 00:01:09.746 align:middle
+¿Qué aspecto tiene esto?
+
+00:01:10.226 --> 00:01:11.226 align:middle
+Veamos un ejemplo.
+
+00:01:11.756 --> 00:01:14.296 align:middle
+Supongamos que tenemos
+una función publishPost()
+
+00:01:14.536 --> 00:01:17.466 align:middle
+que hará cosas diferentes en
+función del estado de un artículo.
+
+00:01:17.956 --> 00:01:23.266 align:middle
+Si el artículo es un borrador, cambiará el
+estado a "moderación" y notificará al moderador.
+
+00:01:23.816 --> 00:01:27.256 align:middle
+Si ya está en moderación y
+el usuario es un administrador,
+
+00:01:27.466 --> 00:01:30.536 align:middle
+cambiará el estado a
+"publicado" y enviará un tuit.
+
+00:01:31.406 --> 00:01:36.436 align:middle
+Si aplicamos el patrón Estado a esta función,
+tendremos que crear una clase para cada estado:
+
+00:01:36.786 --> 00:01:39.936 align:middle
+DraftState, ModerationState, y PublishedState.
+
+00:01:40.436 --> 00:01:45.336 align:middle
+Cada clase tendrá un método publish() que
+encapsulará la lógica específica para ese estado,
+
+00:01:45.766 --> 00:01:49.696 align:middle
+por lo que la clase DraftState tendría un
+aspecto similar al siguiente: Bien, ¡es
+
+00:01:49.886 --> 00:01:52.326 align:middle
+hora de divertirse y poner esto en práctica!
+
+00:01:52.706 --> 00:01:57.356 align:middle
+Vamos a refactorizar la forma en que nuestra aplicación de juego
+gestiona los niveles de dificultad utilizando el patrón Estado.
+
+00:01:57.776 --> 00:01:58.476 align:middle
+¡Eso a continuación!
