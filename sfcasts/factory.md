@@ -127,7 +127,7 @@ creating the *simplest* factory possible, and then we'll *promote* it to an
 in our application. One of them is in the `CharacterBuilder`. Open that up and
 find the `createAttackType()` method. If we look at the `match` statement, we
 see that we're creating `AttackType` objects based on a string input. So,
-we're using the *single method* variant. If we open `GammeInfoCommand`,
+we're using the *single method* variant. If we open `GameInfoCommand`,
 at the bottom... we have the *same* `match` statement. This duplicate code
 isn't *super* ideal because if we ever want to add a *new* `AttackType` or change
 the constructor arguments, we would have to find and update *all* of the places
@@ -145,13 +145,13 @@ paste the code and rename the variable to `$type`.
 Okay, what we've done so far may *seem* insignificant, but we've accomplished
 *a lot*. We've encapsulated *how* `AttackType` objects are created *throughout* our
 application and, as a bonus, we also set the foundation for handling *families*
-of `AttackTypes`. We'll talk about that more later on.
+of `AttackType`'s. We'll talk about that more later on.
 
 The *next* step is to inject the `AttackTypeFactory` into the
 `CharacterBuilder`. Open that up and, at the top, add a constructor with an
 argument - `private readonly AttackTypeFactory $attackTypeFactory`. Then, find
 the `buildCharacter()` method. That's where we call `createAttackType()`. I'll
-split that onto multiple lines so it's easier to read. And now, replace
+split this onto multiple lines so it's easier to read. And now, replace
 `createAttackType()` with `$this->attackTypeFactory->create()`. *Perfect*! Let's
 do the same thing in `GameInfoCommand`. Open that... and add a constructor.
 We can let PhpStorm auto-generate that for us so it automatically adds the
@@ -172,4 +172,4 @@ And... *yes*! This is great! We can see information about our character classes
 
 All right! We've *successfully* implemented the Factory pattern! This was the
 *simplest* variation of the pattern, so *next*, let's kick things up a notch and
-handle *families* of `AttackTypes` with an *abstract factory*.
+handle *families* of `AttackType`'s with an *abstract factory*.
