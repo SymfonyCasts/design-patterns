@@ -8,7 +8,7 @@ También conoceremos el patrón Fábrica, que es un patrón de creación. Este t
 
 Para más información sobre los tipos de patrones de diseño, consulta el primer capítulo del episodio uno.
 
-## Recordatorio sobre los patrones de diseño
+## Recordatorio Sobre los Patrones de Diseño
 
 Antes de entrar en materia, recapitulemos qué son los patrones de diseño y lo que hemos tratado hasta ahora.
 
@@ -16,7 +16,7 @@ En pocas palabras, los patrones de diseño son soluciones probadas en batalla a 
 
 En el episodio uno, cubrimos cinco patrones de diseño: Estrategia, Constructor, Observador, PubSub y Decorador. Seguimos utilizando esos patrones en nuestro juego, pero no es necesario que los entiendas para seguir este tutorial.
 
-## Configuración del proyecto
+## Configuración del Proyecto
 
 Bien, ¡vamos a hacerlo! Te recomiendo encarecidamente que descargues el código del curso desde esta página y codifiques conmigo. El código base ha cambiado bastante desde el episodio uno, así que si estás utilizando el código de ese tutorial, asegúrate de descargar esta nueva versión. Después de descomprimirlo, encontrarás un directorio `start/` con el mismo código que ves aquí. El archivo `README.md` contiene todos los detalles de configuración que necesitarás.
 
