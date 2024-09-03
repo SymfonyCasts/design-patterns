@@ -25,7 +25,7 @@ restores the bonus settings.
 Okay! The *plan* is to refactor this code so it leverages the *State* pattern.
 The *first* step is to move the logic of each level, or "state", into its own
 class. Let's start by creating an interface for our states. Inside `src/`, add a
-new folder called `DifficultyState`, and inside *that*, add a new PHP file -
+new folder called `DifficultyState`, and inside *that*, add a new PHP class -
 `DifficultyStateInterface`. The state's interface *must* have a method for each
 possible event. In our case, that would be `victory()` and `defeat()`, so write
 `public function victory()`. For the arguments, write
