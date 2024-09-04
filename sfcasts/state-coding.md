@@ -60,9 +60,12 @@ the code. *This* state will move us into the "hard" difficulty, so set
 getting to that. Now we can copy the code for the `defeat()` method, fix it, and
 *that* will move us back to the `EasyState`, so set `difficultyState` to
 `new EasyState()`. *Finally*, we'll create our last difficulty state. Add a new
-PHP class called `HardState`, and then we'll repeat the process one last time.
-This is just a repeat of the previous steps so we'll use the magic of TV to zip through this.
-And don't forget to change the `difficultyState` to `new MediumState()`!
+PHP class called `HardState`, and we’ll repeat the process again: implement the
+interface, generate the 2 empty methods, then copy the guts we need for `victory()`
+and paste it in. Update `$this->enemyLevelBonus` to the local `$difficultyContext`
+variable. All stuff we did before. For `defeat()`, grab its code from 
+`GameDifficultyContext`, paste, and... do that variable rename one last time.
+And at the bottom, don’t forget to change the `difficultyState` to `new MediumState()`!
 
 Phew... we're almost there! Now we just need to initialize the starting level.
 Add a constructor to `GameDifficultyContext` and set the `difficultyState` to
