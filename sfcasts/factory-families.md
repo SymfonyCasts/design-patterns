@@ -80,9 +80,9 @@ Now, you may be thinking "What if the `UltimateAttackTypeFactory` has
 dependencies?" or "What if it's not that simple to instantiate?", and that's a
 valid concern. A way to solve that is by doing the same thing we did with the
 "state" classes - by leveraging the [`AutowireLocator` attribute](https://bit.ly/sf-service-locator-attribute).
-Another option would be to create a factory *for* your factories. Ohh factoryception!
-I sure hope Skynet isn't listening... Ok, we can finish this up by adding a `default`
-case and print an `Invalid Cheat Code` message. Perfect!
+Another option would be to create a factory *for* your factories.
+Ohh factory-ception! I sure hope Skynet isn't listening... Ok, we can finish this
+up by adding a `default` case and print an `Invalid Cheat Code` message. Perfect!
 
 Before we give this a try, there's a *tiny* detail we need to handle. Symfony
 doesn't know which `AttackTypeFactory` to inject into `CharacterBuilder` because
