@@ -61,6 +61,7 @@ getting to that. Now we can copy the code for the `defeat()` method, fix it, and
 *that* will move us back to the `EasyState`, so set `difficultyState` to
 `new EasyState()`. *Finally*, we'll create our last difficulty state. Add a new
 PHP class called `HardState`, and then we'll repeat the process one last time.
+This is just a repeat of the previous steps so we'll use the magic of TV to zip through this.
 And don't forget to change the `difficultyState` to `new MediumState()`!
 
 Phew... we're almost there! Now we just need to initialize the starting level.
