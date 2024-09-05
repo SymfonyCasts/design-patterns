@@ -1,0 +1,403 @@
+WEBVTT
+
+00:00:01.056 --> 00:00:03.686 align:middle
+¿Cómo se gestionan los niveles de
+dificultad en nuestra aplicación?
+
+00:00:04.206 --> 00:00:07.246 align:middle
+Abre GameCommand y, dentro del método play(),
+
+00:00:07.246 --> 00:00:09.966 align:middle
+busca la parte en la que comprobamos
+el resultado de la partida.
+
+00:00:09.966 --> 00:00:15.136 align:middle
+Si el jugador gana, llamamos a victory() en el objeto
+de juego, en caso contrario llamamos a defeat().
+
+00:00:15.786 --> 00:00:17.246 align:middle
+Comprobemos el método victory().
+
+00:00:17.556 --> 00:00:19.476 align:middle
+Mantén pulsado "Comando", haz clic y...
+
+00:00:19.916 --> 00:00:24.356 align:middle
+¡oh! Es sólo un atajo para llamar a
+victory() en esta propiedad difficultyContext.
+
+00:00:24.786 --> 00:00:28.856 align:middle
+Es una instancia de la clase
+GameDifficultyContext, y se encarga
+
+00:00:28.856 --> 00:00:30.906 align:middle
+de gestionar los niveles de dificultad.
+
+00:00:31.226 --> 00:00:34.216 align:middle
+Mantén pulsado "Comando" y vuelve a
+hacer clic en el método victory() y...
+
+00:00:34.556 --> 00:00:36.046 align:middle
+ajá - algo de código real.
+
+00:00:36.546 --> 00:00:40.626 align:middle
+Aquí tienes una sentencia switch-case
+para aumentar el nivel de dificultad en
+
+00:00:40.626 --> 00:00:43.136 align:middle
+función del nivel actual,
+así como algunas condiciones.
+
+00:00:43.136 --> 00:00:49.416 align:middle
+Por ejemplo, para pasar del nivel de dificultad
+1 al 2, el nivel del jugador debe ser al menos 2
+
+00:00:49.656 --> 00:00:51.896 align:middle
+o tiene que haber ganado dos combates.
+
+00:00:52.246 --> 00:00:56.426 align:middle
+A continuación, endurece el juego aumentando
+algunas de las estadísticas de los enemigos.
+
+00:00:56.426 --> 00:01:01.476 align:middle
+Pero, para mantenerlo justo y divertido, también
+aumenta la bonificación de XP del jugador.
+
+00:01:01.476 --> 00:01:05.486 align:middle
+El nivel de dificultad 2 es bastante similar, pero
+las condiciones son más difíciles de cumplir.
+
+00:01:05.966 --> 00:01:10.036 align:middle
+Y para el nivel 3, tenemos algo de
+aleatoriedad, tiramos un dado de 20 caras y,
+
+00:01:10.036 --> 00:01:13.366 align:middle
+según el resultado, podemos
+aplicar algunas bonificaciones.
+
+00:01:13.796 --> 00:01:18.456 align:middle
+¡Genial! Por debajo de eso, tenemos el método
+defeat(), que es lo contrario de victory().
+
+00:01:18.456 --> 00:01:22.576 align:middle
+Si el jugador pierde, existe la posibilidad
+de que el nivel de dificultad disminuya,
+
+00:01:22.576 --> 00:01:25.196 align:middle
+y si es así, restaura los
+ajustes de las bonificaciones.
+
+00:01:25.966 --> 00:01:30.196 align:middle
+De acuerdo El plan es refactorizar este
+código para que aproveche el patrón Estado.
+
+00:01:30.696 --> 00:01:36.016 align:middle
+El primer paso es trasladar la lógica de
+cada nivel, o "estado", a su propia clase.
+
+00:01:36.016 --> 00:01:38.586 align:middle
+Empecemos por crear una
+interfaz para nuestros estados.
+
+00:01:38.986 --> 00:01:44.416 align:middle
+Dentro de src/, añade una nueva carpeta
+llamada DifficultyState, y dentro de ella,
+
+00:01:44.716 --> 00:01:48.446 align:middle
+añade una nueva clase PHP
+- DifficultyStateInterface.
+
+00:01:48.446 --> 00:01:52.896 align:middle
+La interfaz del estado debe tener
+un método para cada posible evento.
+
+00:01:53.286 --> 00:01:58.196 align:middle
+En nuestro caso, serían victory() y defeat(),
+así que escribe public function victory().
+
+00:01:58.196 --> 00:02:03.416 align:middle
+Para los argumentos, escribe
+GameDifficultyContext $difficultyContext,
+
+00:02:03.856 --> 00:02:07.516 align:middle
+Character $player, y FightResult $fightResult.
+
+00:02:08.256 --> 00:02:10.226 align:middle
+El método defeat() tiene
+los mismos argumentos,
+
+00:02:10.266 --> 00:02:13.406 align:middle
+así que podemos duplicar esta
+línea y renombrarla como "derrota".
+
+00:02:14.186 --> 00:02:16.726 align:middle
+Los argumentos $player y $fightResult
+podrían haberse envuelto
+
+00:02:16.726 --> 00:02:20.376 align:middle
+en DifficultyContext, pero lo dejaremos así.
+
+00:02:20.376 --> 00:02:22.516 align:middle
+Muy bien, ya estamos listos
+para añadir algunos estados.
+
+00:02:22.856 --> 00:02:27.646 align:middle
+Crea una nueva clase PHP dentro de la misma
+carpeta, y en lugar de utilizar números
+
+00:02:27.646 --> 00:02:31.796 align:middle
+para representar los niveles de dificultad,
+vamos a nombrarlos: "Fácil", "Medio",
+
+00:02:31.856 --> 00:02:38.986 align:middle
+etc. Así que llamémosla EasyState,
+hagamos que implemente la interfaz,
+
+00:02:38.986 --> 00:02:41.456 align:middle
+y mantén pulsadas las teclas "opción"
++ "intro" para añadir los métodos.
+
+00:02:42.426 --> 00:02:48.636 align:middle
+¡Perfecto! Cerraré algunas cosas, y luego, de
+vuelta en GameDifficultyContext, busca el primer caso
+
+00:02:48.636 --> 00:02:50.366 align:middle
+en el método victory() y cópialo.
+
+00:02:50.906 --> 00:02:58.416 align:middle
+Luego, en EasyState, pégalo y
+sustituye $this por $difficultyContext.
+
+00:02:59.966 --> 00:03:03.726 align:middle
+También cambiaremos esta propiedad level para
+que haga referencia al objeto de estado actual,
+
+00:03:04.086 --> 00:03:09.776 align:middle
+así que cámbiale el nombre a difficultyState y
+ponla en el siguiente estado: new MediumState().
+
+00:03:10.526 --> 00:03:13.346 align:middle
+Aún no hemos creado esta clase,
+pero lo haremos dentro de un momento.
+
+00:03:13.946 --> 00:03:16.496 align:middle
+Para añadir la propiedad, mantén
+pulsada "opción" + "intro"
+
+00:03:16.926 --> 00:03:20.106 align:middle
+y cambia su pista de tipo
+a DifficultyStateInterface.
+
+00:03:20.596 --> 00:03:25.386 align:middle
+¡Estupendo! Y si echamos un vistazo rápido a
+la función defeat, desplázate hacia abajo y...
+
+00:03:25.786 --> 00:03:29.486 align:middle
+vale. No hay nada que hacer cuando
+un jugador es derrotado en EasyState,
+
+00:03:29.556 --> 00:03:32.636 align:middle
+ya que es el nivel más bajo, así
+que podemos dejarlo como está.
+
+00:03:33.386 --> 00:03:35.246 align:middle
+Ahora vamos a refactorizar el nivel 2.
+
+00:03:35.696 --> 00:03:38.756 align:middle
+Añade otra clase PHP y llámala MediumState.
+
+00:03:38.756 --> 00:03:40.796 align:middle
+La siguiente parte debería resultarte familiar
+
+00:03:41.256 --> 00:03:43.006 align:middle
+Implementaremos la interfaz...
+
+00:03:43.006 --> 00:03:45.366 align:middle
+añade los métodos pulsando
+"opción" + "intro"...
+
+00:03:46.266 --> 00:03:51.026 align:middle
+copia el código del nivel 2
+en GameDifficultyContext...
+
+00:03:51.026 --> 00:03:55.306 align:middle
+pégalo en la clase MediumState,
+y arregla el código.
+
+00:03:55.816 --> 00:03:58.466 align:middle
+Este estado nos hará pasar
+a la dificultad "difícil",
+
+00:03:58.466 --> 00:04:02.546 align:middle
+así que pon difficultyState
+en new HardState().
+
+00:04:03.186 --> 00:04:05.316 align:middle
+Eso tampoco existe todavía,
+pero ya llegaremos a ello.
+
+00:04:06.046 --> 00:04:12.706 align:middle
+Ahora podemos copiar el código del método
+defeat(), arreglarlo, y eso nos moverá de nuevo
+
+00:04:12.706 --> 00:04:18.376 align:middle
+a la dificultad EasyState, así que
+establece difficultyState en new EasyState().
+
+00:04:18.376 --> 00:04:22.606 align:middle
+Por último, crearemos nuestro
+último estado de dificultad.
+
+00:04:22.606 --> 00:04:27.036 align:middle
+Añade una nueva clase PHP llamada
+HardState, y volveremos a repetir el proceso:
+
+00:04:27.356 --> 00:04:30.556 align:middle
+implementa la interfaz,
+genera los 2 métodos vacíos,
+
+00:04:31.806 --> 00:04:35.546 align:middle
+luego copia las tripas que
+necesitamos para victory() y pégalas.
+
+00:04:36.226 --> 00:04:40.986 align:middle
+Actualiza $this->enemyLevelBonus a
+la variable local $difficultyContext.
+
+00:04:41.196 --> 00:04:42.476 align:middle
+Todo lo que hicimos antes.
+
+00:04:42.476 --> 00:04:50.386 align:middle
+Para defeat(), coge su código de
+GameDifficultyContext, pégalo, y...
+
+00:04:50.706 --> 00:04:52.826 align:middle
+haz el cambio de nombre de
+la variable una última vez.
+
+00:04:53.166 --> 00:04:57.916 align:middle
+Y al final, ¡no olvides cambiar
+difficultyState por new MediumState()!
+
+00:04:59.306 --> 00:05:00.626 align:middle
+Uf... ¡ya casi lo tenemos!
+
+00:05:00.996 --> 00:05:03.186 align:middle
+Ahora sólo tenemos que
+inicializar el nivel inicial.
+
+00:05:04.766 --> 00:05:13.136 align:middle
+Añade un constructor a GameDifficultyContext
+y establece difficultyState en new EasyState().
+
+00:05:13.136 --> 00:05:16.026 align:middle
+Y no olvides actualizar los
+métodos victory() y defeat()
+
+00:05:16.026 --> 00:05:18.666 align:middle
+para que ahora llamen a la
+propiedad difficultyState.
+
+00:05:19.366 --> 00:05:23.316 align:middle
+Vale, ya estamos listos para probarlo,
+pero antes voy a hacer un poco de trampa
+
+00:05:23.526 --> 00:05:25.386 align:middle
+para activar siempre el método victory().
+
+00:05:27.346 --> 00:05:31.076 align:middle
+En GameApplication, vamos a establecer
+la salud del jugador en "100"
+
+00:05:31.076 --> 00:05:33.296 align:middle
+al principio de cada ronda
+para que nunca perdamos.
+
+00:05:33.526 --> 00:05:35.796 align:middle
+Al fin y al cabo, ¡soy el amo del juego!
+
+00:05:36.426 --> 00:05:37.656 align:middle
+Ahora veamos si funciona.
+
+00:05:38.046 --> 00:05:39.776 align:middle
+Gira hasta tu terminal y ejecuta:
+
+00:05:39.776 --> 00:05:47.846 align:middle
+php bin/console app:game:play Jugaremos
+unas cuantas rondas hasta que ganemos, y...
+
+00:05:48.246 --> 00:05:49.506 align:middle
+¡sí! ¡Lo hemos conseguido!
+
+00:05:49.946 --> 00:05:54.046 align:middle
+Pero necesitamos ganar dos batallas antes
+de poder subir de nivel, así que sigamos.
+
+00:05:57.466 --> 00:05:58.966 align:middle
+Y... ¡woohoo!
+
+00:05:59.216 --> 00:06:00.166 align:middle
+¡Ahí está nuestro mensaje!
+
+00:06:00.316 --> 00:06:02.596 align:middle
+¡Nivel de dificultad del
+juego aumentado a Medio!
+
+00:06:03.266 --> 00:06:05.826 align:middle
+Esto funciona muy bien, pero
+puede que no te guste mucho
+
+00:06:05.826 --> 00:06:08.196 align:middle
+cómo hemos instanciado esos objetos de estado.
+
+00:06:08.676 --> 00:06:10.276 align:middle
+¿Y si tuvieran algunas dependencias?
+
+00:06:10.486 --> 00:06:12.346 align:middle
+¿O si su creación fuera costosa?
+
+00:06:12.916 --> 00:06:13.806 align:middle
+¡Buenas preguntas!
+
+00:06:13.806 --> 00:06:18.736 align:middle
+Si los estados son sencillos de crear, haz lo
+que hemos hecho, porque simplificará tu código.
+
+00:06:18.736 --> 00:06:24.926 align:middle
+Si tienen dependencias y son caros de
+crear, aprovecha el atributo AutowireLocator
+
+00:06:24.926 --> 00:06:28.416 align:middle
+para inyectarlos perezosamente
+y reutilizar la misma instancia.
+
+00:06:28.416 --> 00:06:33.036 align:middle
+Si necesitas un objeto de estado nuevo cada
+vez, utiliza una fábrica para crearlos
+
+00:06:33.036 --> 00:06:36.426 align:middle
+e inyéctala en GameDifficultyContext.
+
+00:06:36.426 --> 00:06:38.106 align:middle
+Pronto hablaremos más sobre las fábricas.
+
+00:06:38.906 --> 00:06:43.056 align:middle
+¡Muy bien! Nuestra nueva configuración hace que
+sea superfácil añadir nuevos niveles al juego.
+
+00:06:43.056 --> 00:06:47.686 align:middle
+Si quisiéramos añadir un nivel "más difícil ",
+sólo tendríamos que añadir una nueva clase de estado
+
+00:06:47.686 --> 00:06:51.086 align:middle
+y hacer un pequeño cambio en
+HardState para que nos suba al
+
+00:06:51.086 --> 00:06:52.946 align:middle
+nivel "más difícil" en el método victory().
+
+00:06:53.326 --> 00:06:54.106 align:middle
+¡Así de sencillo!
+
+00:06:54.746 --> 00:06:57.936 align:middle
+Siguiente: ¡Veamos el patrón
+Estado en el mundo real!
