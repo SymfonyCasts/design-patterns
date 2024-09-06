@@ -53,8 +53,8 @@ We'll handle them as command-line options, so open up `GameCommand` and,
 below the constructor, write `protected function configure()`. Inside, add a new
 option by calling `$this->addOption()`. The *first* argument is the option's
 *name*. We'll call it `cheatCode`. The *second* argument is the *shortcut*.
-Let's use `c`. The *third* argument is going to be an *optional* value, so let's
-set it to `InputOption::VALUE_OPTIONAL`. Then, inside the `execute()` method,
+Let's use `c`. The third argument is the mode, we need it to have a value so
+let's set it to `InputOption::VALUE_REQUIRED`. Then, inside the `execute()` method,
 before selecting the character, we'll check to see if the `cheatCode` option was
 passed in, and if *so*, we'll activate it.
 
