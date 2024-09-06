@@ -6,12 +6,12 @@ the outcome of the match. If the player *wins*, we call `victory()` on the game
 object, *otherwise* we call `defeat()`. Let's check out the `victory()` method.
 Hold "Command", click, and... oh! It's just a shortcut for calling `victory()`
 on this `difficultyContext` property. That's an instance of the
-`GameDifficultyContext` class, and it's in charge of managing the *difficulty
-levels*.
+`GameDifficultyContext` class, and it's in charge of managing the 
+*difficulty levels*.
 
 Hold "Command" and click on the `victory()` method again and... *aha* - some
-*real* code. Here's a `switch-case` statement for increasing the *difficulty
-level* based on the *current* level, as well as some conditions. For example, to
+*real* code. Here's a `switch-case` statement for increasing the
+*difficulty level* based on the *current* level, as well as some conditions. For example, to
 move from *difficulty level* 1 to 2, the *player level* must be *at least* 2 or they have to have won
 two fights. Then it makes the game harder by increasing some of the *enemy's*
 stats. *But*, to keep it fair and fun, it also increases the player's XP bonus.
@@ -22,34 +22,49 @@ the outcome, may apply some bonuses. *Sweet*! Below *that*, we have the
 *loses*, there's a chance the difficulty level will decrease, and *if so*, it
 restores the bonus settings.
 
+[[[ code('322b9c1e1a') ]]]
+
 Okay! The *plan* is to refactor this code so it leverages the *State* pattern.
 The *first* step is to move the logic of each level, or "state", into its own
 class. Let's start by creating an interface for our states. Inside `src/`, add a
-new folder called `DifficultyState`, and inside *that*, add a new PHP file -
-`DifficultyStateInterface`. The state's interface *must* have a method for each
+new folder called `DifficultyState`, and inside *that*, add a new PHP class - `DifficultyStateInterface`.
+The state's interface *must* have a method for each
 possible event. In our case, that would be `victory()` and `defeat()`, so write
 `public function victory()`. For the arguments, write
 `GameDifficultyContext $difficultyContext`, `Character $player`, and
 `FightResult $fightResult`. The `defeat()` method has the same arguments, so we
-can duplicate this line and rename it to "defeat". The `$player` and
-`$fightResult` arguments *could have* been wrapped in the `DifficultyContext`,
-but we'll leave it like this.
+can duplicate this line and rename it to "defeat".
+
+[[[ code('1d09afc189') ]]]
+
+The `$player` and `$fightResult` arguments *could have* been wrapped
+in the `DifficultyContext`, but we'll leave it like this.
 
 Alright, we're ready to add some *states*. Create a new PHP class inside the
 same folder, and instead of using *numbers* to represent difficulty levels,
 we're going to *name* them - "Easy", "Medium", etc. So let's name this
 `EasyState`, make it implement the interface, and hold "option" + "enter" to add
-the methods. Perfect! I'll close a few things, then, back in
-`GameDifficultyContext`, find the first case in the `victory()` method and
-copy it. Then, in `EasyState`, paste that and replace `$this` with
-`$difficultyContext`. We'll also change this `level` property to reference the
-current state object, so rename it to `difficultyState` and set it to the *next*
-state - `new MediumState()`. We haven't created this class yet, but we will in a
-moment. To add the property, hold "option" + "enter" and change its type hint
-to `DifficultyStateInterface`. Awesome! And if we take a quick look at the
-`defeat` function, scroll down and... okay. There's nothing to do when a player
-is defeated in the `EasyState`, since that's the lowest level, so we can leave
-this as it is.
+the methods.
+
+[[[ code('d5732c9bee') ]]]
+
+Perfect! I'll close a few things, then, back in `GameDifficultyContext`,
+find the first case in the `victory()` method and copy it. Then, in `EasyState`,
+paste that and replace `$this` with `$difficultyContext`.
+We'll also change this `level` property to reference the current state object,
+so rename it to `difficultyState` and set it to the *next* state - `new MediumState()`.
+
+[[[ code('059e619889') ]]]
+
+We haven't created this class yet, but we will in a moment.
+To add the property, hold "option" + "enter" and change its type hint
+to `DifficultyStateInterface`.
+
+[[[ code('1d34bda0eb') ]]]
+
+Awesome! And if we take a quick look at the `defeat` function, scroll down and... okay.
+There's nothing to do when a player is defeated in the `EasyState`, since that's
+the lowest level, so we can leave this as it is.
 
 *Now* let's refactor level 2. Add another PHP class and name it `MediumState`.
 This next part should look familiar! We'll implement the interface... add the
@@ -57,16 +72,40 @@ methods by holding "option" + "enter"... copy the code from level 2 in
 `GameDifficultyContext`... paste it into the `MediumState` class, and fix
 the code. *This* state will move us into the "hard" difficulty, so set
 `difficultyState` to `new HardState()`. That doesn't exist yet either, but we're
-getting to that. Now we can copy the code for the `defeat()` method, fix it, and
+getting to that. 
+
+[[[ code('6cee45fbad') ]]]
+
+Now we can copy the code for the `defeat()` method, fix it, and
 *that* will move us back to the `EasyState`, so set `difficultyState` to
-`new EasyState()`. *Finally*, we'll create our last difficulty state. Add a new
-PHP class called `HardState`, and then we'll repeat the process one last time.
-And don't forget to change the `difficultyState` to `new MediumState()`!
+`new EasyState()`.
+
+[[[ code('bef31e53b8') ]]]
+
+*Finally*, we'll create our last difficulty state. Add a new
+PHP class called `HardState`, and we’ll repeat the process again: implement the
+interface, generate the 2 empty methods, then copy the guts we need for `victory()`
+and paste it in. Update `$this->enemyLevelBonus` to the local `$difficultyContext`
+variable. All stuff we did before.
+
+[[[ code('46eec8ff42') ]]]
+
+For `defeat()`, grab its code from `GameDifficultyContext`, paste, and... do that
+variable rename one last time. And at the bottom, don’t forget to change
+the `difficultyState` to `new MediumState()`!
+
+[[[ code('eb45b4b759') ]]]
 
 Phew... we're almost there! Now we just need to initialize the starting level.
 Add a constructor to `GameDifficultyContext` and set the `difficultyState` to
-`new EasyState()`. And, don't forget to update the `victory()` and `defeat()` methods
+`new EasyState()`.
+
+[[[ code('520a3c0644') ]]]
+
+And, don't forget to update the `victory()` and `defeat()` methods
 so they now call the `difficultyState` property. 
+
+[[[ code('ee072270df') ]]]
 
 Ok, we're ready to give this a try, but before that, I'm going to cheat a little
 bit to always trigger the `victory()` method. In `GameApplication`, let's set the
