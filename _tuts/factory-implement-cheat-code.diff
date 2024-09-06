@@ -1,18 +1,5 @@
-diff --git a/src/Command/GameCommand.php b/src/Command/GameCommand.php
-index 6e21c21..69e3702 100644
---- a/src/Command/GameCommand.php
-+++ b/src/Command/GameCommand.php
-@@ -25,7 +25,7 @@ class GameCommand extends Command
- 
-     protected function configure()
-     {
--        $this->addOption('cheatCode', 'cc', InputOption::VALUE_OPTIONAL, 'You should not see this...');
-+        $this->addOption('cheatCode', 'c', InputOption::VALUE_OPTIONAL, 'You should not see this...');
-     }
- 
-     protected function execute(InputInterface $input, OutputInterface $output): int
 diff --git a/src/GameApplication.php b/src/GameApplication.php
-index a2a141a..e4fa57f 100644
+index a2a141a..edd08cf 100644
 --- a/src/GameApplication.php
 +++ b/src/GameApplication.php
 @@ -9,6 +9,7 @@ use App\Builder\CharacterBuilder;
@@ -37,7 +24,7 @@ index a2a141a..e4fa57f 100644
 +                GameApplication::$printer->info('Cheat code activated!!');
 +                break;
 +            default:
-+                GameApplication::$printer->info('Invalid cheat code - better luck next time!');
++                GameApplication::$printer->info('Invalid cheat code');
 +                break;
 +        }
 +    }
