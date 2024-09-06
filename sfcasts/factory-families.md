@@ -78,7 +78,7 @@ and add a `break` at the end. *Awesome*.
 
 Now, you may be thinking "What if the `UltimateAttackTypeFactory` has
 dependencies?" or "What if it's not that simple to instantiate?", and that's a
-valid concern. A way to solve that is by doing the same thing we did with the
+valid concern. A way to solve this is the same as what we discussed with
 "state" classes - by leveraging the [`AutowireLocator` attribute](https://bit.ly/sf-service-locator-attribute).
 Another option would be to create a factory *for* your factories.
 Ohh factory-ception! I sure hope Skynet isn't listening... Ok, we can finish this
@@ -98,8 +98,7 @@ Let's try it out! Spin over to your terminal and run:
 php bin/console app:game:play -c up-up-down-down-left-right-left-right-b-a-start
 ```
 
-And don't forget to pass the cheat code! Hey! Look at that! There's our
-`Ultimate cheat code activated!` message. And if we battle... we *won* in just
-*two rounds*! Cheat codes for the win!
+Hey! Look at that! There's our `Ultimate cheat code activated!` message. And if we
+battle... we *won* in just *two rounds*! Cheat codes for the win!
 
 Up next: Let's see how the *factory pattern* is used in the *real world*.
