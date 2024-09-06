@@ -1,3 +1,3 @@
-# Creating a Weapons Factory
+# Factory Pattern in the Real World
 
 Coming soon!
