@@ -1,0 +1,208 @@
+WEBVTT
+
+00:00:01.046 --> 00:00:04.596 align:middle
+Bien, es hora de ver el patrón
+Estado en el mundo real: nuestro IDE.
+
+00:00:05.206 --> 00:00:07.846 align:middle
+Abre GameApplication, y
+selecciona el método play().
+
+00:00:09.766 --> 00:00:13.726 align:middle
+Si intentamos refactorizarlo, veremos que la
+mayoría de las opciones están activadas.
+
+00:00:14.116 --> 00:00:17.526 align:middle
+Si en cambio intentamos
+refactorizar una propiedad...
+
+00:00:18.546 --> 00:00:23.186 align:middle
+se desactivan más opciones: no podemos
+cambiar la firma ni hacerla estática.
+
+00:00:23.676 --> 00:00:27.676 align:middle
+¿Por qué? Las opciones disponibles se
+basan en lo que está seleccionado en el IDE.
+
+00:00:28.126 --> 00:00:28.996 align:middle
+¿Te suena?
+
+00:00:29.616 --> 00:00:35.256 align:middle
+En este caso, el IDE es el contexto, y
+seleccionar algo es básicamente un "evento"
+
+00:00:35.256 --> 00:00:38.776 align:middle
+o "acción" que hace que el
+IDE cambie su estado interno.
+
+00:00:39.596 --> 00:00:43.886 align:middle
+Otro lugar donde podemos ver el patrón de Estado en
+funcionamiento es en el componente Symfony Workflow.
+
+00:00:44.526 --> 00:00:47.716 align:middle
+Este componente nos permite crear
+fácilmente máquinas de estado.
+
+00:00:48.786 --> 00:00:52.156 align:middle
+Si echamos un vistazo a la documentación,
+podemos ver unos cuantos ejemplos.
+
+00:00:52.586 --> 00:00:54.826 align:middle
+El que más me gusta es la
+función "pull request".
+
+00:00:55.396 --> 00:00:59.286 align:middle
+Aquí podemos ver todos los estados posibles en
+los que puede estar una petición de extracción,
+
+00:00:59.576 --> 00:01:04.326 align:middle
+cómo se pasa de un estado a otro y
+qué eventos se ejecutan por el camino.
+
+00:01:05.016 --> 00:01:06.846 align:middle
+Si está en el estado "prueba", por ejemplo,
+
+00:01:06.846 --> 00:01:10.206 align:middle
+y hay un evento "actualizar",
+permanece en el mismo estado.
+
+00:01:10.596 --> 00:01:14.586 align:middle
+Pero si hay un evento "espera_revisión",
+pasa al estado "revisión".
+
+00:01:15.006 --> 00:01:15.836 align:middle
+Genial, ¿verdad?
+
+00:01:16.196 --> 00:01:19.566 align:middle
+¡Y lo mejor es que podemos configurar
+nuestras máquinas de estado utilizando YAML!
+
+00:01:20.206 --> 00:01:22.296 align:middle
+La próxima vez que necesites
+implementar una máquina de estados,
+
+00:01:22.296 --> 00:01:24.856 align:middle
+te recomiendo encarecidamente
+que pruebes Symfony Workflow.
+
+00:01:25.116 --> 00:01:26.776 align:middle
+Es un componente muy
+divertido con el que trabajar.
+
+00:01:27.476 --> 00:01:31.406 align:middle
+¿Sabías que los patrones Estado y
+Estrategia comparten el mismo diseño?
+
+00:01:31.816 --> 00:01:36.886 align:middle
+La única diferencia estructural es que los objetos
+de estado pueden tener una referencia a otros estados.
+
+00:01:37.176 --> 00:01:41.776 align:middle
+Entonces... si ambos patrones tienen el mismo
+diseño, ¿por qué importa cuál utilicemos?
+
+00:01:42.036 --> 00:01:43.796 align:middle
+¿No obtendremos el mismo
+resultado de cualquier forma?
+
+00:01:44.506 --> 00:01:45.386 align:middle
+No exactamente.
+
+00:01:45.886 --> 00:01:49.836 align:middle
+La diferencia más importante entre cada patrón
+es el propósito que hay detrás de ellos.
+
+00:01:50.426 --> 00:01:55.116 align:middle
+El patrón Estado nos permite cambiar el comportamiento
+en función del estado interno de un objeto.
+
+00:01:55.666 --> 00:01:59.466 align:middle
+El patrón Estrategia nos permite
+elegir entre una familia de algoritmos,
+
+00:01:59.516 --> 00:02:01.356 align:middle
+independientemente del estado del sistema.
+
+00:02:02.086 --> 00:02:06.056 align:middle
+He aquí una excelente analogía
+de Eugene Kovko y Michal Aibin:
+
+00:02:06.646 --> 00:02:08.196 align:middle
+Un coche puede estar en diferentes estados.
+
+00:02:08.536 --> 00:02:11.136 align:middle
+El motor puede estar encendido,
+y el motor puede estar apagado.
+
+00:02:11.396 --> 00:02:12.626 align:middle
+La batería puede estar descargada.
+
+00:02:12.756 --> 00:02:14.856 align:middle
+El depósito puede estar vacío, etc.
+
+00:02:15.296 --> 00:02:18.106 align:middle
+En todos estos estados, el coche
+se comportará de forma diferente.
+
+00:02:18.506 --> 00:02:22.966 align:middle
+Sin embargo, el conductor puede acceder a la
+interfaz del coche: volante, pedales, marchas,
+
+00:02:22.966 --> 00:02:28.106 align:middle
+etc. Estos son los estados, y todo el
+comportamiento puede considerarse una combinación
+
+00:02:28.106 --> 00:02:29.136 align:middle
+de las condiciones.
+
+00:02:29.546 --> 00:02:32.196 align:middle
+Todos los estados proporcionarían
+un comportamiento distinto [...]
+
+00:02:32.756 --> 00:02:34.376 align:middle
+Éste es el patrón Estado en acción. Pero,
+
+00:02:34.806 --> 00:02:38.696 align:middle
+si cambiamos el motor para que utilice
+gasolina o gasóleo, no cambia el estado
+
+00:02:38.696 --> 00:02:42.846 align:middle
+del coche, sólo cambia cómo funciona
+un elemento interno del sistema. Ese es
+
+00:02:43.076 --> 00:02:44.416 align:middle
+el patrón Estrategia. Bien,
+
+00:02:45.246 --> 00:02:47.466 align:middle
+ése es el patrón Estado en pocas palabras.
+
+00:02:47.716 --> 00:02:52.316 align:middle
+Repasemos algunos de sus pros y sus contras: En primer
+lugar, el patrón Estado permite que tus objetos
+
+00:02:52.316 --> 00:02:55.306 align:middle
+cambien de comportamiento cuando
+cambia su estado interno, e
+
+00:02:55.486 --> 00:02:58.116 align:middle
+incluso puede ocultar en qué
+estado se encuentra el objeto.
+
+00:02:58.116 --> 00:03:02.026 align:middle
+También es una forma estupenda de evitar
+el uso de grandes bloques if-else. Y
+
+00:03:02.026 --> 00:03:06.036 align:middle
+, por último, aprovecha el SRP y el
+principio Open/Close. Sin embargo,
+
+00:03:06.036 --> 00:03:09.526 align:middle
+puede resultar excesivo para casos sencillos e
+
+00:03:09.526 --> 00:03:12.496 align:middle
+introducir un número
+significativo de clases. A
+
+00:03:13.216 --> 00:03:17.066 align:middle
+continuación: Echaremos un vistazo al último
+patrón de esta serie: ¡el patrón Fábrica!
