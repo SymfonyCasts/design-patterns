@@ -58,21 +58,6 @@ argument and determine which object it needs to create. This is useful when the
 application is more *dynamic*. The `$type` value may come from the user's
 *input*, a *request*, or something else.
 
-```php
-class WeaponFactory
-{
-    public function make(string $type): WeaponInterface
-    {
-        return match ($type) {
-            'bow' => new Bow(Dice::rollRange(3, 6), 20),
-            'fire_bolt' => new Sword(Dice::rollRange(4, 8), 12),
-            'sword' => new Axe(Dice::rollRange(6, 12), 8),
-            default => throw new \RuntimeException('Invalid weapon type given')
-        };
-    }
-}
-```
-
 *However*, there *are* a couple of downsides to this approach, like losing 
 *type safety*, since *any* string can be sent as the type. Luckily, that can be solved
 with a good test suite, *or* by transforming the string into an `enum`. It's
@@ -85,34 +70,6 @@ we have *multiple* factories implementing the *same* interface, and each
 concrete factory creates a family of objects. In our character weapons example,
 we could group weapons based on the *material* they are made of, like iron or
 steel, and each factory would *only* create weapons with that material.
-
-```php
-class SteelWeaponFactory implements WeaponFactoryInterface
-{
-    protected function makeSword(): WeaponInterface
-    {
-        return new SteelSword(Dice::rollRange(6, 10), 16);
-    }
-
-    protected function makeAxe(): WeaponInterface
-    {
-        return new SteelAxe(Dice::rollRange(8, 14), 12);
-    }
-}
-
-class SilverWeaponGameApplication implements WeaponFactoryInterface
-{
-    protected function makeSword(): WeaponInterface
-    {
-        return new SilverSword(Dice::rollRange(4, 8), 12);
-    }
-
-    protected function makeAxe(): WeaponInterface
-    {
-        return new SilverAxe(Dice::rollRange(6, 12), 8);
-    }
-}
-```
 
 Depending on the application, we can choose which factory will be used based on
 some config, or *swap* the factory at runtime based on some event. In our game,
