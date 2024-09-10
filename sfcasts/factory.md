@@ -84,12 +84,15 @@ creating the *simplest* factory possible, and then we'll *promote* it to an
 in our application. One of them is in the `CharacterBuilder`. Open that up and
 find the `createAttackType()` method. If we look at the `match` statement, we
 see that we're creating `AttackType` objects based on a string input. So,
-we're using the *single method* variant. If we open `GameInfoCommand`,
-at the bottom... we have the *same* `match` statement. This duplicate code
-isn't *super* ideal because if we ever want to add a *new* `AttackType` or change
-the constructor arguments, we would have to find and update *all* of the places
-we instantiate them. In larger applications, this process would be error-prone
-and take a *ton* of time.
+we're using the *single method* variant.
+
+[[[ code('9a5fe010a2') ]]]
+
+If we open `GameInfoCommand`, at the bottom... we have the *same* `match` statement.
+This duplicate code isn't *super* ideal because if we ever want to
+add a *new* `AttackType` or change the constructor arguments, we would have to
+find and update *all* of the places we instantiate them. In larger applications,
+this process would be error-prone and take a *ton* of time.
 
 Surely there's a better way, right? There *is*! We're going to refactor this
 code with a *factory*. Copy this `match` statement code, and inside the `src/`
@@ -99,6 +102,8 @@ will create `AttackType` objects. Write `public function create()`, give it a
 `string $type` argument, and make it return `AttackType` objects. In `create()`,
 paste the code and rename the variable to `$type`.
 
+[[[ code('2686068f45') ]]]
+
 Okay, what we've done so far may *seem* insignificant, but we've accomplished
 *a lot*. We've encapsulated *how* `AttackType` objects are created *throughout* our
 application and, as a bonus, we also set the foundation for handling *families*
@@ -106,15 +111,26 @@ of `AttackType`'s. We'll talk about that more later on.
 
 The *next* step is to inject the `AttackTypeFactory` into the
 `CharacterBuilder`. Open that up and, at the top, add a constructor with an
-argument - `private readonly AttackTypeFactory $attackTypeFactory`. Then, find
-the `buildCharacter()` method. That's where we call `createAttackType()`. I'll
+argument - `private readonly AttackTypeFactory $attackTypeFactory`.
+
+[[[ code('534e8df2bf') ]]]
+
+Then, find the `buildCharacter()` method. That's where we call `createAttackType()`. I'll
 split this onto multiple lines so it's easier to read. And now, replace
-`createAttackType()` with `$this->attackTypeFactory->create()`. *Perfect*! Let's
-do the same thing in `GameInfoCommand`. Open that... and add a constructor.
+`createAttackType()` with `$this->attackTypeFactory->create()`. 
+
+[[[ code('d568393d25') ]]]
+
+*Perfect*! Let's do the same thing in `GameInfoCommand`. Open that... and add a constructor.
 We can let PhpStorm auto-generate that for us so it automatically adds the
 `parent` call. *Then* we'll inject the *factory* - `private readonly AttackTypeFactory $attackTypeFactory`.
+
+[[[ code('947cf7974b') ]]]
+
 *Finally*, scroll down, find the `computeAverageDamage()` method... and once again,
 replace `createAttackType()` with `$this->attackTypeFactory->create()`. Awesome!
+
+[[[ code('f37840d7d5') ]]]
 
 I think we're ready to give this a try! Spin over to your terminal and,
 *this time*, run the `GameInfoCommand`:
