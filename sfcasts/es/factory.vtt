@@ -1,0 +1,354 @@
+WEBVTT
+
+00:00:01.056 --> 00:00:04.226 align:middle
+Ha llegado el momento de nuestro último
+patrón de diseño: el patrón Fábrica.
+
+00:00:04.756 --> 00:00:09.156 align:middle
+Fábrica es un patrón de diseño de creación
+que proporciona una forma de ocultar los detalles
+
+00:00:09.156 --> 00:00:12.556 align:middle
+de cómo se crean tus objetos
+al código que los utiliza.
+
+00:00:13.106 --> 00:00:17.776 align:middle
+En lugar de instanciar objetos directamente
+con new, utilizamos una fábrica que decide
+
+00:00:17.776 --> 00:00:20.076 align:middle
+qué objeto crear en función de la entrada.
+
+00:00:20.816 --> 00:00:25.176 align:middle
+El patrón Fábrica se compone de cinco
+partes: La primera parte es una interfaz
+
+00:00:25.176 --> 00:00:26.996 align:middle
+de los productos que queremos crear.
+
+00:00:27.426 --> 00:00:30.536 align:middle
+Si quisiéramos crear armas para
+nuestros personajes, por ejemplo,
+
+00:00:30.826 --> 00:00:34.456 align:middle
+tendríamos una WeaponInterface,
+y los productos serían armas.
+
+00:00:35.086 --> 00:00:38.816 align:middle
+La segunda son los productos
+concretos que implementan la interfaz.
+
+00:00:39.216 --> 00:00:43.896 align:middle
+En este ejemplo, tendríamos
+clases como Sword, Axe, Bow, etc.
+
+00:00:44.636 --> 00:00:46.476 align:middle
+En tercer lugar está la interfaz de fábrica.
+
+00:00:46.766 --> 00:00:50.936 align:middle
+Es opcional, pero resulta muy útil cuando
+necesitas crear familias de productos.
+
+00:00:51.496 --> 00:00:56.296 align:middle
+La cuarta es la fábrica concreta que implementa
+la interfaz de fábrica, si tenemos una.
+
+00:00:56.806 --> 00:00:59.356 align:middle
+Esta clase lo sabe todo sobre
+la creación de productos.
+
+00:00:59.946 --> 00:01:05.026 align:middle
+Y por último, tenemos el cliente, que utiliza
+una fábrica para crear objetos producto.
+
+00:01:05.546 --> 00:01:09.346 align:middle
+Esta clase sólo sabe cómo utilizar
+los productos, pero no cómo se crean,
+
+00:01:09.606 --> 00:01:12.536 align:middle
+ni qué producto concreto está utilizando.
+
+00:01:13.356 --> 00:01:16.856 align:middle
+Quizá te sorprenda saber que hay más
+de una variante del patrón Fábrica.
+
+00:01:17.366 --> 00:01:23.276 align:middle
+La variante más sencilla es una fábrica con varios
+métodos make, uno para cada producto posible.
+
+00:01:23.856 --> 00:01:27.386 align:middle
+Esa fábrica tendría este
+aspecto: Esta variante es útil
+
+00:01:27.386 --> 00:01:30.636 align:middle
+cuando quien llama ya
+sabe qué objeto necesita.
+
+00:01:30.796 --> 00:01:34.036 align:middle
+También es fácil tener diferentes
+argumentos de constructor para cada tipo.
+
+00:01:34.836 --> 00:01:37.436 align:middle
+Otro enfoque es utilizar
+un único método make.
+
+00:01:37.646 --> 00:01:41.626 align:middle
+Que recibirá un argumento y
+determinará qué objeto necesita crear.
+
+00:01:42.126 --> 00:01:44.706 align:middle
+Esto es útil cuando la
+aplicación es más dinámica.
+
+00:01:44.706 --> 00:01:49.266 align:middle
+El valor de $type puede proceder de la entrada del
+usuario, de una petición o de cualquier otra cosa.
+
+00:01:49.696 --> 00:01:54.296 align:middle
+Sin embargo, este enfoque tiene un par de
+inconvenientes, como la pérdida de seguridad de tipo,
+
+00:01:54.456 --> 00:01:56.596 align:middle
+ya que se puede enviar
+cualquier cadena como tipo.
+
+00:01:57.256 --> 00:01:59.626 align:middle
+Por suerte, eso puede solucionarse
+con un buen conjunto de pruebas,
+
+00:01:59.936 --> 00:02:02.436 align:middle
+o transformando la cadena en un enum.
+
+00:02:02.986 --> 00:02:06.266 align:middle
+También es difícil tener diferentes
+argumentos de constructor en cada tipo.
+
+00:02:07.006 --> 00:02:10.266 align:middle
+La última variante de la que
+hablaremos es la "Fábrica Abstracta".
+
+00:02:10.806 --> 00:02:14.876 align:middle
+En este enfoque, tenemos varias fábricas
+que implementan la misma interfaz,
+
+00:02:15.166 --> 00:02:18.426 align:middle
+y cada fábrica concreta
+crea una familia de objetos.
+
+00:02:18.986 --> 00:02:23.786 align:middle
+En nuestro ejemplo de las armas de los personajes, podríamos
+agrupar las armas en función del material del que están hechas,
+
+00:02:24.096 --> 00:02:28.806 align:middle
+como hierro o acero, y cada fábrica
+sólo crearía armas con ese material.
+
+00:02:29.446 --> 00:02:34.186 align:middle
+Dependiendo de la aplicación, podemos elegir qué fábrica
+se utilizará en función de alguna configuración,
+
+00:02:34.616 --> 00:02:37.436 align:middle
+o cambiar la fábrica en tiempo de
+ejecución en función de algún evento.
+
+00:02:38.016 --> 00:02:42.426 align:middle
+En nuestro juego, podríamos cambiar la fábrica
+de armas cada vez que cambie el nivel del juego,
+
+00:02:42.686 --> 00:02:44.526 align:middle
+lo que sin duda haría las
+cosas más emocionantes.
+
+00:02:45.396 --> 00:02:45.846 align:middle
+¡Muy bien!
+
+00:02:46.156 --> 00:02:48.396 align:middle
+¡Es hora de ver el patrón
+Fábrica en acción!
+
+00:02:48.976 --> 00:02:51.536 align:middle
+Empezaremos creando la
+fábrica más sencilla posible,
+
+00:02:51.956 --> 00:02:54.266 align:middle
+y luego la convertiremos
+en una fábrica abstracta.
+
+00:02:54.896 --> 00:02:58.826 align:middle
+Ya hemos creado objetos AttackType en
+algunos lugares de nuestra aplicación.
+
+00:02:59.466 --> 00:03:01.306 align:middle
+Uno de ellos es en la página CharacterBuilder.
+
+00:03:01.826 --> 00:03:04.666 align:middle
+Ábrelo y busca el método createAttackType().
+
+00:03:05.326 --> 00:03:07.716 align:middle
+Si miramos la sentencia match, veremos
+
+00:03:07.716 --> 00:03:11.326 align:middle
+que estamos creando objetos AttackType
+a partir de una cadena de entrada.
+
+00:03:11.726 --> 00:03:13.766 align:middle
+Por tanto, estamos utilizando
+la variante de método único.
+
+00:03:14.366 --> 00:03:17.586 align:middle
+Si abrimos GameInfoCommand,
+en la parte inferior...
+
+00:03:18.246 --> 00:03:19.896 align:middle
+tenemos la misma sentencia match.
+
+00:03:20.336 --> 00:03:24.716 align:middle
+Este código duplicado no es súper ideal porque
+si alguna vez queremos añadir un nuevo AttackType
+
+00:03:24.846 --> 00:03:28.626 align:middle
+o cambiar los argumentos del constructor,
+tendríamos que encontrar y actualizar todos
+
+00:03:28.626 --> 00:03:30.326 align:middle
+los lugares donde los instanciamos.
+
+00:03:30.886 --> 00:03:35.266 align:middle
+En aplicaciones más grandes, este proceso sería
+propenso a errores y llevaría un montón de tiempo.
+
+00:03:35.756 --> 00:03:37.276 align:middle
+Seguro que hay una forma mejor, ¿verdad?
+
+00:03:37.796 --> 00:03:41.006 align:middle
+¡La hay! Vamos a refactorizar
+este código con una fábrica.
+
+00:03:41.696 --> 00:03:47.136 align:middle
+Copia este código de la declaración match, y dentro
+del directorio src/, crea una carpeta llamada Factory/.
+
+00:03:47.816 --> 00:03:52.596 align:middle
+Dentro de ella, añade una nueva clase
+PHP, y la llamaremos AttackTypeFactory.
+
+00:03:53.296 --> 00:03:57.706 align:middle
+¡Estupendo! Ahora necesitamos un
+método que cree objetos AttackType.
+
+00:03:58.246 --> 00:04:02.466 align:middle
+Escribe public function create(),
+dale un argumento string $type,
+
+00:04:02.596 --> 00:04:04.956 align:middle
+y haz que devuelva objetos AttackType.
+
+00:04:05.626 --> 00:04:09.306 align:middle
+En create(), pega el código y cambia
+el nombre de la variable a $type.
+
+00:04:10.196 --> 00:04:14.756 align:middle
+Vale, lo que hemos hecho hasta ahora puede parecer
+insignificante, pero hemos conseguido mucho.
+
+00:04:15.166 --> 00:04:20.446 align:middle
+Hemos encapsulado cómo se crean los objetos
+AttackType en toda nuestra aplicación y,
+
+00:04:20.446 --> 00:04:24.986 align:middle
+como extra, también hemos sentado las
+bases para manejar familias de AttackType's.
+
+00:04:25.476 --> 00:04:27.156 align:middle
+Hablaremos de ello más adelante.
+
+00:04:27.856 --> 00:04:32.066 align:middle
+El siguiente paso es inyectar el
+AttackTypeFactory en el CharacterBuilder.
+
+00:04:32.776 --> 00:04:36.986 align:middle
+Ábrelo y, en la parte superior,
+añade un constructor con un argumento:
+
+00:04:39.046 --> 00:04:43.566 align:middle
+private readonly AttackTypeFactory
+$attackTypeFactory.
+
+00:04:44.326 --> 00:04:46.506 align:middle
+Después, busca el método buildCharacter().
+
+00:04:46.826 --> 00:04:48.916 align:middle
+Ahí es donde llamamos a createAttackType().
+
+00:04:49.616 --> 00:04:52.356 align:middle
+Dividiré esto en varias líneas
+para que sea más fácil de leer.
+
+00:04:53.526 --> 00:04:58.766 align:middle
+Y ahora, sustituye createAttackType() por
+$this->attackTypeFactory->create().
+
+00:04:59.566 --> 00:05:02.996 align:middle
+Perfecto Hagamos lo mismo en GameInfoCommand.
+
+00:05:03.456 --> 00:05:04.076 align:middle
+Abre eso...
+
+00:05:04.246 --> 00:05:05.256 align:middle
+y añade un constructor.
+
+00:05:06.006 --> 00:05:10.766 align:middle
+Podemos dejar que PhpStorm lo autogenere por nosotros
+para que añada automáticamente la llamada a parent.
+
+00:05:11.416 --> 00:05:17.086 align:middle
+Luego inyectaremos la fábrica - private
+readonly AttackTypeFactory $attackTypeFactory.
+
+00:05:17.826 --> 00:05:21.176 align:middle
+Por último, desplázate hacia abajo,
+busca el método computeAverageDamage()...
+
+00:05:21.426 --> 00:05:26.976 align:middle
+y una vez más, sustituye createAttackType()
+por $this->attackTypeFactory->create().
+
+00:05:27.706 --> 00:05:29.996 align:middle
+¡Estupendo! ¡Creo que
+estamos listos para probarlo!
+
+00:05:30.436 --> 00:05:34.536 align:middle
+Ve a tu terminal y, esta
+vez, ejecuta GameInfoCommand:
+
+00:05:34.916 --> 00:05:38.476 align:middle
+php bin/console app:game:info Y...
+
+00:05:38.716 --> 00:05:40.116 align:middle
+¡sí! ¡Esto es genial!
+
+00:05:40.396 --> 00:05:43.836 align:middle
+Podemos ver información sobre las clases
+de nuestros personajes y sus armas.
+
+00:05:44.466 --> 00:05:47.076 align:middle
+Vamos a celebrarlo eliminando
+todo el código duplicado
+
+00:05:47.076 --> 00:05:49.706 align:middle
+de CharacterBuilder y GameInfoCommand.
+
+00:05:50.646 --> 00:05:51.206 align:middle
+¡Muy bien!
+
+00:05:51.286 --> 00:05:53.626 align:middle
+¡Hemos implementado con
+éxito el patrón Fábrica!
+
+00:05:54.046 --> 00:05:58.296 align:middle
+Esta ha sido la variante más sencilla del
+patrón, así que ahora vamos a dar un paso más
+
+00:05:58.296 --> 00:06:01.986 align:middle
+y manejar familias de AttackType
+con una fábrica abstracta.
