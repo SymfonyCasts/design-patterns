@@ -55,7 +55,7 @@ object by calling `$this->createForm()`, and processes it. Now, let's look at
 the `createForm()` method.
 
 ```php
-class AbstractController 
+class AbstractController implements ServiceSubscriberInterface
 {
     protected function createForm(string $type, mixed $data = null, array $options = []): FormInterface
     {
