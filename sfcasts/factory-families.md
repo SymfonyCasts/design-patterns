@@ -17,11 +17,15 @@ select "Refactor" and then "Extract Interface". Change the name to
 *There's* our interface, and it has a `create()` method just like we wanted. And
 over in `AttackTypeFactory`, it's *already implemented*. Pretty handy, right?
 
+[[[ code('6c51c575ce') ]]]
+
 The next step is to create a new factory for the new "set" or "family" of
 `AttackType` objects. Inside the `Factory/` directory, add a new PHP class that
 we'll call `UltimateAttackTypeFactory`. Implement the interface... and add the
 `create()` method by holding "Option" + "Enter" and selecting "Add method
 stubs". I'll clean this up, and... perfect!
+
+[[[ code('996f48d824') ]]]
 
 Now, for the `create()` method, we'll add a `match` statement that's very
 similar to the one in `AttackTypeFactory`. Write `return match ($type)` and,
@@ -37,6 +41,8 @@ Okay! Let's finish this up! Add a `sword` case and return
 `new MeteorType()`. And lastly, for the `default` case, just throw a
 `\RuntimeException()` with a message - `Invalid attack type`. Done!
 
+[[[ code('23aaf96b78') ]]]
+
 Next, we need to add a way to *swap* our factories at runtime. Open
 `CharacterBuilder` and scroll up to its constructor. We can see that this
 already has a dependency to the concrete `AttackTypeFactory` class. We need it
@@ -46,6 +52,8 @@ setter for this property, so remove the `readonly` statement and add the setter
 method by moving the cursor over the property name, holding "Option" + "Enter" and
 selecting "Add Setter".
 
+[[[ code('049bcbb241') ]]]
+
 ## Adding Cheat Codes
 
 All right! We're getting closer! Now we need a way to *play* our cheat codes.
@@ -54,13 +62,20 @@ below the constructor, write `protected function configure()`. Inside, add a new
 option by calling `$this->addOption()`. The *first* argument is the option's
 *name*. We'll call it `cheatCode`. The *second* argument is the *shortcut*.
 Let's use `c`. The third argument is the mode, we need it to have a value so
-let's set it to `InputOption::VALUE_REQUIRED`. Then, inside the `execute()` method,
-before selecting the character, we'll check to see if the `cheatCode` option was
-passed in, and if *so*, we'll activate it.
+let's set it to `InputOption::VALUE_REQUIRED`.
+
+[[[ code('54702e783f') ]]]
+
+Then, inside the `execute()` method, before selecting the character, we'll check
+to see if the `cheatCode` option was passed in, and if *so*, we'll activate it.
 
 To do this, write `if ($input->getOption('cheatCode'))`, and inside *that*,
 `$this->game->activateCheatCode()`, sending the `cheatCode` option as the
-argument. This method doesn't exist yet, so let's create it. Position the cursor
+argument. 
+
+[[[ code('f08c591538') ]]]
+
+This method doesn't exist yet, so let's create it. Position the cursor
 over the method's name, hold "Option" + "Enter", and select "Add method". Okay,
 change the argument to `string $cheatCode`... and inside, we'll use a
 `switch-case` just in case we want to add more cheat codes in the future. To do
@@ -70,11 +85,15 @@ Oh! I know! I'll paste this in because it's a bit long, but it *might* look
 familiar to you. Remember the famous Konami code? It feels like the 90s are
 back!
 
+[[[ code('2ee859678d') ]]]
+
 Okay, *inside* the `case`, let's print a message so we know that the cheat code
 was activated. *Then* we'll swap the factory on the `CharacterBuilder`. To do
 that, write
 `$this->characterBuilder->setAttackTypeFactory(new UltimateAttackTypeFactory())`
 and add a `break` at the end. *Awesome*.
+
+[[[ code('f0b0a2ce76') ]]]
 
 Now, you may be thinking "What if the `UltimateAttackTypeFactory` has
 dependencies?" or "What if it's not that simple to instantiate?", and that's a
@@ -84,6 +103,8 @@ Another option would be to create a factory *for* your factories.
 Ohh factory-ception! I sure hope Skynet isn't listening... Ok, we can finish this
 up by adding a `default` case and print an `Invalid Cheat Code` message. Perfect!
 
+[[[ code('46cf4014ef') ]]]
+
 Before we give this a try, there's a *tiny* detail we need to handle. Symfony
 doesn't know which `AttackTypeFactory` to inject into `CharacterBuilder` because
 we have more than one implementation of the `AttackTypeFactoryInterface`. We
@@ -91,6 +112,8 @@ need to tell Symfony which one to use by default. To do that, we can leverage
 the `AsAlias` attribute. Open `AttackTypeFactory` and, above the class name,
 write `#[AsAlias()]` and pass `AttackTypeFactoryInterface::class` as the ID.
 Done!
+
+[[[ code('175de6b4a4') ]]]
 
 Let's try it out! Spin over to your terminal and run:
 
