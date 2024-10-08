@@ -1,0 +1,185 @@
+WEBVTT
+
+00:00:01.086 --> 00:00:03.596 align:middle
+Si estás tan entusiasmado
+como yo con el patrón Factory,
+
+00:00:03.766 --> 00:00:06.516 align:middle
+es posible que quieras empezar a
+utilizarlo en tus aplicaciones Symfony.
+
+00:00:06.926 --> 00:00:09.496 align:middle
+Afortunadamente, Symfony
+proporciona un sólido soporte.
+
+00:00:09.966 --> 00:00:10.446 align:middle
+¡Compruébalo!
+
+00:00:10.876 --> 00:00:16.876 align:middle
+Ve al sitio Symfony docs, busca "Using
+Factory", y haz clic en el primer enlace aquí.
+
+00:00:18.546 --> 00:00:22.456 align:middle
+Esto nos muestra un montón de formas de utilizar
+una fábrica, como crear objetos a través de una
+
+00:00:22.456 --> 00:00:26.896 align:middle
+"fábrica estática", que no es más que un
+método estático dentro de una clase de servicio.
+
+00:00:27.356 --> 00:00:30.596 align:middle
+Y aquí abajo, podemos ver la configuración
+que necesitamos para poner esto en marcha:
+
+00:00:30.946 --> 00:00:34.126 align:middle
+utilizando la opción factory
+en la definición del cliente
+
+00:00:34.126 --> 00:00:37.296 align:middle
+para especificar la clase de fábrica
+y el método estático a llamar.
+
+00:00:37.626 --> 00:00:38.336 align:middle
+¡Súper útil!
+
+00:00:38.906 --> 00:00:42.896 align:middle
+Otra opción es hacer que la clase que
+quieres instanciar tenga su propia fábrica.
+
+00:00:43.326 --> 00:00:47.346 align:middle
+También funciona con un método estático,
+y es superútil para minimizar la cantidad
+
+00:00:47.346 --> 00:00:51.536 align:middle
+de clases que tenemos, manteniendo la
+lógica de instanciación en un solo lugar.
+
+00:00:52.116 --> 00:00:54.596 align:middle
+Aquí abajo, también tenemos
+la "Fábrica no estática",
+
+00:00:54.846 --> 00:00:56.596 align:middle
+que es bastante similar a lo
+que hemos estado haciendo.
+
+00:00:56.956 --> 00:01:00.546 align:middle
+La principal diferencia es que Symfony
+se encargará de instanciar la fábrica,
+
+00:01:00.706 --> 00:01:03.616 align:middle
+llamar al método make()
+e inyectar lo que devuelva
+
+00:01:03.616 --> 00:01:05.046 align:middle
+en el servicio que lo necesite.
+
+00:01:05.716 --> 00:01:08.656 align:middle
+Ah, y si tu método make()
+requiere algunos argumentos,
+
+00:01:08.876 --> 00:01:11.096 align:middle
+puedes utilizar la opción
+arguments para definirlos.
+
+00:01:11.636 --> 00:01:15.366 align:middle
+Y si ninguna de estas opciones te funciona,
+siempre puedes inyectar tu fábrica
+
+00:01:15.366 --> 00:01:19.796 align:middle
+en tus servicios y llamar tú mismo al método
+make(), como hemos hecho en este tutorial.
+
+00:01:20.576 --> 00:01:24.706 align:middle
+Bien, esas son algunas de las opciones que nos
+da Symfony para utilizar el patrón Fábrica.
+
+00:01:25.006 --> 00:01:27.196 align:middle
+¿Pero Symfony utiliza el patrón internamente?
+
+00:01:27.686 --> 00:01:31.736 align:middle
+¡Por supuesto! Symfony utiliza el patrón
+Fábrica en el componente Formulario.
+
+00:01:32.306 --> 00:01:36.846 align:middle
+Echemos un vistazo al código: Se trata de un
+simple método controlador que recibe una petición,
+
+00:01:37.066 --> 00:01:41.406 align:middle
+crea un objeto formulario llamando a
+$this->createForm(), y lo procesa.
+
+00:01:42.096 --> 00:01:44.706 align:middle
+Ahora, veamos el método createForm().
+
+00:01:45.356 --> 00:01:48.136 align:middle
+Se trata de un atajo para
+obtener el servicio form.factory
+
+00:01:48.136 --> 00:01:50.266 align:middle
+del contenedor y llamar a create().
+
+00:01:50.826 --> 00:01:55.736 align:middle
+Si te fijas en los argumentos, recibe un parámetro
+$type que determina qué objeto formulario
+
+00:01:55.736 --> 00:01:58.196 align:middle
+crear, así como algunos datos para rellenarlo.
+
+00:01:58.806 --> 00:01:59.536 align:middle
+¿Te resulta familiar?
+
+00:01:59.926 --> 00:02:01.196 align:middle
+¡También hicimos esto antes!
+
+00:02:01.866 --> 00:02:02.326 align:middle
+¡Muy bien!
+
+00:02:02.496 --> 00:02:03.696 align:middle
+¡Ese es el patrón Fábrica!
+
+00:02:04.106 --> 00:02:08.756 align:middle
+Repasemos algunos de sus pros y contras: En primer
+lugar, es una forma estupenda de desacoplar el código
+
+00:02:08.756 --> 00:02:11.726 align:middle
+que crea objetos del código que los utiliza.
+
+00:02:12.286 --> 00:02:16.336 align:middle
+También es muy útil cuando necesitas
+crear diferentes familias de objetos.
+
+00:02:16.686 --> 00:02:21.606 align:middle
+Y, por último, aprovecha los
+principios de SRP y de abierto-cerrado.
+
+00:02:21.606 --> 00:02:24.786 align:middle
+Pero puede hacer que tu base
+de código sea más compleja,
+
+00:02:24.976 --> 00:02:26.966 align:middle
+sobre todo si tienes muchas fábricas.
+
+00:02:27.796 --> 00:02:28.496 align:middle
+¡Muy bien, equipo!
+
+00:02:28.616 --> 00:02:29.196 align:middle
+¡Hemos terminado!
+
+00:02:29.706 --> 00:02:32.336 align:middle
+Hemos cubierto un montón de patrones,
+pero todavía hay más por ahí.
+
+00:02:32.866 --> 00:02:35.796 align:middle
+Si hay algún patrón que te
+gustaría conocer, ¡háznoslo saber!
+
+00:02:36.396 --> 00:02:40.596 align:middle
+Hasta entonces, diviértete poniendo todo
+esto en práctica, y si necesitas ayuda,
+
+00:02:40.826 --> 00:02:42.316 align:middle
+estamos aquí para ti en los comentarios.
+
+00:02:42.896 --> 00:02:45.136 align:middle
+Gracias por codificar conmigo,
+¡y hasta la próxima!
