@@ -1,0 +1,362 @@
+WEBVTT
+
+00:00:01.076 --> 00:00:05.276 align:middle
+Vamos a subir de nivel nuestro AttackTypeFactory
+y convertirlo en una fábrica abstracta.
+
+00:00:05.786 --> 00:00:11.316 align:middle
+Como vimos en el capítulo anterior, una fábrica
+abstracta nos permite manejar familias de objetos.
+
+00:00:11.806 --> 00:00:16.476 align:middle
+Para ilustrar esto, vamos a introducir códigos
+de trucos en el juego que, si los activamos
+
+00:00:16.656 --> 00:00:18.886 align:middle
+, nos darán unas armas superpoderosas.
+
+00:00:19.216 --> 00:00:21.396 align:middle
+Oh sí, ¡ahora sí que
+podemos dominar el juego!
+
+00:00:21.956 --> 00:00:26.726 align:middle
+Para añadir códigos de trucos, necesitaremos crear otra
+fábrica y una forma de intercambiarla en tiempo de ejecución.
+
+00:00:26.726 --> 00:00:28.136 align:middle
+Así que ¡manos a la obra!
+
+00:00:28.626 --> 00:00:31.906 align:middle
+Lo primero que tenemos que hacer es crear
+una interfaz para nuestras fábricas.
+
+00:00:32.256 --> 00:00:35.186 align:middle
+En lugar de hacerlo manualmente,
+te mostraré un pequeño truco
+
+00:00:35.296 --> 00:00:37.496 align:middle
+que hará que PhpStorm lo haga por ti.
+
+00:00:38.156 --> 00:00:41.666 align:middle
+Abre AttackTypeFactory, haz clic con el
+botón derecho en el nombre de la clase,
+
+00:00:41.666 --> 00:00:45.706 align:middle
+selecciona "Refactorizar"
+y luego "Extraer interfaz".
+
+00:00:46.326 --> 00:00:51.306 align:middle
+Cambia el nombre a AttackTypeFactoryInterface
+y vuelve a hacer clic en "Refactorizar".
+
+00:00:51.926 --> 00:00:52.856 align:middle
+¡Mira eso!
+
+00:00:53.056 --> 00:00:56.746 align:middle
+Ahí está nuestra interfaz, y tiene un
+método create() tal y como queríamos.
+
+00:00:57.456 --> 00:01:00.946 align:middle
+Y en AttackTypeFactory, ya está implementado.
+
+00:01:01.186 --> 00:01:02.116 align:middle
+Muy práctico, ¿verdad?
+
+00:01:02.856 --> 00:01:08.286 align:middle
+El siguiente paso es crear una nueva fábrica para el
+nuevo "conjunto" o "familia" de objetos AttackType.
+
+00:01:08.816 --> 00:01:14.886 align:middle
+Dentro del directorio Factory/, añade una nueva
+clase PHP que llamaremos UltimateAttackTypeFactory.
+
+00:01:15.826 --> 00:01:17.046 align:middle
+Implementa la interfaz...
+
+00:01:18.816 --> 00:01:23.676 align:middle
+y añade el método create() manteniendo pulsadas las teclas
+"Opción" + "Intro" y seleccionando "Añadir stubs de métodos".
+
+00:01:24.496 --> 00:01:26.846 align:middle
+Limpio esto y...
+
+00:01:27.296 --> 00:01:29.576 align:middle
+¡perfecto! Ahora, para el método create(),
+
+00:01:30.046 --> 00:01:33.946 align:middle
+añadiremos una declaración match
+muy similar a la de AttackTypeFactory.
+
+00:01:34.566 --> 00:01:39.536 align:middle
+Escribe return match ($type) y,
+dentro, utilizaremos los mismos casos
+
+00:01:39.536 --> 00:01:42.076 align:middle
+pero devolveremos objetos
+AttackType diferentes.
+
+00:01:42.076 --> 00:01:49.016 align:middle
+Por ejemplo, en el caso bow, devolveremos un
+arma más poderosa: un objeto TitaniumBowType.
+
+00:01:49.466 --> 00:01:49.936 align:middle
+Pero... espera.
+
+00:01:50.126 --> 00:01:51.746 align:middle
+Esa clase aún no existe, ¿verdad?
+
+00:01:52.176 --> 00:01:56.676 align:middle
+Pues no Pero para ahorrarnos algo de tiempo, esas
+nuevas clases AttackType ya están preparadas
+
+00:01:56.676 --> 00:01:59.486 align:middle
+en el directorio tutorial/, en
+la raíz de nuestro proyecto.
+
+00:01:59.936 --> 00:02:05.186 align:middle
+Ábrelo, copia la carpeta Ultimate/
+y pégala dentro de src/AttackType/.
+
+00:02:06.886 --> 00:02:08.576 align:middle
+¡Muy bien! ¡Vamos a terminar esto!
+
+00:02:09.686 --> 00:02:13.506 align:middle
+Añade un caso sword y devuelve
+new SkullBreakerSwordType().
+
+00:02:13.506 --> 00:02:17.246 align:middle
+Para el caso fire_bolt,
+devuelve new MeteorType().
+
+00:02:17.856 --> 00:02:22.076 align:middle
+Y por último, para el caso default,
+lanza un \RuntimeException()
+
+00:02:22.556 --> 00:02:24.646 align:middle
+con un mensaje - Invalid attack type.
+
+00:02:25.366 --> 00:02:29.496 align:middle
+¡Listo! A continuación, tenemos que añadir una forma de
+intercambiar nuestras fábricas en tiempo de ejecución.
+
+00:02:29.986 --> 00:02:33.006 align:middle
+Abre CharacterBuilder y
+desplázate hasta su constructor.
+
+00:02:33.666 --> 00:02:38.386 align:middle
+Podemos ver que ya tiene una dependencia
+con la clase concreta AttackTypeFactory.
+
+00:02:38.866 --> 00:02:44.426 align:middle
+Necesitamos que funcione con cualquier fábrica, así
+que cambia su type hint a AttackTypeFactoryInterface.
+
+00:02:44.916 --> 00:02:48.776 align:middle
+Luego, para que sea intercambiable,
+necesitaremos un definidor para esta propiedad,
+
+00:02:49.066 --> 00:02:53.356 align:middle
+así que elimina la sentencia readonly y
+añade el método definidor moviendo el cursor
+
+00:02:53.356 --> 00:02:58.006 align:middle
+sobre el nombre de la propiedad, manteniendo pulsadas las
+teclas "Opción" + "Intro" y seleccionando "Añadir definidor".
+
+00:02:58.606 --> 00:02:59.246 align:middle
+Ya está
+
+00:02:59.386 --> 00:03:00.246 align:middle
+¡Nos estamos acercando!
+
+00:03:00.826 --> 00:03:03.146 align:middle
+Ahora necesitamos una forma de
+reproducir nuestros códigos de trucos.
+
+00:03:03.426 --> 00:03:10.136 align:middle
+Los manejaremos como opciones de línea de comandos,
+así que abre GameCommand y, debajo del constructor,
+
+00:03:10.366 --> 00:03:12.666 align:middle
+escribe protected function configure().
+
+00:03:13.596 --> 00:03:17.536 align:middle
+Dentro, añade una nueva opción
+llamando a $this->addOption().
+
+00:03:18.096 --> 00:03:20.126 align:middle
+El primer argumento es el nombre de la opción.
+
+00:03:20.556 --> 00:03:21.676 align:middle
+La llamaremos cheatCode.
+
+00:03:22.426 --> 00:03:24.186 align:middle
+El segundo argumento es el atajo.
+
+00:03:24.516 --> 00:03:29.316 align:middle
+Usaremos c. El tercer argumento es el
+modo, necesitamos que tenga un valor
+
+00:03:29.316 --> 00:03:32.806 align:middle
+así que pongámoslo
+InputOption::VALUE_REQUIRED.
+
+00:03:33.746 --> 00:03:38.406 align:middle
+A continuación, dentro del método execute(),
+antes de seleccionar el carácter, comprobaremos
+
+00:03:38.406 --> 00:03:42.246 align:middle
+si se ha pasado la opción cheatCode
+y, en caso afirmativo, la activaremos.
+
+00:03:42.816 --> 00:03:46.276 align:middle
+Para ello, escribe if
+($input->getOption('cheatCode')),
+
+00:03:47.586 --> 00:03:51.146 align:middle
+y dentro de éste,
+$this->game->activateCheatCode(),
+
+00:03:51.146 --> 00:03:53.676 align:middle
+enviando la opción cheatCode como argumento.
+
+00:03:54.246 --> 00:03:56.706 align:middle
+Este método aún no existe,
+así que vamos a crearlo.
+
+00:03:57.256 --> 00:04:02.346 align:middle
+Sitúa el cursor sobre el nombre del método, mantén pulsadas
+las teclas "Opción" + "Intro" y selecciona "Añadir método".
+
+00:04:02.996 --> 00:04:05.786 align:middle
+Bien, cambia el argumento
+a string $cheatCode...
+
+00:04:05.786 --> 00:04:11.376 align:middle
+y dentro, utilizaremos un switch-case por si queremos
+añadir más códigos de trucos en el futuro.
+
+00:04:11.926 --> 00:04:15.546 align:middle
+Para ello, di switch
+($cheatCode) y dentro de él,
+
+00:04:15.766 --> 00:04:18.576 align:middle
+añadiremos un case con el valor de
+nuestro último código de trucos.
+
+00:04:19.186 --> 00:04:21.246 align:middle
+Hm... ¿cuál sería un buen valor para eso?
+
+00:04:21.826 --> 00:04:22.436 align:middle
+¡Oh! ¡Ya sé!
+
+00:04:22.806 --> 00:04:26.666 align:middle
+Voy a pegar esto porque es un poco largo,
+pero puede que te resulte familiar.
+
+00:04:27.056 --> 00:04:28.906 align:middle
+¿Recuerdas el famoso código Konami?
+
+00:04:29.266 --> 00:04:30.796 align:middle
+¡Parece que han vuelto los 90!
+
+00:04:31.556 --> 00:04:36.816 align:middle
+Bien, dentro del case, vamos a imprimir un mensaje para
+que sepamos que se ha activado el código de trucos.
+
+00:04:38.886 --> 00:04:41.456 align:middle
+Luego cambiaremos la fábrica
+en el CharacterBuilder.
+
+00:04:42.996 --> 00:04:48.596 align:middle
+Para ello, escribe $this->characterBuilder->setAttackTypeFactory(new
+UltimateAttackTypeFactory())
+
+00:04:48.596 --> 00:04:52.156 align:middle
+y añade un break al final. Fantástico.
+
+00:04:52.786 --> 00:04:58.246 align:middle
+Ahora, puede que estés pensando "¿Y si el
+UltimateAttackTypeFactory tiene dependencias?" o
+
+00:04:58.616 --> 00:05:02.096 align:middle
+"¿Y si no es tan sencillo de instanciar?",
+y es una preocupación válida. Una
+
+00:05:02.686 --> 00:05:05.956 align:middle
+forma de resolverlo es la misma que
+comentamos con las clases "estado":
+
+00:05:06.186 --> 00:05:08.676 align:middle
+aprovechando el atributo AutowireLocator. Otra
+
+00:05:09.366 --> 00:05:12.786 align:middle
+opción sería crear una fábrica
+para tus fábricas. ¡ Ohh
+
+00:05:12.896 --> 00:05:14.766 align:middle
+fábrica-cepción!
+
+00:05:15.016 --> 00:05:16.866 align:middle
+Espero que Skynet no esté escuchando... Vale,
+
+00:05:17.556 --> 00:05:25.266 align:middle
+podemos terminar esto añadiendo un caso default e
+imprimir un mensaje Invalid Cheat Code. ¡Perfecto!
+
+00:05:25.876 --> 00:05:30.406 align:middle
+Antes de probarlo, hay un pequeño
+detalle que tenemos que solucionar.
+
+00:05:30.406 --> 00:05:35.306 align:middle
+Symfony no sabe qué AttackTypeFactory
+inyectar en CharacterBuilder porque
+
+00:05:35.516 --> 00:05:39.976 align:middle
+tenemos más de una implementación
+de AttackTypeFactoryInterface.
+
+00:05:40.446 --> 00:05:43.416 align:middle
+Tenemos que decirle a Symfony cuál
+utilizar por defecto. Para ello
+
+00:05:43.926 --> 00:05:47.106 align:middle
+, podemos aprovechar el atributo AsAlias. Abre
+
+00:05:47.496 --> 00:05:53.426 align:middle
+AttackTypeFactory y, encima del nombre
+de la clase, escribe #[AsAlias()] y
+
+00:05:53.636 --> 00:05:57.506 align:middle
+pasa AttackTypeFactoryInterface::class
+como ID. ¡Listo!
+
+00:05:58.056 --> 00:05:59.746 align:middle
+¡Vamos a probarlo!
+
+00:06:00.026 --> 00:06:01.646 align:middle
+Ve a tu terminal y ejecuta: php
+
+00:06:01.646 --> 00:06:11.446 align:middle
+bin/console app:game:play -c
+up-up-down-down-left-right-left-right-b-a-start ¡Eh! ¡
+
+00:06:12.426 --> 00:06:13.086 align:middle
+Mira esto! Ahí
+
+00:06:13.256 --> 00:06:15.206 align:middle
+está nuestro mensaje Ultimate
+cheat code activated!.
+
+00:06:15.206 --> 00:06:17.146 align:middle
+Y si luchamos..
+
+00:06:20.226 --> 00:06:21.926 align:middle
+. ¡ganamos en sólo dos rondas! ¡
+
+00:06:22.216 --> 00:06:23.396 align:middle
+Códigos trampa para la victoria!
+
+00:06:24.046 --> 00:06:27.956 align:middle
+A continuación: Veamos cómo se utiliza
+el patrón de fábrica en el mundo real.
